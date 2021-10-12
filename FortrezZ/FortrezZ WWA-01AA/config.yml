@@ -1,0 +1,4 @@
+name: 'FortrezZ WWA-01AA Temperature and Leak Sensor'
+packageKey: 'zwave-fortrezz-leak'
+permissions:
+  zwave: {}
