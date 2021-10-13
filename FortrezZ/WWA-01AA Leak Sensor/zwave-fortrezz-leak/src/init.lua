@@ -44,11 +44,6 @@ local function wakeup_notification(driver, device, cmd)
   if device.preferences.requestBattery == "on" then
     device:send(Battery:Get({}))
   end
-  --Send WakeUp.WAKE_UP_NO_MORE_INFORMATION. Not sure if this part is working since there's no TRANSMIT_COMPLETE_OK
-  local cmd = zw.Command(0x84, 0x08, "")
-  cmd.err = nil
-  cmd.args={}
-  device:send(cmd)
 end
 
 local function basic_set(driver,device,cmd)
