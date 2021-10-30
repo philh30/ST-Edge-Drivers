@@ -66,5 +66,5 @@ smartthings edge:drivers
 ```
 5. Now start live logging by running the command below, entering the Driver ID found above and the IP address of your ST Hub in place of \<DriverID> and \<HubIP>:
 ```
-smartthings edge:drivers:logcat \<DriverID> --hub-address \<HubIP>
+smartthings edge:drivers:logcat <DriverID> --hub-address <HubIP>
 ```
