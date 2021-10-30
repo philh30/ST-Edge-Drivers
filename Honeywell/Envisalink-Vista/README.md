@@ -7,7 +7,7 @@ This driver provides a direct, local connection between the SmartThings hub and 
 ***This driver is a work in progress.*** ST Edge is currently (October 2021) in beta, and may change in ways that break this driver.
 
 - [SmartThings Community topic](https://community.smartthings.com/)
-- [Installation instructions](INSTALLATION.MD)
+- [Installation instructions](INSTALLATION.md)
 
 ## Version Notes
 

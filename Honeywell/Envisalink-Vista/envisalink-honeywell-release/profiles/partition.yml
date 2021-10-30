@@ -1,0 +1,65 @@
+name: partition
+components:
+- id: main
+  capabilities:
+  - id: "platinummassive43262.statusMessage"
+    version: 1
+  - id: "platinummassive43262.alarmMode"
+    version: 1
+  - id: securitySystem
+    version: 1
+  - id: chime
+    version: 1
+  - id: bypassable
+    version: 1
+  - id: battery
+    version: 1
+  - id: powerSource
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: SecurityPanel
+metadata:
+  deviceType: SecurityPanel
+  ocfDeviceType: x.com.st.d.remotecontroller
+  deviceTypeId: SecurityPanel
+  vid: 8403cae4-62d4-33d2-940e-38ef5c8037fd
+  mnmn: SmartThingsCommunity
+preferences:
+  - title: "STHM -> Partition Integration"
+    name: integrateSTHM
+    description: "Arm and disarm partition when SmartThings Home Monitor is armed and disarmed"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  - title: "Add Virtual Switches"
+    name: addSwitches
+    description: "Automatically add switches for enabled alarm modes. Recommend changing this option to 'Do not add' once desired switches have been created. Switches can be deleted with no ill effects."
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  - title: "Display 'Arm Instant' mode"
+    name: armInstantSupported
+    description: "Choose which alarm modes should be displayed as options for this partition"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  - title: "Display 'Arm Max' mode"
+    name: armMaxSupported
+    description: "Choose which alarm modes should be displayed as options for this partition"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  - title: "Display 'Arm Night' mode"
+    name: armNightSupported
+    description: "Choose which alarm modes should be displayed as options for this partition"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  

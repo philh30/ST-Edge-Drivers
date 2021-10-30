@@ -1,0 +1,5 @@
+name: 'Honeywell-Ademco Envisalink - Release'
+packageKey: 'envisalink-honeywell-release'
+permissions:
+  lan: {}
+  discovery: {}

@@ -1,0 +1,173 @@
+name: primaryPartition
+components:
+- id: main
+  capabilities:
+  - id: "platinummassive43262.statusMessage"
+    version: 1
+  - id: "platinummassive43262.alarmMode"
+    version: 1
+  - id: securitySystem
+    version: 1
+  - id: chime
+    version: 1
+  - id: bypassable
+    version: 1
+  - id: battery
+    version: 1
+  - id: powerSource
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: SecurityPanel
+metadata:
+  deviceType: SecurityPanel
+  ocfDeviceType: x.com.st.d.remotecontroller
+  deviceTypeId: SecurityPanel
+  vid: 8403cae4-62d4-33d2-940e-38ef5c8037fd
+  mnmn: SmartThingsCommunity
+preferences:
+  - title: "Envisalink LAN Address"
+    name: lanAddressEVL
+    description: "IP:Port address of EVL (e.g. 192.168.1.120:4025)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      minLength: 12
+      maxLength: 20
+      default: "192.168.1.nnn:4025"
+  - title: "Envisalink User Password"
+    name: passwordEVL
+    description: "Password to log into the Envisalink"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: password
+      minLength: 4
+      maxLength: 16
+      default: "user"
+  - title: "Alarm Code"
+    name: alarmCodeEVL
+    description: "4-digit alarm code"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: password
+      minLength: 4
+      maxLength: 4
+      default: "1111"
+  - title: "STHM -> Partition Integration"
+    name: integrateSTHM
+    description: "Arm and disarm partition when SmartThings Home Monitor is armed and disarmed"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  - title: "Zone Close Delay"
+    name: zoneCloseDelay
+    description: "Set how quickly zones are closed (0=Faster, 10=Slower but less false closures)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 10
+      default: 4
+  - title: "Add Partition 2"
+    name: addPartition
+    description: "Add second partition"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  - title: "Add Virtual Switches"
+    name: addSwitches
+    description: "Automatically add switches for enabled alarm modes. Recommend changing this option to 'Do not add' once desired switches have been created. Switches can be deleted with no ill effects."
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  - title: "Display 'Arm Instant' mode"
+    name: armInstantSupported
+    description: "Choose which alarm modes should be displayed as options for this partition"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  - title: "Display 'Arm Max' mode"
+    name: armMaxSupported
+    description: "Choose which alarm modes should be displayed as options for this partition"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  - title: "Display 'Arm Night' mode"
+    name: armNightSupported
+    description: "Choose which alarm modes should be displayed as options for this partition"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  - title: "Add Zones"
+    name: addZones
+    description: "Allow new zones to be added"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  - title: "Highest Wired Zone"
+    name: wiredZoneMax
+    description: "All zones equal or lower will be created as wired. All zones higher will be created as wireless. Default 8, but may be higher with expansion modules."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 128
+      default: 8
+  - title: "Contact Sensor Zones"
+    name: contactZones
+    description: "Enter a comma delimited list of contact sensor zone numbers to create (e.g. 3,23,16,12)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ''
+  - title: "Motion Sensor Zones"
+    name: motionZones
+    description: "Enter a comma delimited list of motion sensor zone numbers to create (e.g. 5,28,11,14)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ''
+  - title: "Glass Break Sensor Zones"
+    name: glassZones
+    description: "Enter a comma delimited list of glass break sensor zone numbers to create (e.g. 4,30,15,17)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ''
+  - title: "Leak Sensor Zones"
+    name: leakZones
+    description: "Enter a comma delimited list of leak sensor zone numbers to create (e.g. 6,24,13,9)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ''
+  - title: "Smoke Sensor Zones"
+    name: smokeZones
+    description: "Enter a comma delimited list of smoke sensor zone numbers to create (e.g. 7,21,19,10)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ''
+  - title: "Add Triggers"
+    name: addTriggers
+    description: "Add trigger 1 and 2 as virtual switches"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false

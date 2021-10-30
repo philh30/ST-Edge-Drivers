@@ -1,0 +1,12 @@
+name: switch
+components:
+- id: main
+  capabilities:
+  - id: switch
+    version: 1
+  categories:
+    - name: Switch
+metadata:
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch

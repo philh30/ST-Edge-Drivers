@@ -1,0 +1,57 @@
+name: leak-sensor-wired
+components:
+- id: main
+  capabilities:
+  - id: "platinummassive43262.leakZone"
+    version: 1
+  - id: "platinummassive43262.bypass"
+    version: 1
+  - id: tamperAlert
+    version: 1
+  - id: waterSensor
+    version: 1
+  - id: bypassable
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+    - name: LeakSensor
+metadata:
+  deviceType: LeakSensor
+  ocfDeviceType: x.com.st.d.sensor.moisture
+  deviceTypeId: LeakSensor
+  vid: 7016a6e4-3bb5-3323-8505-8b6ad5688512
+  mnmn: SmartThingsCommunity
+preferences:
+  - title: "Partition"
+    name: "partition"
+    description: "Partition that this zone is assigned to"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 2
+      default: 1
+  - title: "Change Sensor Wired/Wireless"
+    name: wiredWireless
+    description: "Driver will attempt to change the zone between wired and wireless."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        wired: "Wired"
+        wireless: "Wireless"
+      default: "wired"
+  - title: "Change Zone Type"
+    name: zoneType
+    description: "Driver will attempt to change the zone type."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        contact: "Contact sensor"
+        motion: "Motion detector"
+        glass: "Glass break sensor"
+        leak: "Leak sensor"
+        smoke: "Smoke detector"
+      default: "leak"

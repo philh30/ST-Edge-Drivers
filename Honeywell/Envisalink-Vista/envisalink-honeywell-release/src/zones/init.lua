@@ -1,0 +1,145 @@
+local capabilities = require('st.capabilities')
+local log = require('log')
+local commands = require('commands')
+local capabilitydefs = require('capabilitydefs')
+local evt = require('evthandler')
+local socket = require "cosock.socket"
+
+local models_supported = {
+  'Honeywell Contact Sensor Wireless',
+  'Honeywell Motion Sensor Wireless',
+  'Honeywell Smoke Sensor Wireless',
+  'Honeywell Leak Sensor Wireless',
+  'Honeywell Glass Break Sensor Wireless',
+  'Honeywell Contact Sensor Wired',
+  'Honeywell Motion Sensor Wired',
+  'Honeywell Smoke Sensor Wired',
+  'Honeywell Leak Sensor Wired',
+  'Honeywell Glass Break Sensor Wired',
+}
+
+local capabilityInits = {
+  ['Wireless'] = {
+    capabilities.bypassable.bypassStatus.ready(),
+    capabilities.tamperAlert.tamper.clear(),
+    capabilities.battery.battery({value = 100}),
+  },
+  ['Wired'] = {
+    capabilities.bypassable.bypassStatus.ready(),
+    capabilities.tamperAlert.tamper.clear(),
+  },
+  ['Contact'] = {
+    capabilities[capabilitydefs.contactZone.name].contactZone.closed(),
+    capabilities.contactSensor.contact.closed(),
+  },
+  ['Motion'] = {
+    capabilities[capabilitydefs.motionZone.name].motionZone.inactive(),
+    capabilities.motionSensor.motion.inactive(),
+  },
+  ['Smoke'] = {
+    capabilities[capabilitydefs.smokeZone.name].smokeZone.clear(),
+    capabilities.smokeDetector.smoke.clear()
+  },
+  ['Leak'] = {
+    capabilities[capabilitydefs.leakZone.name].leakZone.dry(),
+    capabilities.waterSensor.water.dry()
+  },
+  ['Glass Break'] = {
+    capabilities[capabilitydefs.glassBreakZone.name].glassBreakZone.noSound(),
+    capabilities.soundDetection.soundDetected.noSound(),
+    capabilities.contactSensor.contact.closed(),
+  },
+}
+
+local function can_handle_sensors(opts, driver, device, ...)
+  for _, model in ipairs(models_supported) do
+    if device.model == model then
+      return true
+    end
+  end
+  return false
+end
+
+local function added_handler(driver, device)
+  log.info(device.id .. ": " .. device.device_network_id .. " > ADDED ZONE")
+  local wired_wireless = device.model:match('Wire.+')
+  local type = device.model:match('Honeywell (.+) Sensor')
+  for _, event in pairs(capabilityInits[wired_wireless]) do
+    device:emit_event(event)
+  end
+  for _, event in pairs(capabilityInits[type]) do
+    device:emit_event(event)
+  end
+  device:online()
+end
+
+local function init_handler(driver,device)
+  log.debug(device.id .. ": " .. device.device_network_id .. " : " .. device.model .. " > INITIALIZING")
+  local partition = device.preferences.partition
+  local zone = device.device_network_id:match('envisalink|z|(%d+)')
+end
+
+local function refresh_handler(driver, device, command)
+  log.info(device.id .. ": " .. device.device_network_id .. " > REFRESH")
+  commands.refresh_zone(driver,device)
+end
+
+-------------------
+-- bypass function
+local function bypass_handler(driver, device, cmd)
+  log.info('Bypass function called')
+  local args = {}
+  args.zone = device.device_network_id:match('envisalink|z|(%d+)')
+  args.command = cmd.command
+  args.partition = device.preferences.partition
+  commands.send_evl_command(driver,args)
+end
+
+local function infoChanged_handler(driver, device)
+  log.info(device.id .. ": " .. device.device_network_id .. " > INFO CHANGED CONTACT SENSOR")
+  local new_model = evt.device_types[device.preferences.zoneType][device.preferences.wiredWireless].model
+  if device.model ~= new_model then
+    log.warn (string.format('Changing %s device type from %s to %s',device.device_network_id,device.model,new_model))
+    local create_device_msg = {
+      profile = evt.device_types[device.preferences.zoneType][device.preferences.wiredWireless].profile,
+      manufacturer = 'Honeywell/Ademco',
+      model = new_model,
+      vendor_provided_label = 'Honeywell Vista ' .. evt.device_types[device.preferences.zoneType].vendor_label,
+    }
+    assert (device:try_update_metadata(create_device_msg), "Failed to change device")
+    log.warn (string.format('Attempted to change to %s, now %s',new_model,device.model))
+    
+    socket.sleep(1)
+    
+    local wired_wireless = new_model:match('Wire.+')
+    local type = new_model:match('Honeywell (.+) Sensor')
+    for _, event in pairs(capabilityInits[wired_wireless]) do
+      device:emit_event(event)
+    end
+    for _, event in pairs(capabilityInits[type]) do
+      device:emit_event(event)
+    end
+  end
+end
+
+---------------------------------------
+-- Zone Sub-Driver
+local zone_driver = {
+  NAME = "Zone",
+  lifecycle_handlers = {
+    added = added_handler,
+    init = init_handler,
+    infoChanged = infoChanged_handler,
+  },
+  capability_handlers = {
+    [capabilities.refresh.ID] = {
+          [capabilities.refresh.commands.refresh.NAME] = refresh_handler,
+        },
+    [capabilities[capabilitydefs.bypass.name].ID] = {
+          [capabilities[capabilitydefs.bypass.name].commands.bypass.NAME] = bypass_handler,
+    }
+  },
+  can_handle = can_handle_sensors,
+}
+
+return zone_driver
