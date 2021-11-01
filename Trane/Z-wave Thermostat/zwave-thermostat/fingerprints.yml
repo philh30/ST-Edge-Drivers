@@ -1,0 +1,7 @@
+zwaveManufacturer:
+  - id: "Trane TZEMT400BB3NX"
+    deviceLabel: Trane Thermostat
+    manufacturerId: 0x008B
+    productType: 0x5452
+    productId: 0x5433
+    deviceProfileName: trane-thermostat
