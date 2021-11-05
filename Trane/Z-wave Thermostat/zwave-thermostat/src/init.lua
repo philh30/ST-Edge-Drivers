@@ -1,3 +1,17 @@
+-- Author: philh30
+--
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+--
+--     http://www.apache.org/licenses/LICENSE-2.0
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+
 local Basic = (require "st.zwave.CommandClass.Basic")({ version = 1 })
 local SensorMultilevel = (require "st.zwave.CommandClass.SensorMultilevel")({ version = 1 })
 local ThermostatSetpoint = (require "st.zwave.CommandClass.ThermostatSetpoint")({ version = 1 })
@@ -15,6 +29,7 @@ local constants = require "st.zwave.constants"
 local utils = require "st.utils"
 local capdefs = require "capabilitydefs"
 local socket = require "cosock.socket"
+local delay_send = require "delay_send"
 
 capabilities[capdefs.thermostatScheduleMode.name]  = capdefs.thermostatScheduleMode.capability
 
@@ -33,27 +48,26 @@ local function can_handle_zwave_thermostat(opts, driver, device, ...)
   return false
 end
 
+local function refresh(driver,device)
+  log.debug('Refresh')
+  local cmds = {
+    ThermostatFanMode:SupportedGet({}),
+    ThermostatMode:SupportedGet({}),
+    Configuration:Get({ parameter_number = 132 }),  -- Hold = 0, Run Schedule = 1
+    Configuration:Get({ parameter_number = 25 }),   -- Energy save on = 2, off = 0
+    ThermostatFanMode:Get({}),
+    ThermostatMode:Get({}),
+    ThermostatOperatingState:Get({}),
+    ThermostatSetpoint:Get({setpoint_type = ThermostatSetpoint.setpoint_type.HEATING_1}),
+    ThermostatSetpoint:Get({setpoint_type = ThermostatSetpoint.setpoint_type.COOLING_1}),
+    SensorMultilevel:Get({}),
+  }
+  delay_send(device,cmds,1)
+end
+
 local function dev_init(driver, device)
-  log.debug ('Device Init')
-  device:send(ThermostatFanMode:SupportedGet({}))
-  socket.sleep(2)
-  device:send(ThermostatMode:SupportedGet({}))
-  socket.sleep(2)
-  device:send(Configuration:Get({ parameter_number = 132 }))  -- Hold = 0, Run Schedule = 1
-  socket.sleep(1)
-  device:send(Configuration:Get({ parameter_number = 25 }))   -- Energy save on = 2, off = 0
-  socket.sleep(1)
-  device:send(ThermostatFanMode:Get({}))
-  socket.sleep(1)
-  device:send(ThermostatMode:Get({}))
-  socket.sleep(1)
-  device:send(ThermostatOperatingState:Get({}))
-  socket.sleep(1)
-  device:send(ThermostatSetpoint:Get({setpoint_type = ThermostatSetpoint.setpoint_type.HEATING_1}))
-  socket.sleep(1)
-  device:send(ThermostatSetpoint:Get({setpoint_type = ThermostatSetpoint.setpoint_type.COOLING_1}))
-  socket.sleep(1)
-  device:send(SensorMultilevel:Get({}))
+  log.debug('Device Init')
+  refresh(driver,device)
 end
 
 local function dev_added(driver, device)
@@ -170,6 +184,9 @@ local driver_template = {
     [capdefs.thermostatScheduleMode.capability.ID] = {
           [capdefs.thermostatScheduleMode.capability.commands.setThermostatScheduleMode.NAME] = set_schedule_mode,
         },
+    [capabilities.refresh.ID] = {
+          [capabilities.refresh.commands.refresh.NAME] = refresh,
+        }
   },
   NAME = "zwave thermostat",
   can_handle = can_handle_zwave_thermostat,
