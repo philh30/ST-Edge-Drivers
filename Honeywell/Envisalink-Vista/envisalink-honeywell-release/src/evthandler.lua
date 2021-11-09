@@ -236,9 +236,9 @@ function event_handler.stnp_notification_handler(driver, body)
         if body.state then
           event_handler.zone_handler[device.model](driver,device,body)
         elseif body.tamper then
-          update_tamper(device,body)
+          update_tamper(driver,device,body)
         elseif body.battery then
-          update_battery(device,body)
+          update_battery(driver,device,body)
         end
         break
       end
