@@ -62,7 +62,7 @@ smartthings devices
 ```
 4. After authenticating the CLI, find the Driver ID for this driver by running:
 ```
-smartthings edge:drivers
+smartthings edge:drivers:installed
 ```
 5. Now start live logging by running the command below, entering the Driver ID found above and the IP address of your ST Hub in place of \<DriverID> and \<HubIP>:
 ```
