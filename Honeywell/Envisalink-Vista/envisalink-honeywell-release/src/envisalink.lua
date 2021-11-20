@@ -349,6 +349,8 @@ local function get_partition_state(flags, alpha)
 		return 'alarmcleared'
     elseif alpha:find('You may exit now') then
 		return 'arming'
+	elseif alpha:find('May Exit Now') then
+		return 'arming'
     elseif flags.armed_stay and flags.armed_zero_entry_delay then
 		return 'armedinstant'
     elseif flags.armed_away and flags.armed_zero_entry_delay then
@@ -416,12 +418,15 @@ function handlers.handle_keypad_update(driver,sock,data)
 				power 		= flags.ac_present and 'mains' or 'battery',
 				bypass 		= flags.bypass and 'bypassed' or (flags.ready and 'closed' or 'open')
 			}
+			local zone_code = get_zone_report_type(flags,alpha)
+			local arming_countdown = (partition_status == 'arming') and (zone_code == 'notready')
 			if partition_code then
 				-- Keypad update is giving partition status
 				partition_response.battery = flags.low_battery and 0 or 100
+			elseif arming_countdown then
+				-- Keypad is counting down. Take no action on zone report
 			elseif tonumber(zone_user) then
 				-- Keypad update is giving zone status
-				local zone_code = get_zone_report_type(flags,alpha)
 				local zone_response = {
 					type 		= 'zone',
 					partition 	= partition,
