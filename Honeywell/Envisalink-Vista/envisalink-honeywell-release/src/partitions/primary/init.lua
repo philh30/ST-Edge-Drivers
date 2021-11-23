@@ -23,7 +23,7 @@ local function initconfigEVL(device)
     log.warn ('Invalid EVL LAN address')
   end
       
-  conf.alarmcode = tonumber(device.preferences.alarmCodeEVL)
+  conf.alarmcode = device.preferences.alarmCodeEVL
   conf.password = device.preferences.passwordEVL
   conf.zoneclosedelay = tonumber(device.preferences.zoneCloseDelay)
   conf.wiredzonemax = tonumber(device.preferences.wiredZoneMax)
