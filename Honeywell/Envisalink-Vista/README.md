@@ -11,7 +11,19 @@ This driver provides a direct, local connection between the SmartThings hub and 
 
 ## Version Notes
 
-### V 1.0
+### V 1.04 - 11/24/2021
+- Fixed events for alarmMode - previously were posting the value instead of the key (e.g. Alarm instead of alarm). This was preventing automations from firing.
+
+### V 1.03 - 11/22/2021
+- Removed conversion of alarm code to integer. This was preventing alarm codes with leading zeroes from working, as the zeroes were removed in the conversion.
+
+### V 1.02 - 11/20/2021
+- Changes to account for panels that are set to display the exit delay countdown. The countdown was previously causing erroneous zone state changes to post.
+
+### V 1.01 - 11/9/2021
+- Fixed calls to update_tamper and update_battery to include correct parameters.
+
+### V 1.00 - 10/29/2021
 - Second partition support included. Limited testing so far, but all functions that treat p2 differently from p1 worked. Could enable p3 with a few changes, but not sure how useful it would be as it's the common partition.
 - Panel commands are throttled to 1 every 2 seconds.
 - Zones are currently closed using a system based on redloro's code for zone timers. Should change this in the future to get rid of some of the zone flutter but need to see how low battery reports cycle through the keypad sequence. Keypad updates cycle through the zone faults in ascending numerical order, but are interrupted by new faults and restart at lowest numbered zone. Zone timers work well with a couple faulted zones but are causing false zone clears when multiple zones are left faulted for an extended period.
