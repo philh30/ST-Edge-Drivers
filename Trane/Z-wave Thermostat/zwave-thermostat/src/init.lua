@@ -19,6 +19,7 @@ local ThermostatMode = (require "st.zwave.CommandClass.ThermostatMode")({ versio
 local ThermostatFanMode = (require "st.zwave.CommandClass.ThermostatFanMode")({ version = 1 })
 local ThermostatOperatingState = (require "st.zwave.CommandClass.ThermostatOperatingState")({ version = 1 })
 local Configuration = (require "st.zwave.CommandClass.Configuration")({ version = 1 })
+local Clock = (require "st.zwave.CommandClass.Clock")({ version = 1 })
 local capabilities = require "st.capabilities"
 local ZwaveDriver = require "st.zwave.driver"
 local defaults = require "st.zwave.defaults"
@@ -50,7 +51,14 @@ end
 
 local function refresh(driver,device)
   log.debug('Refresh')
+  
+  local now = os.date('*t')
+	local offset = -5                 -- Currently EST. Update when local time is available.
+	local now_hour = (now.hour + offset > 0) and ((now.hour + offset < 24) and (now.hour + offset) or (now.hour - 24 + offset)) or (now.hour + 24 + offset)
+
   local cmds = {
+    Clock:Set({ weekday = (now.wday + 5) % 7, hour = now_hour, minute = now.min }),
+    Clock:Get({}),
     ThermostatFanMode:SupportedGet({}),
     ThermostatMode:SupportedGet({}),
     Configuration:Get({ parameter_number = 132 }),  -- Hold = 0, Run Schedule = 1
