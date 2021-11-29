@@ -82,6 +82,9 @@ local function infoChanged_handler(driver,device, event, args)
   local changed = false
   local connection_changed = false
   
+  conf.zoneclosedelay = tonumber(device.preferences.zoneCloseDelay)
+  conf.wiredzonemax = tonumber(device.preferences.wiredZoneMax)
+
   if args.old_st_store.preferences.lanAddressEVL ~= device.preferences.lanAddressEVL then
     changed = true
     connection_changed = true
