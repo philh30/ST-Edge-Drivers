@@ -11,6 +11,9 @@ This driver provides a direct, local connection between the SmartThings hub and 
 
 ## Version Notes
 
+### V 1.05 - 11/29/2021
+- Fixed error where highest wired zone and zone delay preferences were not updating the driver properly.
+
 ### V 1.04 - 11/24/2021
 - Fixed events for alarmMode - previously were posting the value instead of the key (e.g. Alarm instead of alarm). This was preventing automations from firing.
 
