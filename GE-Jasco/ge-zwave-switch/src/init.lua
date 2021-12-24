@@ -83,10 +83,10 @@ end
 --- @param driver st.zwave.Driver
 --- @param device st.zwave.Device
 local function basic_set(driver, device, cmd)
-  local evt = (cmd.args.value == 0) and capabilities.button.button.down_2x() or capabilities.button.button.up_2x()
+  local evt = capabilities.button.button.pushed_2x()
   evt.state_change = true
   device:emit_event(evt)
-  evt = capabilities.button.button.pushed_2x()
+  evt = (cmd.args.value == 0) and capabilities.button.button.down_2x() or capabilities.button.button.up_2x()
   evt.state_change = true
   device:emit_event(evt)
 end
@@ -136,8 +136,11 @@ local function central_scene_notification_handler(self, device, cmd)
   if ( cmd.args.scene_number ~= nil and cmd.args.scene_number ~= 0 ) then
     button_number = cmd.args.scene_number
   end
-  local button_key = ((button_number == 1) and 'up' or 'down') .. map_key_attribute_to_capability[cmd.args.key_attributes]
+  local suffix = map_key_attribute_to_capability[cmd.args.key_attributes]
+  local button_key = ((button_number == 1) and 'up' or 'down') .. suffix
+  local generic_push = 'pushed' .. suffix
   if cmd.args.key_attributes ~= CentralScene.key_attributes.KEY_RELEASED then
+    send_button_capability_event(device,capabilities.button.button[generic_push],button_number,cmd)
     send_button_capability_event(device,capabilities.button.button[button_key],button_number,cmd)
   end
 end

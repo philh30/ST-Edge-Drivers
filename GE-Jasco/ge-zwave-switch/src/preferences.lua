@@ -46,7 +46,7 @@ local GE_SCENE = {
   },
   BUTTONS = {
     count = 1,
-    values = {'up','down','up_hold','down_hold','up_2x','down_2x','up_3x','down_3x'},
+    values = {'up','down','pushed','up_hold','down_hold','pushed_hold','up_2x','down_2x','pushed_2x','up_3x','down_3x','pushed_3x'},
   },
 }
 
