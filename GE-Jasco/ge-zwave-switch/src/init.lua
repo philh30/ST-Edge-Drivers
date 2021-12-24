@@ -1,5 +1,7 @@
 -- Author: philh30
 --
+-- Copyright 2021 SmartThings
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
@@ -138,7 +140,7 @@ local function central_scene_notification_handler(self, device, cmd)
   end
   local suffix = map_key_attribute_to_capability[cmd.args.key_attributes]
   local button_key = ((button_number == 1) and 'up' or 'down') .. suffix
-  local generic_push = 'pushed' .. suffix
+  local generic_push = (suffix == '_hold') and ('held') or ('pushed' .. suffix)
   if cmd.args.key_attributes ~= CentralScene.key_attributes.KEY_RELEASED then
     send_button_capability_event(device,capabilities.button.button[generic_push],button_number,cmd)
     send_button_capability_event(device,capabilities.button.button[button_key],button_number,cmd)

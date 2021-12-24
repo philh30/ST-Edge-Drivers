@@ -23,16 +23,6 @@ preferences:
         2: "Always off"
         3: "Always on"
       default: 0
-  - title: "Invert Switch"
-    name: invertSwitch
-    description: "Invert switch"
-    required: true
-    preferenceType: enumeration
-    definition:
-      options:
-        0: "No"
-        1: "Yes"
-      default: 0
   - title: "Exclusion Sequence"
     name: excludeProtect
     description: "Never accidentally remove a device with alternate exclusion"
