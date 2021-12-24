@@ -160,4 +160,12 @@ preferences.get_buttons = function(zw_device)
   return nil
 end
 
+preferences.to_numeric_value = function(new_value)
+  local numeric = tonumber(new_value)
+  if numeric == nil then -- in case the value is boolean
+    numeric = new_value and 1 or 0
+  end
+  return numeric
+end
+
 return preferences
