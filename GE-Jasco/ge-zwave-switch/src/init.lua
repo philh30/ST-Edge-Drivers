@@ -12,16 +12,21 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-local cc = require "st.zwave.CommandClass"
 local capabilities = require "st.capabilities"
---- @type st.zwave.defaults
-local defaults = require "st.zwave.defaults"
---- @type st.zwave.Driver
+local cc = require "st.zwave.CommandClass"
 local ZwaveDriver = require "st.zwave.driver"
+local defaults = require "st.zwave.defaults"
 local log = require "log"
+--- @type st.zwave.CommandClass.Association
 local Association = (require "st.zwave.CommandClass.Association")({ version=2 })
+--- @type st.zwave.CommandClass.Basic
 local Basic = (require "st.zwave.CommandClass.Basic")({ version = 1 })
+--- @type st.zwave.CommandClass.Configuration
 local Configuration = (require "st.zwave.CommandClass.Configuration")({ version=4 })
+--- @type st.zwave.CommandClass.SceneActivation
+local SceneActivation = (require "st.zwave.CommandClass.SceneActivation")({version=1,strict=true})
+--- @type st.zwave.CommandClass.CentralScene
+local CentralScene = (require "st.zwave.CommandClass.CentralScene")({version=1,strict=true})
 local preferencesMap = require "preferences"
 local splitAssocString = require "split_assoc_string"
 
@@ -63,6 +68,13 @@ end
 
 --- @param driver st.zwave.Driver
 --- @param device st.zwave.Device
+local function do_configure(driver, device)
+  device:refresh()
+  update_preferences(driver, device)
+end
+
+--- @param driver st.zwave.Driver
+--- @param device st.zwave.Device
 local function added(driver, device)
   device:refresh()
   update_preferences(driver, device)
@@ -74,6 +86,60 @@ local function basic_set(driver, device, cmd)
   local evt = (cmd.args.value == 0) and capabilities.button.button.down_2x() or capabilities.button.button.up_2x()
   evt.state_change = true
   device:emit_event(evt)
+  evt = capabilities.button.button.pushed_2x()
+  evt.state_change = true
+  device:emit_event(evt)
+end
+
+local map_key_attribute_to_capability = {
+  [CentralScene.key_attributes.KEY_PRESSED_1_TIME] = '',
+  [CentralScene.key_attributes.KEY_RELEASED] = '_released', -- released doesn't exist on button capability, so don't emit this event
+  [CentralScene.key_attributes.KEY_HELD_DOWN] = '_hold',
+  [CentralScene.key_attributes.KEY_PRESSED_2_TIMES] = '_2x',
+  [CentralScene.key_attributes.KEY_PRESSED_3_TIMES] = '_3x',
+  [CentralScene.key_attributes.KEY_PRESSED_4_TIMES] = '_4x',
+  [CentralScene.key_attributes.KEY_PRESSED_5_TIMES] = '_5x',
+}
+
+--- Generates and send button capability event
+---
+--- @param device st.zwave.Device
+--- @param capability_attribute function generates capability event
+--- @param  button_number number
+local function send_button_capability_event(device, capability_attribute, button_number, cmd)
+  local additional_fields = {
+    state_change = true
+  }
+  local event
+  if capability_attribute ~= nil then
+    event = capability_attribute(additional_fields)
+  end
+
+  if event ~= nil then
+    device:emit_event_for_endpoint(cmd.src_channel, event)
+  end
+end
+
+--- Handler for scene notification command class reports
+---
+--- Shall emit appropriate capabilities.button event ( `pushed`, `held` etc.)
+--- based on command's key_attributes
+---
+--- @param self st.zwave.Driver
+--- @param device st.zwave.Device
+--- @param cmd st.zwave.CommandClass.CentralScene.Notification
+---           expected command arguments:
+---           args={key_attributes="KEY_PRESSED_1_TIME",
+---                 scene_number=0, sequence_number=0, slow_refresh=false}
+local function central_scene_notification_handler(self, device, cmd)
+  local button_number = 1
+  if ( cmd.args.scene_number ~= nil and cmd.args.scene_number ~= 0 ) then
+    button_number = cmd.args.scene_number
+  end
+  local button_key = ((button_number == 1) and 'up' or 'down') .. map_key_attribute_to_capability[cmd.args.key_attributes]
+  if cmd.args.key_attributes ~= CentralScene.key_attributes.KEY_RELEASED then
+    send_button_capability_event(device,capabilities.button.button[button_key],button_number,cmd)
+  end
 end
 
 local driver_template = {
@@ -81,24 +147,25 @@ local driver_template = {
     [cc.BASIC] = {
       [Basic.SET] = basic_set,
     },
+    [cc.CENTRAL_SCENE] = {
+      [CentralScene.NOTIFICATION] = central_scene_notification_handler,
+    },
   },
   supported_capabilities = {
     capabilities.switch,
     capabilities.switchLevel,
     capabilities.fanSpeed,
-    capabilities.button,
     capabilities.refresh,
+    capabilities.button,
   },
   lifecycle_handlers = {
-    added = added,
     infoChanged = info_changed,
+    doConfigure = do_configure,
+    added = added,
   },
-  sub_drivers = {
-    require("zwave-fan-3-speed")
-  },
+  NAME = "ge zwave",
 }
 
 defaults.register_for_default_handlers(driver_template, driver_template.supported_capabilities)
---- @type st.zwave.Driver
-local ge_fan = ZwaveDriver("ge_zwave_fan", driver_template)
-ge_fan:run()
+local ge_switch = ZwaveDriver("ge-zwave-switch", driver_template)
+ge_switch:run()

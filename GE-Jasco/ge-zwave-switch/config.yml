@@ -1,0 +1,4 @@
+name: 'GE Z-Wave Switch'
+packageKey: 'ge-zwave-switch'
+permissions:
+  zwave: {}

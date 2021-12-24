@@ -1,4 +1,0 @@
-name: 'GE Z-Wave Fan'
-packageKey: 'ge-zwave-fan'
-permissions:
-  zwave: {}

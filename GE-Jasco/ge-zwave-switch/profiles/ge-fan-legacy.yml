@@ -1,4 +1,4 @@
-name: ge-fan-3034
+name: ge-fan-legacy
 components:
 - id: main
   capabilities:

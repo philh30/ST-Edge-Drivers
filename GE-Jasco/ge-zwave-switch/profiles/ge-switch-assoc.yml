@@ -1,19 +1,15 @@
-name: ge-fan-3131
+name: ge-switch-assoc
 components:
 - id: main
   capabilities:
   - id: switch
-    version: 1
-  - id: switchLevel
-    version: 1
-  - id: fanSpeed
     version: 1
   - id: button
     version: 1
   - id: refresh
     version: 1
   categories:
-  - name: Fan
+  - name: Switch
 preferences:
   - title: "LED Indicator"
     name: ledIndicator
@@ -22,8 +18,8 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
-        0: "Turn on when switch is on"
-        1: "Turn on when switch is off"
+        0: "Turn on when switch is off"
+        1: "Turn on when switch is on"
         2: "Always off"
       default: 0
   - title: "Invert Switch"
@@ -36,7 +32,7 @@ preferences:
         0: "No"
         1: "Yes"
       default: 0
-  - title: "Association Group 2 - On/Off w/ Load"
+  - title: "Association Group 2"
     name: assocGroup2
     description: "Enter a comma delimited list of hex IDs to be turned on/off with the switch load (5 node max)"
     required: true
@@ -44,9 +40,9 @@ preferences:
     definition:
       stringType: text
       default: ""
-  - title: "Association Group 3 - Double Tap"
+  - title: "Association Group 3"
     name: assocGroup3
-    description: "Enter a comma delimited list of hex IDs to be turned on/off with switch double tap (4 node max, not counting node 1). Node 1 will be added automatically."
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with switch double tap (4 node max)"
     required: true
     preferenceType: string
     definition:

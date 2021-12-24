@@ -1,0 +1,53 @@
+name: salt
+components:
+- id: main
+  capabilities:
+  - id: temperatureMeasurement
+    version: 1
+  - id: voltageMeasurement
+    version: 1
+  - id: powerMeter
+    version: 1
+  - id: pHMeasurement
+    version: 1
+  - id: "platinummassive43262.orpMeasurement"
+    version: 1
+  - id: "platinummassive43262.phMeasurement"
+    version: 1
+  - id: "platinummassive43262.saltMeasurement"
+    version: 1
+  - id: "platinummassive43262.currentMeter"
+    version: 1
+  - id: "platinummassive43262.statusMessage"
+    version: 1
+  - id: "platinummassive43262.errorReport"
+    version: 1
+  categories:
+  - name: WaterValve
+metadata:
+  deviceType: WaterValve
+  ocfDeviceType: oic.d.watervalve
+  deviceTypeId: WaterValve
+  vid: 56ec67e6-6e17-3c55-b129-8b6967c0fc65
+  mnmn: SmartThingsCommunity
+preferences:
+  - title: "SmartThings Node Proxy LAN Address"
+    name: lanAddress
+    description: "IP:Port address of STNP"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      minLength: 12
+      maxLength: 20
+      default: '192.168.1.nnn:8080'
+  - title: "ST Node Proxy Auth Code"
+    name: authCode
+    description: "Auth code saved in SmartThings Node Proxy config.json"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: password
+      minLength: 4
+      maxLength: 16
+      default: "authcode"

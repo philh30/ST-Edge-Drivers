@@ -1,0 +1,5 @@
+name: 'Pool Pilot Total Control STNP'
+packageKey: 'salt-stnp'
+permissions:
+  lan: {}
+  discovery: {}
