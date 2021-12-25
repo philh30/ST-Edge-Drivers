@@ -25,7 +25,7 @@ Fingerprint | Device | Profile | Tested
 0063/4952/3036 | GE Smart Switch (14291 / ZW4005) | ge-switch-assoc | Yes
 0063/4952/3037 | GE Smart Toggle Switch (14292 / ZW4003) | ge-switch-assoc | Yes
 0063/4952/3038 | GE Smart Toggle Switch (14293 / ZW4003) | ge-switch-assoc | No
-0063/4952/3135 | GE Smart Switch (14291 / 46201 / ZW4008) | ge-switch-scene | No
+0063/4952/3135 | GE Smart Switch (14291 / 46201 / ZW4008) | ge-switch-scene | Yes
 0063/4952/3137 | GE Smart Toggle Switch (14292 / 46202 / ZW4009) | ge-switch-scene | No
 0063/4952/3139 | GE Smart Switch (43072 / ZW4008DV) | ge-switch-scene | No
 0063/4952/3231 | GE Smart Toggle Switch (43074 / ZW4009DV) | ge-switch-scene | No
