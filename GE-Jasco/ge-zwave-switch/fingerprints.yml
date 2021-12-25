@@ -269,8 +269,20 @@ zwaveManufacturer:
     productType: 0x5257
     productId: 0x3533
     deviceProfileName: ge-switch-legacy
+  - id: "0039/4944/3038"
+    deviceLabel: Honeywell Dimmer 39458
+    manufacturerId: 0x0039
+    productType: 0x4944
+    productId: 0x3038
+    deviceProfileName: ge-dimmer-assoc
+  - id: "0039/4944/3130"
+    deviceLabel: Honeywell Dimmer 39357
+    manufacturerId: 0x0039
+    productType: 0x4944
+    productId: 0x3130
+    deviceProfileName: ge-dimmer-assoc
   - id: "0039/4944/3131"
-    deviceLabel: Honeywell Fan 14287
+    deviceLabel: Honeywell Fan 39358
     manufacturerId: 0x0039
     productType: 0x4944
     productId: 0x3131
@@ -281,3 +293,75 @@ zwaveManufacturer:
     productType: 0x4944
     productId: 0x3235
     deviceProfileName: ge-dimmer-scene
+  - id: "0039/4944/3237"
+    deviceLabel: Honeywell Dimmer 39357
+    manufacturerId: 0x0039
+    productType: 0x4944
+    productId: 0x3237
+    deviceProfileName: ge-dimmer-scene
+  - id: "0039/4952/3036"
+    deviceLabel: Honeywell Switch 39455
+    manufacturerId: 0x0039
+    productType: 0x4952
+    productId: 0x3036
+    deviceProfileName: ge-switch-assoc
+  - id: "0039/4952/3037"
+    deviceLabel: Honeywell Switch 39354
+    manufacturerId: 0x0039
+    productType: 0x4952
+    productId: 0x3037
+    deviceProfileName: ge-switch-assoc
+  - id: "0039/4952/3133"
+    deviceLabel: Honeywell Outlet 39456
+    manufacturerId: 0x0039
+    productType: 0x4952
+    productId: 0x3133
+    deviceProfileName: ge-outlet-assoc
+  - id: "0039/4952/3135"
+    deviceLabel: Honeywell Switch 39348
+    manufacturerId: 0x0039
+    productType: 0x4952
+    productId: 0x3135
+    deviceProfileName: ge-switch-scene
+  - id: "0039/4952/3137"
+    deviceLabel: Honeywell Switch 39354
+    manufacturerId: 0x0039
+    productType: 0x4952
+    productId: 0x3137
+    deviceProfileName: ge-switch-scene
+  - id: "0039/4F50/3032"
+    deviceLabel: Honeywell Plug In Switch 39346
+    manufacturerId: 0x0039
+    productType: 0x4F50
+    productId: 0x3032
+    deviceProfileName: ge-plugin-assoc
+  - id: "0039/4F50/3034"
+    deviceLabel: Honeywell Plug In Switch 39363
+    manufacturerId: 0x0039
+    productType: 0x4F50
+    productId: 0x3034
+    deviceProfileName: ge-plugin-scene
+  - id: "0039/5044/3033"
+    deviceLabel: Honeywell Plug In Dimmer 39446
+    manufacturerId: 0x0039
+    productType: 0x5044
+    productId: 0x3033
+    deviceProfileName: ge-plugdim-assoc
+  - id: "0039/5044/3038"
+    deviceLabel: Honeywell Plug In Dimmer 39443
+    manufacturerId: 0x0039
+    productType: 0x5044
+    productId: 0x3038
+    deviceProfileName: ge-plugdim-assoc
+  - id: "0039/5052/3033"
+    deviceLabel: Honeywell Plug In Switch 39449
+    manufacturerId: 0x0039
+    productType: 0x5052
+    productId: 0x3033
+    deviceProfileName: ge-plugin-assoc
+  - id: "0039/5052/3038"
+    deviceLabel: HoneywellGE Plug In Switch 39444
+    manufacturerId: 0x0039
+    productType: 0x5052
+    productId: 0x3038
+    deviceProfileName: ge-plugin-assoc
