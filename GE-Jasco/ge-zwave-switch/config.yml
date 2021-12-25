@@ -1,4 +1,4 @@
-name: 'GE Z-Wave Switch'
+name: 'GE Z-Wave Switch/Dimmer/Fan/Outlet'
 packageKey: 'ge-zwave-switch'
 permissions:
   zwave: {}

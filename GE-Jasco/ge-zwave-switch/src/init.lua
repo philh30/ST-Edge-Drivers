@@ -46,8 +46,9 @@ local function update_preferences(driver, device, args)
         local maxnodes = preferences[id].maxnodes
         local addhub = preferences[id].addhub
         local nodes = splitAssocString(value,',',maxnodes,addhub)
+        local hubnode = device.driver.environment_info.hub_zwave_id
         device:send(Association:Remove({grouping_identifier = group, node_ids = {}}))
-        if addhub then device:send(Association:Set({grouping_identifier = group, node_ids = {1}})) end --add hub to group 3 for double click reporting
+        if addhub then device:send(Association:Set({grouping_identifier = group, node_ids = {hubnode}})) end --add hub to group 3 for double click reporting
         if #nodes > 0 then
           device:send(Association:Set({grouping_identifier = group, node_ids = nodes}))
         end
