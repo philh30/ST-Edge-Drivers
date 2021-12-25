@@ -23,7 +23,7 @@ Fingerprint | Device | Profile | Tested
 0063/4952/3033 | GE Smart Toggle Switch (12727 / ZW4003) | ge-switch-legacy | No
 0063/4952/3034 | GE Smart Toggle Switch (12731) | ge-switch-legacy | No
 0063/4952/3036 | GE Smart Switch (14291 / ZW4005) | ge-switch-assoc | Yes
-0063/4952/3037 | GE Smart Toggle Switch (14292 / ZW4003) | ge-switch-assoc | No
+0063/4952/3037 | GE Smart Toggle Switch (14292 / ZW4003) | ge-switch-assoc | Yes
 0063/4952/3038 | GE Smart Toggle Switch (14293 / ZW4003) | ge-switch-assoc | No
 0063/4952/3135 | GE Smart Switch (14291 / 46201 / ZW4008) | ge-switch-scene | No
 0063/4952/3137 | GE Smart Toggle Switch (14292 / 46202 / ZW4009) | ge-switch-scene | No
@@ -46,7 +46,7 @@ Fingerprint | Device | Profile | Tested
 0063/4944/3035 | GE Smart Toggle Dimmer (12733) | ge-dimmer-legacy | No
 0063/4944/3036 | GE Smart Toggle Dimmer (12734) | ge-dimmer-legacy | No
 0063/4944/3037 | GE Smart Toggle Dimmer (12735) | ge-dimmer-legacy | No
-0063/4944/3038 | GE Smart Dimmer (14294 / ZW3005) | ge-dimmer-assoc | No
+0063/4944/3038 | GE Smart Dimmer (14294 / ZW3005) | ge-dimmer-assoc | Yes
 0063/4944/3039 | GE Smart Dimmer (14299 / ZW3006) | ge-dimmer-assoc | No
 0063/4944/3130 | GE Smart Toggle Dimmer (14295 / ZW3004) | ge-dimmer-assoc | No
 0063/4944/3233 | GE Smart Touch Dimmer (14289 / ZW3009) | ge-dimmer-assoc | No
