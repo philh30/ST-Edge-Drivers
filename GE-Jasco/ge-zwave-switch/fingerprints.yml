@@ -162,7 +162,7 @@ zwaveManufacturer:
     productId: 0x3135
     deviceProfileName: ge-switch-scene
   - id: "0063/4952/3137"
-    deviceLabel: GE Switch 46201
+    deviceLabel: GE Switch 46202
     manufacturerId: 0x0063
     productType: 0x4952
     productId: 0x3137
