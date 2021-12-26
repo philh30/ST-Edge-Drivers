@@ -156,6 +156,14 @@ preferences:
     definition:
       stringType: text
       default: ''
+  - title: "Carbon Monoxide Sensor Zones"
+    name: coZones
+    description: "Enter a comma delimited list of carbon monoxide sensor zone numbers to create (e.g. 3,28,13,11)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ''
   - title: "Smoke Sensor Zones"
     name: smokeZones
     description: "Enter a comma delimited list of smoke sensor zone numbers to create (e.g. 7,21,19,10)"

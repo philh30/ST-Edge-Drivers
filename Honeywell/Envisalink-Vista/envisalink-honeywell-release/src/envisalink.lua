@@ -13,16 +13,6 @@ Copyright 2021 Todd Austin
   either express or implied. See the License for the specific language governing permissions
   and limitations under the License.
 
-
-  DESCRIPTION
-  
-  Samsung SmartThings Edge Driver for Envisalink - module to (1) handle incoming Envisalink messages, (2) create
-  json tables & log messages based on them, and (3) send commands to Envisalink
-
-  ** The Envisalink message-parsing code here is ported from the alarmserver Python package
-  originally developed by donnyk+envisalink@gmail.com, which also included subsequent modifications/enhancements by
-  leaberry@gmail.com, jordan@xeron.cc, and ralphtorchia1@gmail.com
-
 --]]
 
 

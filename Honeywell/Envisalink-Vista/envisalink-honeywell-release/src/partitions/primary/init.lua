@@ -1,3 +1,17 @@
+-- Author: philh30
+--
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+--
+--     http://www.apache.org/licenses/LICENSE-2.0
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+
 local cosock = require "cosock"
 local socket = require "cosock.socket"
 local commands = require('commands')
@@ -7,6 +21,7 @@ local utilities = require('utilities')
 local capdefs = require('capabilitydefs')
 local evlClient = require('envisalink')
 local events = require "evthandler"
+
 
 local function initconfigEVL(device)
 
@@ -125,6 +140,7 @@ local function infoChanged_handler(driver,device, event, args)
   if device.preferences.addZones then
     add_zones(driver,'Contact',device.preferences.contactZones)
     add_zones(driver,'Motion',device.preferences.motionZones)
+    add_zones(driver,'Carbon Monoxide',device.preferences.coZones)
     add_zones(driver,'Smoke',device.preferences.smokeZones)
     add_zones(driver,'Leak',device.preferences.leakZones)
     add_zones(driver,'Glass Break',device.preferences.glassZones)

@@ -1,3 +1,5 @@
+-- Author: philh30
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
@@ -22,14 +24,15 @@ local lifecycles = require('lifecycles')
 
 ---------------------------------------
 -- custom capabilities
-caps[capdefs.statusMessage.name]  = capdefs.statusMessage.capability
-caps[capdefs.alarmMode.name]  = capdefs.alarmMode.capability
-caps[capdefs.bypass.name]         = capdefs.bypass.capability
-caps[capdefs.contactZone.name]    = capdefs.contactZone.capability
-caps[capdefs.glassBreakZone.name] = capdefs.glassBreakZone.capability
-caps[capdefs.leakZone.name]       = capdefs.leakZone.capability
-caps[capdefs.motionZone.name]     = capdefs.motionZone.capability
-caps[capdefs.smokeZone.name]      = capdefs.smokeZone.capability
+caps[capdefs.statusMessage.name]      = capdefs.statusMessage.capability
+caps[capdefs.alarmMode.name]          = capdefs.alarmMode.capability
+caps[capdefs.bypass.name]             = capdefs.bypass.capability
+caps[capdefs.carbonMonoxideZone.name] = capdefs.carbonMonoxideZone.capability
+caps[capdefs.contactZone.name]        = capdefs.contactZone.capability
+caps[capdefs.glassBreakZone.name]     = capdefs.glassBreakZone.capability
+caps[capdefs.leakZone.name]           = capdefs.leakZone.capability
+caps[capdefs.motionZone.name]         = capdefs.motionZone.capability
+caps[capdefs.smokeZone.name]          = capdefs.smokeZone.capability
 
 ---------------------------------------
 -- variables

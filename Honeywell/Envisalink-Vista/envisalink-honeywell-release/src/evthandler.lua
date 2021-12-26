@@ -1,3 +1,17 @@
+-- Author: philh30
+--
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+--
+--     http://www.apache.org/licenses/LICENSE-2.0
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+
 local log             = require('log')
 local capabilities    = require('st.capabilities')
 local capabilitydefs  = require('capabilitydefs')
@@ -42,28 +56,33 @@ local switch_modes = {
 
 event_handler.device_types = {
   contact = {
-    wired         = { profile = 'contact-sensor-wired',     model = 'Honeywell Contact Sensor Wired'    },
-    wireless      = { profile = 'contact-sensor-wireless',  model = 'Honeywell Contact Sensor Wireless' },
+    wired         = { profile = 'contact-sensor-wired',           model = 'Honeywell Contact Sensor Wired'    },
+    wireless      = { profile = 'contact-sensor-wireless',        model = 'Honeywell Contact Sensor Wireless' },
     vendor_label  = 'Contact'
   },
   motion = {
-    wired         = { profile = 'motion-sensor-wired',      model = 'Honeywell Motion Sensor Wired'     },
-    wireless      = { profile = 'motion-sensor-wireless',   model = 'Honeywell Motion Sensor Wireless'  },
+    wired         = { profile = 'motion-sensor-wired',            model = 'Honeywell Motion Sensor Wired'     },
+    wireless      = { profile = 'motion-sensor-wireless',         model = 'Honeywell Motion Sensor Wireless'  },
     vendor_label  = 'Motion'
   },
   glass = {
-    wired         = { profile = 'glass-sensor-wired',       model = 'Honeywell Glass Sensor Wired'      },
-    wireless      = { profile = 'glass-sensor-wireless',    model = 'Honeywell Glass Sensor Wireless'   },
+    wired         = { profile = 'glass-sensor-wired',             model = 'Honeywell Glass Sensor Wired'      },
+    wireless      = { profile = 'glass-sensor-wireless',          model = 'Honeywell Glass Sensor Wireless'   },
     vendor_label  = 'Glass Break'
   },
   leak = {
-    wired         = { profile = 'leak-sensor-wired',        model = 'Honeywell Leak Sensor Wired'       },
-    wireless      = { profile = 'leak-sensor-wireless',     model = 'Honeywell Leak Sensor Wireless'    },
+    wired         = { profile = 'leak-sensor-wired',              model = 'Honeywell Leak Sensor Wired'       },
+    wireless      = { profile = 'leak-sensor-wireless',           model = 'Honeywell Leak Sensor Wireless'    },
     vendor_label  = 'Leak'
   },
+  carbonmonoxide = {
+    wired         = { profile = 'carbonmonoxide-sensor-wired',    model = 'Honeywell Carbon Monoxide Sensor Wired'      },
+    wireless      = { profile = 'carbonmonoxide-sensor-wireless', model = 'Honeywell Carbon Monoxide Sensor Wireless'   },
+    vendor_label  = 'Carbon Monoxide'
+  },
   smoke = {
-    wired         = { profile = 'smoke-sensor-wired',       model = 'Honeywell Smoke Sensor Wired'      },
-    wireless      = { profile = 'smoke-sensor-wireless',    model = 'Honeywell Smoke Sensor Wireless'   },
+    wired         = { profile = 'smoke-sensor-wired',             model = 'Honeywell Smoke Sensor Wired'      },
+    wireless      = { profile = 'smoke-sensor-wireless',          model = 'Honeywell Smoke Sensor Wireless'   },
     vendor_label  = 'Smoke'
   },
 }
@@ -73,6 +92,7 @@ local device_profiles = {
   ['Partition']         = 'partition',
   ['Contact']           = 'contact-sensor',
   ['Motion']            = 'motion-sensor',
+  ['Carbon Monoxide']   = 'carbonmonoxide-sensor',
   ['Smoke']             = 'smoke-sensor',
   ['Leak']              = 'leak-sensor',
   ['Glass Break']       = 'glass-sensor',
@@ -82,18 +102,20 @@ local device_profiles = {
 ----------------
 -- Zone Handlers
 local translate_state = {
-  contact         = { open = 'open',           closed = 'closed',    bypassed = 'closed'  },
-  contact_bypass  = { open = 'open',           closed = 'closed',    bypassed = 'bypassed'},
-  motion          = { open = 'active',         closed = 'inactive',  bypassed = 'inactive'},
-  motion_bypass   = { open = 'active',         closed = 'inactive',  bypassed = 'bypassed'},
-  bypassable      = { open = 'notReady',       closed = 'ready',     bypassed = 'bypassed'},
-  smoke           = { open = 'detected',       closed = 'clear',     bypassed = 'clear'   },
-  smoke_bypass    = { open = 'detected',       closed = 'clear',     bypassed = 'bypassed'},
-  glass           = { open = 'glassBreaking',  closed = 'noSound',   bypassed = 'noSound' },
-  glass_bypass    = { open = 'glassBreaking',  closed = 'noSound',   bypassed = 'bypassed'},
-  leak            = { open = 'wet',            closed = 'dry',       bypassed = 'dry'     },
-  leak_bypass     = { open = 'wet',            closed = 'dry',       bypassed = 'bypassed'},
-  security_system = { alarm = nil, alarmcleared = nil, arming = nil, armedaway = 'armedAway', armedstay = 'armedStay', armedinstant = 'armedStay', armedmax = 'armedAway', ready = 'disarmed', notready = 'disarmed' }
+  contact               = { open = 'open',           closed = 'closed',    bypassed = 'closed'  },
+  contact_bypass        = { open = 'open',           closed = 'closed',    bypassed = 'bypassed'},
+  motion                = { open = 'active',         closed = 'inactive',  bypassed = 'inactive'},
+  motion_bypass         = { open = 'active',         closed = 'inactive',  bypassed = 'bypassed'},
+  bypassable            = { open = 'notReady',       closed = 'ready',     bypassed = 'bypassed'},
+  carbonmonoxide        = { open = 'detected',       closed = 'clear',     bypassed = 'clear'   },
+  carbonmonoxide_bypass = { open = 'detected',       closed = 'clear',     bypassed = 'bypassed'},
+  smoke                 = { open = 'detected',       closed = 'clear',     bypassed = 'clear'   },
+  smoke_bypass          = { open = 'detected',       closed = 'clear',     bypassed = 'bypassed'},
+  glass                 = { open = 'glassBreaking',  closed = 'noSound',   bypassed = 'noSound' },
+  glass_bypass          = { open = 'glassBreaking',  closed = 'noSound',   bypassed = 'bypassed'},
+  leak                  = { open = 'wet',            closed = 'dry',       bypassed = 'dry'     },
+  leak_bypass           = { open = 'wet',            closed = 'dry',       bypassed = 'bypassed'},
+  security_system       = { alarm = nil, alarmcleared = nil, arming = nil, armedaway = 'armedAway', armedstay = 'armedStay', armedinstant = 'armedStay', armedmax = 'armedAway', ready = 'disarmed', notready = 'disarmed' }
 }
 
 local function update_zone_contact(driver,device,body)
@@ -101,19 +123,26 @@ local function update_zone_contact(driver,device,body)
   device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]}))
   device:emit_event(capabilities.contactSensor.contact({value = translate_state.contact[body.state]}))
 end
-  
+
 local function update_zone_motion(driver,device,body)
   device:emit_event(capabilities[capabilitydefs.motionZone.name].motionZone({value = translate_state.motion_bypass[body.state]}))
   device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]}))
   device:emit_event(capabilities.motionSensor.motion({value = translate_state.motion[body.state]}))
 end
-  
+
+local function update_zone_carbonmonoxide(driver,device,body)
+  device:emit_event(capabilities[capabilitydefs.carbonMonoxideZone.name].carbonMonoxideZone({value = translate_state.carbonmonoxide_bypass[body.state]}))
+  device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]}))
+  device:emit_event(capabilities.carbonMonoxideDetector.carbonMonoxide({value = translate_state.carbonmonoxide[body.state]}))
+  device:emit_event(capabilities.smokeDetector.smoke({value = translate_state.smoke[body.state]}))
+end
+
 local function update_zone_smoke(driver,device,body)
   device:emit_event(capabilities[capabilitydefs.smokeZone.name].smokeZone({value = translate_state.smoke_bypass[body.state]}))
   device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]}))
   device:emit_event(capabilities.smokeDetector.smoke({value = translate_state.smoke[body.state]}))
 end
-  
+
 local function update_zone_leak(driver,device,body)
   device:emit_event(capabilities[capabilitydefs.leakZone.name].leakZone({value = translate_state.leak_bypass[body.state]}))
   device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]}))
@@ -147,16 +176,18 @@ local function update_switch(driver,device,body)
 end
 
 event_handler.zone_handler = {
-  ['Honeywell Contact Sensor Wireless']     = update_zone_contact,
-  ['Honeywell Motion Sensor Wireless']      = update_zone_motion,
-  ['Honeywell Smoke Sensor Wireless']       = update_zone_smoke,
-  ['Honeywell Leak Sensor Wireless']        = update_zone_leak,
-  ['Honeywell Glass Break Sensor Wireless'] = update_zone_glass,
-  ['Honeywell Contact Sensor Wired']        = update_zone_contact,
-  ['Honeywell Motion Sensor Wired']         = update_zone_motion,
-  ['Honeywell Smoke Sensor Wired']          = update_zone_smoke,
-  ['Honeywell Leak Sensor Wired']           = update_zone_leak,
-  ['Honeywell Glass Break Sensor Wired']    = update_zone_glass,
+  ['Honeywell Contact Sensor Wireless']         = update_zone_contact,
+  ['Honeywell Motion Sensor Wireless']          = update_zone_motion,
+  ['Honeywell Carbon Monoxide Sensor Wireless'] = update_zone_carbonmonoxide,
+  ['Honeywell Smoke Sensor Wireless']           = update_zone_smoke,
+  ['Honeywell Leak Sensor Wireless']            = update_zone_leak,
+  ['Honeywell Glass Break Sensor Wireless']     = update_zone_glass,
+  ['Honeywell Contact Sensor Wired']            = update_zone_contact,
+  ['Honeywell Motion Sensor Wired']             = update_zone_motion,
+  ['Honeywell Carbon Monoxide Sensor Wired']    = update_zone_carbonmonoxide,
+  ['Honeywell Smoke Sensor Wired']              = update_zone_smoke,
+  ['Honeywell Leak Sensor Wired']               = update_zone_leak,
+  ['Honeywell Glass Break Sensor Wired']        = update_zone_glass,
 }
 
 local function update_partition(driver,device,body)
@@ -271,7 +302,7 @@ end
 
 function event_handler.createDevice(driver, dev_type, dev_profile, dev_id, dev_label)
   -- dev_type = partition/zone/switch
-  -- dev_profile = Primary Partition/Partition/Contact/Motion/Smoke/Leak/Glass Break/Switch/Momentary
+  -- dev_profile = Primary Partition/Partition/Contact/Motion/Carbon Monoxide/Smoke/Leak/Glass Break/Switch/Momentary
   -- dev_id = 1/2/3/4/armStay/armAway/disarm/armInstant
 
   local id = 'envisalink' .. ((dev_type == 'partition' and '|p|') or (dev_type == 'zone' and '|z|') or '|s|') .. dev_id

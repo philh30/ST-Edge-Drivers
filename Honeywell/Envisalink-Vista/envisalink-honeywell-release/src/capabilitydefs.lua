@@ -1,14 +1,29 @@
+-- Author: philh30
+--
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+--
+--     http://www.apache.org/licenses/LICENSE-2.0
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+
 local capabilities = require('st.capabilities')
 
--- statusMessage    = platinummassive43262.statusMessage
--- alarmMode        = platinummassive43262.alarmState
--- alarmCommands    = platinummassive43262.securityPartitionCommands
--- bypass           = platinummassive43262.bypass
--- contactZone      = platinummassive43262.contactZone
--- glassBreakZone   = platinummassive43262.glassBreakZone
--- leakZone         = platinummassive43262.leakZone
--- motionZone       = platinummassive43262.motionZone
--- smokeZone        = platinummassive43262.smokeZone
+-- statusMessage        = platinummassive43262.statusMessage
+-- alarmMode            = platinummassive43262.alarmState
+-- alarmCommands        = platinummassive43262.securityPartitionCommands
+-- bypass               = platinummassive43262.bypass
+-- carbonMonoxideZone   = platinummassive43262.carbonMonoxideZone
+-- contactZone          = platinummassive43262.contactZone
+-- glassBreakZone       = platinummassive43262.glassBreakZone
+-- leakZone             = platinummassive43262.leakZone
+-- motionZone           = platinummassive43262.motionZone
+-- smokeZone            = platinummassive43262.smokeZone
 
 local capabilitydefs = {}
 
@@ -120,6 +135,42 @@ capabilitydefs.bypass.json = [[
 }
 ]]
 capabilitydefs.bypass.capability = capabilities.build_cap_from_json_string(capabilitydefs.bypass.json)
+
+capabilitydefs.carbonMonoxideZone = {}
+capabilitydefs.carbonMonoxideZone.name = "platinummassive43262.carbonMonoxideZone"
+capabilitydefs.carbonMonoxideZone.json = [[
+{
+    "id": "platinummassive43262.carbonMonoxideZone",
+    "version": 1,
+    "status": "proposed",
+    "name": "Carbon Monoxide Zone",
+    "ephemeral": false,
+    "attributes": {
+        "carbonMonoxideZone": {
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "value": {
+                        "type": "string",
+                        "enum": [
+                            "clear",
+                            "detected",
+                            "bypassed"
+                        ]
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "value"
+                ]
+            },
+            "enumCommands": []
+        }
+    },
+    "commands": {}
+}
+]]
+capabilitydefs.carbonMonoxideZone.capability = capabilities.build_cap_from_json_string(capabilitydefs.carbonMonoxideZone.json)
 
 capabilitydefs.contactZone= {}
 capabilitydefs.contactZone.name = "platinummassive43262.contactZone"

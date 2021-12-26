@@ -53,5 +53,6 @@ preferences:
         motion: "Motion detector"
         glass: "Glass break sensor"
         leak: "Leak sensor"
+        carbonmonoxide: "Carbon monoxide detector"
         smoke: "Smoke detector"
       default: "leak"

@@ -1,3 +1,17 @@
+-- Author: philh30
+--
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+--
+--     http://www.apache.org/licenses/LICENSE-2.0
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+
 local capabilities = require('st.capabilities')
 local log = require('log')
 local commands = require('commands')
@@ -8,11 +22,13 @@ local socket = require "cosock.socket"
 local models_supported = {
   'Honeywell Contact Sensor Wireless',
   'Honeywell Motion Sensor Wireless',
+  'Honeywell Carbon Monoxide Sensor Wireless',
   'Honeywell Smoke Sensor Wireless',
   'Honeywell Leak Sensor Wireless',
   'Honeywell Glass Break Sensor Wireless',
   'Honeywell Contact Sensor Wired',
   'Honeywell Motion Sensor Wired',
+  'Honeywell Carbon Monoxide Sensor Wired',
   'Honeywell Smoke Sensor Wired',
   'Honeywell Leak Sensor Wired',
   'Honeywell Glass Break Sensor Wired',
@@ -35,6 +51,11 @@ local capabilityInits = {
   ['Motion'] = {
     capabilities[capabilitydefs.motionZone.name].motionZone.inactive(),
     capabilities.motionSensor.motion.inactive(),
+  },
+  ['Carbon Monoxide'] = {
+    capabilities[capabilitydefs.carbonMonoxideZone.name].carbonMonoxideZone.clear(),
+    capabilities.carbonMonoxideDetector.carbonMonoxide.clear(),
+    capabilities.smokeDetector.smoke.clear()
   },
   ['Smoke'] = {
     capabilities[capabilitydefs.smokeZone.name].smokeZone.clear(),

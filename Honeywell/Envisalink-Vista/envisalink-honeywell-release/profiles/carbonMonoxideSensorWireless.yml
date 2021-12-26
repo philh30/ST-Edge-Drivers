@@ -1,8 +1,8 @@
-name: motion-sensor-wireless
+name: carbonmonoxide-sensor-wireless
 components:
 - id: main
   capabilities:
-  - id: "platinummassive43262.motionZone"
+  - id: "platinummassive43262.carbonMonoxideZone"
     version: 1
   - id: "platinummassive43262.bypass"
     version: 1
@@ -10,19 +10,21 @@ components:
     version: 1
   - id: battery
     version: 1
-  - id: motionSensor
+  - id: carbonMonoxideDetector
+    version: 1
+  - id: smokeDetector
     version: 1
   - id: bypassable
     version: 1
   - id: refresh
     version: 1
   categories:
-    - name: MotionSensor
+    - name: SmokeDetector
 metadata:
-  deviceType: MotionSensor
-  ocfDeviceType: x.com.st.d.sensor.motion
-  deviceTypeId: MotionSensor
-  vid: 3d15ff0f-677c-39d9-8ce5-363f9c7af082
+  deviceType: SmokeDetector
+  ocfDeviceType: x.com.st.d.sensor.smoke
+  deviceTypeId: SmokeDetector
+  vid: 7fa3693c-de0d-398e-b0b7-2867f47cb29b
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Partition"
@@ -57,4 +59,4 @@ preferences:
         leak: "Leak sensor"
         carbonmonoxide: "Carbon monoxide detector"
         smoke: "Smoke detector"
-      default: "motion"
+      default: "carbonmonoxide"
