@@ -20,7 +20,7 @@ metadata:
   deviceType: SmokeDetector
   ocfDeviceType: x.com.st.d.sensor.smoke
   deviceTypeId: SmokeDetector
-  vid: 65850e36-b6e2-379e-9efb-7e6ac54c265b
+  vid: 02234f0d-a747-3e6e-850d-050263eadbef
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Partition"
