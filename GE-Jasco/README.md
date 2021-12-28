@@ -53,6 +53,7 @@ Fingerprint | Device | Profile | Tested
 0063/4944/3235 | GE Smart Dimmer (14294 / 46203 / ZW3010) | ge-dimmer-scene | Yes
 0063/4944/3237 | GE Smart Toggle Dimmer (14295 / 46204 / ZW3011) | ge-dimmer-scene | No
 0063/4944/3333 | GE Smart Dimmer (52252 / 52253 / ZW3012) | ge-dimmer-scene | No
+0063/4944/3334 | GE Smart Dimmer (56590 / 56592 / ZW3012) | ge-dimmer-scene | No
 0039/4944/3038 | Honeywell Smart Dimmer (39458 / ZW3005) | ge-dimmer-assoc | No
 0039/4944/3130 | Honeywell Smart Toggle Dimmer (39357 / ZW3004) | ge-dimmer-assoc | No
 0039/4944/3235 | Honeywell Smart Dimmer (39351 / ZW3010) | ge-dimmer-scene | No
@@ -74,6 +75,8 @@ Fingerprint | Device | Profile | Tested
 0063/4952/3035 | GE Smart Outlet (14286 / ZW1001) | ge-outlet-assoc | No
 0063/4952/3133 | GE Smart Outlet (14288 / ZW1002) | ge-outlet-assoc | Yes
 0063/4952/3134 | GE Smart Outlet (14288 / ZW1002) | ge-outlet-assoc | No
+0063/4952/3233 | GE Smart Outlet (???) | ge-outlet-scene | No
+0063/4952/3235 | GE Smart Outlet (55257 / ZW1002) | ge-outlet-scene | No
 0063/5252/3530 | GE Smart Outlet (45636 / ZW1001) | ge-outlet-legacy | No
 0039/4952/3133 | Honeywell Smart Outlet (39456 / ZW1002) | ge-outlet-assoc | Yes
 

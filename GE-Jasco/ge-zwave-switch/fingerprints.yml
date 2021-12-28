@@ -95,6 +95,12 @@ zwaveManufacturer:
     productType: 0x4944
     productId: 0x3333
     deviceProfileName: ge-dimmer-scene
+  - id: "0063/4944/3334"
+    deviceLabel: GE Dimmer 56590
+    manufacturerId: 0x0063
+    productType: 0x4944
+    productId: 0x3334
+    deviceProfileName: ge-dimmer-scene
   - id: "0063/4952/3031"
     deviceLabel: GE Outlet 12721
     manufacturerId: 0x0063
@@ -179,6 +185,18 @@ zwaveManufacturer:
     productType: 0x4952
     productId: 0x3231
     deviceProfileName: ge-switch-scene
+  - id: "0063/4952/3233"
+    deviceLabel: GE Outlet
+    manufacturerId: 0x0063
+    productType: 0x4952
+    productId: 0x3233
+    deviceProfileName: ge-outlet-scene
+  - id: "0063/4952/3235"
+    deviceLabel: GE Outlet 55257
+    manufacturerId: 0x0063
+    productType: 0x4952
+    productId: 0x3235
+    deviceProfileName: ge-outlet-scene
   - id: "0063/4F50/3031"
     deviceLabel: GE Plug In Switch 12720
     manufacturerId: 0x0063
