@@ -9,7 +9,7 @@ Profiles:
 - ge-________-assoc
   - Configuration parameters available in settings
   - Association groups 2 and 3 available in settings
-  - Hub added to association group 3 to support double tap
+  - Hub added to association group 3 to support double tap (does not apply to motion switch/dimmer)
 - ge-________-scene
   - Configuration parameters available in settings
   - Association groups 2 and 3 available in settings
@@ -35,6 +35,12 @@ Fingerprint | Device | Profile | Tested
 0039/4952/3135 | Honeywell Smart Switch (39348 / ZW4008) | ge-switch-scene | No
 0039/4952/3137 | Honeywell Smart Toggle Switch (39354 / ZW4009) | ge-switch-scene | No
 
+### ***In-Wall Motion Switches***
+Fingerprint | Device | Profile | Tested
+--- | --- | --- | ---
+0063/494D/3031 | GE Smart Motion Sensor Switch (24770 / ZW4006) | ge-motionswitch-assoc | No
+0063/494D/3032 | GE Smart Motion Sensor Switch (26931 / ZW4006) | ge-motionswitch-assoc | Yes
+
 ### ***In-Wall Dimmers***
 
 Fingerprint | Device | Profile | Tested
@@ -58,6 +64,12 @@ Fingerprint | Device | Profile | Tested
 0039/4944/3130 | Honeywell Smart Toggle Dimmer (39357 / ZW3004) | ge-dimmer-assoc | No
 0039/4944/3235 | Honeywell Smart Dimmer (39351 / ZW3010) | ge-dimmer-scene | No
 0039/4944/3237 | Honeywell Smart Toggle Dimmer (39357 / ZW3011) | ge-dimmer-scene | No
+
+### ***In-Wall Motion Dimmers***
+Fingerprint | Device | Profile | Tested
+--- | --- | --- | ---
+0063/494D/3033 | GE Smart Motion Sensor Switch (26932) | ge-motiondimmer-assoc | No
+0063/494D/3034 | GE Smart Motion Sensor Switch (26933) | ge-motiondimmer-assoc | No
 
 ### ***In-Wall Fan Controls***
 

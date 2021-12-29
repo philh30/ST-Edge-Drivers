@@ -25,8 +25,6 @@ local Association = (require "st.zwave.CommandClass.Association")({ version=2 })
 local Basic = (require "st.zwave.CommandClass.Basic")({ version = 1 })
 --- @type st.zwave.CommandClass.Configuration
 local Configuration = (require "st.zwave.CommandClass.Configuration")({ version=4 })
---- @type st.zwave.CommandClass.SceneActivation
-local SceneActivation = (require "st.zwave.CommandClass.SceneActivation")({version=1,strict=true})
 --- @type st.zwave.CommandClass.CentralScene
 local CentralScene = (require "st.zwave.CommandClass.CentralScene")({version=1,strict=true})
 local preferencesMap = require "preferences"
@@ -41,6 +39,7 @@ local function update_preferences(driver, device, args)
       if preferences[id].type == 'config' then
         local new_parameter_value = preferencesMap.to_numeric_value(device.preferences[id])
         device:send(Configuration:Set({parameter_number = preferences[id].parameter_number, size = preferences[id].size, configuration_value = new_parameter_value}))
+        device:send(Configuration:Get({parameter_number = preferences[id].parameter_number}))
       elseif preferences[id].type == 'assoc' then
         local group = preferences[id].group
         local maxnodes = preferences[id].maxnodes
@@ -163,6 +162,7 @@ local driver_template = {
     capabilities.fanSpeed,
     capabilities.refresh,
     capabilities.button,
+    capabilities.motionSensor,
   },
   lifecycle_handlers = {
     infoChanged = info_changed,

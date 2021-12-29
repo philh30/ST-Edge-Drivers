@@ -17,11 +17,11 @@ local GE_BASIC = {
     ledIndicator    = {type = 'config', parameter_number = 3, size = 1},
     invertSwitch    = {type = 'config', parameter_number = 4, size = 1},
     dimStepsZwave   = {type = 'config', parameter_number = 7, size = 1},
-    dimTimeZwave    = {type = 'config', parameter_number = 8, size = 1},
+    dimTimeZwave    = {type = 'config', parameter_number = 8, size = 2},
     dimStepsManual  = {type = 'config', parameter_number = 9, size = 1},
-    dimTimeManual   = {type = 'config', parameter_number = 10, size = 1},
+    dimTimeManual   = {type = 'config', parameter_number = 10, size = 2},
     dimStepsAll     = {type = 'config', parameter_number = 11, size = 1},
-    dimTimeAll      = {type = 'config', parameter_number = 12, size = 1},
+    dimTimeAll      = {type = 'config', parameter_number = 12, size = 2},
     assocGroup2     = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
     assocGroup3     = {type = 'assoc', group = 3, maxnodes = 4, addhub = true},
   },
@@ -48,6 +48,32 @@ local GE_SCENE = {
     count = 1,
     values = {'up','down','pushed','up_hold','down_hold','held','up_2x','down_2x','pushed_2x','up_3x','down_3x','pushed_3x'},
   },
+}
+local GE_MOTION = {
+  PARAMETERS = {
+    timeoutDuration   = {type = 'config', parameter_number = 1, size = 1},
+    --assocBright       = {type = 'config', parameter_number = 2, size = 2},
+    operationMode     = {type = 'config', parameter_number = 3, size = 1},
+    --associationMode   = {type = 'config', parameter_number = 4, size = 1},
+    invertSwitch      = {type = 'config', parameter_number = 5, size = 1},
+    enableMotion      = {type = 'config', parameter_number = 6, size = 1},
+    dimStepsZwave     = {type = 'config', parameter_number = 7, size = 1},
+    dimTimeZwave      = {type = 'config', parameter_number = 8, size = 2},
+    dimStepsManual    = {type = 'config', parameter_number = 9, size = 1},
+    dimTimeManual     = {type = 'config', parameter_number = 10, size = 2},
+    dimStepsAll       = {type = 'config', parameter_number = 11, size = 1},
+    dimTimeAll        = {type = 'config', parameter_number = 12, size = 2},
+    motionSensitivity = {type = 'config', parameter_number = 13, size = 1},
+    lightSensing      = {type = 'config', parameter_number = 14, size = 1},
+    resetCycle        = {type = 'config', parameter_number = 15, size = 2},
+    switchMode        = {type = 'config', parameter_number = 16, size = 1},
+    switchLevel       = {type = 'config', parameter_number = 17, size = 1},
+    dimRate           = {type = 'config', parameter_number = 18, size = 1},
+    excludeProtect    = {type = 'config', parameter_number = 19, size = 1},
+    assocGroup2       = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
+    assocGroup3       = {type = 'assoc', group = 3, maxnodes = 5, addhub = false},
+  },
+  BUTTONS = {}
 }
 
 local devices = {
@@ -141,6 +167,24 @@ local devices = {
     },
     PARAMETERS = GE_SCENE.PARAMETERS,
     BUTTONS = GE_SCENE.BUTTONS,
+  },
+  GE_MOTIONSWITCH_ASSOC = {
+    MATCHING_MATRIX = {
+      mfrs = {0x0039, 0x0063},
+      product_types = {0x494D},
+      product_ids = {0x3031,0x3032},
+    },
+    PARAMETERS = GE_MOTION.PARAMETERS,
+    BUTTONS = GE_MOTION.BUTTONS,
+  },
+  GE_MOTIONDIMMER_ASSOC = {
+    MATCHING_MATRIX = {
+      mfrs = {0x0039, 0x0063},
+      product_types = {0x494D},
+      product_ids = {0x3033,0x3034},
+    },
+    PARAMETERS = GE_MOTION.PARAMETERS,
+    BUTTONS = GE_MOTION.BUTTONS,
   },
 }
 local preferences = {}
