@@ -11,6 +11,10 @@ This driver provides a direct, local connection between the SmartThings hub and 
 
 ## Version Notes
 
+### V 1.06 - 12/26/2021
+- Added carbon monoxide detector device type.
+- Fixed active/inactive status of icon on smoke detector dashboard.
+
 ### V 1.05 - 11/29/2021
 - Fixed error where highest wired zone and zone delay preferences were not updating the driver properly.
 
