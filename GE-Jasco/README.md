@@ -2,7 +2,7 @@
 
 ## **GE Z-Wave Motion Switch/Dimmer (ge-zwave-motion-switch)**
 
-Adds custom cabailities to control configuration parameters on motion switch/dimmer:
+Adds custom capabilities to control configuration parameters on motion switch/dimmer:
 - Operating Mode (Occupancy/Vacancy/Manual)
 - Light Sensing (On/Off)
 - Motion Sensor Sensitivity (High/Medium/Low)
