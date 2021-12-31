@@ -1,0 +1,4 @@
+name: 'GE Z-Wave Motion Switch/Dimmer'
+packageKey: 'ge-zwave-motion-switch'
+permissions:
+  zwave: {}
