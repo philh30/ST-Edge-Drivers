@@ -1,6 +1,26 @@
 # GE Drivers
 
-## **ge-zwave-switch**
+## **GE Z-Wave Motion Switch/Dimmer (ge-zwave-motion-switch)**
+
+Adds custom cabailities to control configuration parameters on motion switch/dimmer:
+- Operating Mode (Occupancy/Vacancy/Manual)
+- Light Sensing (On/Off)
+- Motion Sensor Sensitivity (High/Medium/Low)
+- Light Duration After Motion Stops (5s/1m/5m/15m/30m)
+
+### ***In-Wall Motion Switches***
+Fingerprint | Device | Profile | Tested
+--- | --- | --- | ---
+0063/494D/3031 | GE Smart Motion Sensor Switch (24770 / ZW4006) | ge-motionswitch-assoc | No
+0063/494D/3032 | GE Smart Motion Sensor Switch (26931 / ZW4006) | ge-motionswitch-assoc | Yes
+
+### ***In-Wall Motion Dimmers***
+Fingerprint | Device | Profile | Tested
+--- | --- | --- | ---
+0063/494D/3033 | GE Smart Motion Sensor Switch (26932) | ge-motiondimmer-assoc | No
+0063/494D/3034 | GE Smart Motion Sensor Switch (26933) | ge-motiondimmer-assoc | No
+
+## **GE Z-Wave Switch/Dimmer/Fan/Outlet (ge-zwave-switch)**
 
 Profiles:
 
