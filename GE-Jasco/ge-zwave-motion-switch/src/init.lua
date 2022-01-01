@@ -124,7 +124,6 @@ local function refresh_handler(driver,device)
   elseif device:supports_capability_by_id(capabilities.switch.ID) and device:is_cc_supported(cc.BASIC) then
     device:send(Basic:Get({}))
   end
-  --device:send(SensorBinary:Get({sensor_type = SensorBinary.sensor_type.MOTION}))
   device:send(Notification:Get({v1_alarm_type = 0, notification_type = 0xFF, event = 0x00}))
   device:send(Configuration:Get({parameter_number = 1}))
   device:send(Configuration:Get({parameter_number = 3}))
