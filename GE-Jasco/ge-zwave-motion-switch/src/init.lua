@@ -29,6 +29,10 @@ local Basic = (require "st.zwave.CommandClass.Basic")({version=1,strict=true})
 local SwitchBinary = (require "st.zwave.CommandClass.SwitchBinary")({version=2,strict=true})
 --- @type st.zwave.CommandClass.SwitchMultilevel
 local SwitchMultilevel = (require "st.zwave.CommandClass.SwitchMultilevel")({version=4,strict=true})
+--- @type st.zwave.CommandClass.SensorBinary
+local SensorBinary = (require "st.zwave.CommandClass.SensorBinary")({version=2})
+--- @type st.zwave.CommandClass.Notification
+local Notification = (require "st.zwave.CommandClass.Notification")({version=3})
 local preferencesMap = require "preferences"
 local splitAssocString = require "split_assoc_string"
 local capdefs = require('capabilitydefs')
@@ -120,6 +124,8 @@ local function refresh_handler(driver,device)
   elseif device:supports_capability_by_id(capabilities.switch.ID) and device:is_cc_supported(cc.BASIC) then
     device:send(Basic:Get({}))
   end
+  --device:send(SensorBinary:Get({sensor_type = SensorBinary.sensor_type.MOTION}))
+  device:send(Notification:Get({v1_alarm_type = 0, notification_type = 0xFF, event = 0x00}))
   device:send(Configuration:Get({parameter_number = 1}))
   device:send(Configuration:Get({parameter_number = 3}))
   device:send(Configuration:Get({parameter_number = 13}))

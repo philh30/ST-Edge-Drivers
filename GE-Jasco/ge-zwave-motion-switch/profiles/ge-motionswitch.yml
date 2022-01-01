@@ -18,6 +18,12 @@ components:
     version: 1
   categories:
   - name: Switch
+metadata:
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch
+  vid: 44b23b56-7f19-338d-b237-9932401f93f6
+  mnmn: SmartThingsCommunity
 preferences:
   - title: "Enable/Disable Motion Sensor"
     name: enableMotion
