@@ -162,6 +162,7 @@ local function device_added(driver, device)
         device:emit_component_event(comp,capabilities.button.numberOfButtons(button_count))
         device:emit_component_event(comp,capabilities.button.supportedButtonValues(supported_button_values))
     end
+    do_refresh(driver,device)
 end
 
 local zen32_scene_controller = {
