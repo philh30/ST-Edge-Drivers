@@ -1,0 +1,4 @@
+name: 'Zooz ZEN32'
+packageKey: 'zen32'
+permissions:
+  zwave: {}

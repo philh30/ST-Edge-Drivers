@@ -1,0 +1,7 @@
+zwaveManufacturer:
+  - id: "027A/7000/A008"
+    deviceLabel: Zooz ZEN32 Scene Controller
+    manufacturerId: 0x027A
+    productType: 0x7000
+    productId: 0xA008
+    deviceProfileName: zen32
