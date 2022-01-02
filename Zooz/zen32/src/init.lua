@@ -90,19 +90,6 @@ local function info_changed(driver, device, event, args)
   update_preferences(driver, device, args)
 end
 
---- Configure device
----
---- @param driver st.zwave.Driver
---- @param device st.zwave.Device
-local function do_configure(driver, device)
-  local configuration = configurationsMap.get_device_configuration(device)
-  if configuration ~= nil then
-    for _, value in ipairs(configuration) do
-      device:send(Configuration:Set({parameter_number = value.parameter_number, size = value.size, configuration_value = value.configuration_value}))
-    end
-  end
-end
-
 local function device_added(driver, device)
   device:refresh()
 end
@@ -132,7 +119,6 @@ local driver_template = {
   lifecycle_handlers = {
     init = device_init,
     infoChanged = info_changed,
-    doConfigure = do_configure,
     added = device_added
   }
 }
