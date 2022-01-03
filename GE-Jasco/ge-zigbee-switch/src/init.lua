@@ -64,7 +64,6 @@ local driver_template = {
   lifecycle_handlers = {
     doConfigure = do_configure,
   },
----[[
   zigbee_handlers = {
     attr = {
       [SimpleMetering.ID] = {
