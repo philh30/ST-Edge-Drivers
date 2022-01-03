@@ -136,7 +136,9 @@ local function central_scene_notification_handler(self, device, cmd)
         local button_component = map_scene_to_component[cmd.args.scene_number]
         local button_push = map_key_attribute_to_capability[cmd.args.key_attributes]
         if button_push ~= 'released' then
-            device:emit_component_event(device.profile.components[button_component],capabilities.button.button(button_push))
+            local evt = capabilities.button.button(button_push)
+            evt.state_change = true
+            device:emit_component_event(device.profile.components[button_component],evt)
         end
     end
 end
