@@ -1,0 +1,4 @@
+name: 'GE Zigbee Switch'
+packageKey: 'ge-zigbee-switch'
+permissions:
+  zigbee: {}

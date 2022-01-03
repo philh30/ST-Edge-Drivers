@@ -1,0 +1,21 @@
+zigbeeManufacturer:
+  - id: "Jasco Products/45856"
+    deviceLabel: Jasco Switch 45856
+    manufacturer: Jasco Products
+    model: 45856
+    deviceProfileName: ge-switch
+  - id: "Jasco Products/45857"
+    deviceLabel: Jasco Switch 45857
+    manufacturer: Jasco Products
+    model: 45857 
+    deviceProfileName: ge-dimmer
+  - id: "CentraLite/3210-L"
+    deviceLabel: CentraLite 3210-L
+    manufacturer: CentraLite
+    model: 3210-L
+    deviceProfileName: ge-switch
+  - id: "Samjin/outlet"
+    deviceLabel: Samjin outlet
+    manufacturer: Samjin
+    model: outlet
+    deviceProfileName: ge-switch
