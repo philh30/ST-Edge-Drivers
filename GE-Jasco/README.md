@@ -1,5 +1,9 @@
 # GE Drivers
 
+## **GE Zigbee Switch/Dimmer (ge-zigbee-switch)**
+
+This currently just has the functionality that I expect will be provided in the stock ST driver for Zigbee switches/dimmers with energy and power reporting. The driver includes a fix to the default ST handler for the SimpleMetering cluster's InstantaneousDemand attribute to report the proper power value.
+
 ## **GE Z-Wave Motion Switch/Dimmer (ge-zwave-motion-switch)**
 
 Adds custom capabilities to control configuration parameters on motion switch/dimmer:
