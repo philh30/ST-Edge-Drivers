@@ -1,4 +1,4 @@
-name: ge-switch
+name: ge-plug
 components:
 - id: main
   capabilities:
@@ -9,8 +9,8 @@ components:
   - id: firmwareUpdate
     version: 1
   categories:
-  - name: Switch
+  - name: SmartPlug
 metadata:
-  deviceType: Switch
-  ocfDeviceType: oic.d.switch
-  deviceTypeId: Switch 
+  deviceType: SmartPlug
+  ocfDeviceType: oic.d.smartplug
+  deviceTypeId: SmartPlug 
