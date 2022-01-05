@@ -27,10 +27,7 @@ local delay_send = require "delay_send"
 
 --- @param driver ZigbeeDriver The current driver running containing necessary context for execution
 --- @param device st.zigbee.Device The device this message was received from containing identifying information
-local do_configure = function(driver, device)
-  device:refresh()
-  device:configure()
-
+local function get_multiplier_divisor(driver,device)
   -- Additional one time configuration
   if device:supports_capability(capabilities.energyMeter) or device:supports_capability(capabilities.powerMeter) then
     -- Divisor and multipler for EnergyMeter
@@ -40,6 +37,18 @@ local do_configure = function(driver, device)
     device:send(SimpleMetering.attributes.Divisor:read(device))
     device:send(SimpleMetering.attributes.Multiplier:read(device))
   end
+end
+
+--- @param driver ZigbeeDriver The current driver running containing necessary context for execution
+--- @param device st.zigbee.Device The device this message was received from containing identifying information
+local function do_configure(driver, device)
+  device:refresh()
+  device:configure()
+  get_multiplier_divisor(driver,device)
+end
+
+local function init(driver,device)
+  get_multiplier_divisor(driver,device)
 end
 
 --- @param driver ZigbeeDriver The current driver running containing necessary context for execution
@@ -136,6 +145,7 @@ local driver_template = {
   lifecycle_handlers = {
     doConfigure = do_configure,
     infoChanged = info_changed,
+    init = init,
   },
   zigbee_handlers = {
     attr = {
