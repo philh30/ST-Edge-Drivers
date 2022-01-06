@@ -2,7 +2,19 @@
 
 ## **GE Zigbee Switch/Dimmer (ge-zigbee-switch)**
 
-This currently just has the functionality that I expect will be provided in the stock ST driver for Zigbee switches/dimmers with energy and power reporting. The driver includes a fix to the default ST handler for the SimpleMetering cluster's InstantaneousDemand attribute to report the proper power value.
+Provides power/energy reporting for models that support it. The GE/Jasco Zigbee switches and dimmers have little to no configuration options. There's no reason this driver shouldn't work for devices besides the GE/Jasco models (I have two plug-in switches from other manufacturers using it), though other models may have better configuration options that a specifically-tailored driver could take advantage of. The LED indicators don't even seem to be configurable by Zigbee, though I've seen that they can be changed with a sequence of button taps.
+
+### Switch (Jasco 45856)
+Same functionality as what I expect will be included in the stock ST driver when it's released. Assuming the stock ST driver supports power monitoring, I'd recommend just using it for the 45856.
+
+### Dimmer (Jasco 45857)
+Corrects default behavior where if the switch is off and a dim command is sent that is less than the prior setting, the dimmer may change to that dim setting without turning on. In addition, the following options are available for configuration in the settings menu:
+- **Default Dim Level** - The default dimming level when the device is turned on (a tap on the physical switch or an ON command from the hub). A value of 0 restores the dimmer to the previous level when the switch was last on. Values from 1-100% will scale based on the minimum and maximum dimming settings. *This is the only configurable option that I've found that is stored in the device - all other settings are programmatic and will apply only to commands originating from the hub.*
+- **Dimming Transition Time** - The time in tenths of seconds to transition to a new level when a set level command is sent. Values can range from instant (0) to 1 hour 49 minutes 13.4 seconds (65534). A setting of 65535 uses the default transition time configured in the dimmer hardware, which for the 45857 is instant. *This setting applies only to commands originating from the hub.*
+- **Transition Time Scaling** - Enabling this setting will use the *Dimming Transition Time* as the time to move from 0 to 100%, and will scale any smaller change to take a proportional amount of time. For example, if the *Dimming Transition Time* is set to 10 minutes and the level is changed from 25 to 75% (a 50% change), the transition will take 5 minutes. This setting does not applie if the *Dimming Transition Time* is set to 65535. *This setting applies only to commands originating from the hub.*
+- **Dim Start Level when Off** - Changes the starting level of the dimmer when a set level command is sent while the device is off. The default operation is that the device will turn on at the prior dim level and transition to the new level. Enabling this setting will cause the dimmer to scale fully from 0% when it receives a set level command. If this setting is enabled, routines and automations should be set to include only a set level command, with no ON command. *This setting applies only to commands originating from the hub.*
+- **Maximum and Minimum Dim Level** - Configurable maximum and minimum dimming levels. The device uses dimming levels of 0 to 255 instead of the 0 to 100% displayed in the app. In order to provide greater granularity in setting these limits to match the performance of your light bulbs, these settings use the 0 to 255 values native to the hardware. *This setting applies only to commands originating from the hub. Note that, if the physical buttons are used to dim below the minimum level, the app will show a dim level of 0 and the switch in the ON state. A minimum dim level that is set greater than the maximum dim level will be ignored, with 0 being used as the minimum instead.*
+
 
 ## **GE Z-Wave Motion Switch/Dimmer (ge-zwave-motion-switch)**
 

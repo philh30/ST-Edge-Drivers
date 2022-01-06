@@ -1,3 +1,5 @@
+-- Author: philh30
+--
 -- Copyright 2021 SmartThings
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +30,6 @@ local delay_send = require "delay_send"
 --- @param driver ZigbeeDriver The current driver running containing necessary context for execution
 --- @param device st.zigbee.Device The device this message was received from containing identifying information
 local function get_multiplier_divisor(driver,device)
-  -- Additional one time configuration
   if device:supports_capability(capabilities.energyMeter) or device:supports_capability(capabilities.powerMeter) then
     -- Divisor and multipler for EnergyMeter
     device:send(ElectricalMeasurement.attributes.ACPowerDivisor:read(device))

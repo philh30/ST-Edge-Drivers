@@ -5,7 +5,7 @@ zigbeeManufacturer:
     model: 45856
     deviceProfileName: ge-switch-power-energy
   - id: "Jasco Products/45857"
-    deviceLabel: Jasco Switch 45857
+    deviceLabel: Jasco Dimmer 45857
     manufacturer: Jasco Products
     model: 45857 
     deviceProfileName: ge-dimmer-power-energy
