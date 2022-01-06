@@ -25,7 +25,7 @@ preferences:
     definition:
       minimum: 0
       maximum: 100
-      default: 0
+      default: 100
   - title: "Dimming Transition Time"
     name: levelChangeTime
     description: "Time (in tenths of seconds) to transition between dimming levels (0-65534 = 0.0-6553.4 seconds, 65535 = use switch default). This setting applies only to commands from the hub."
@@ -45,16 +45,6 @@ preferences:
         0: "All adjustments take equal time"
         1: "Smaller adjustments are faster"
       default: 0
-  - title: "Dim Start Level when Off"
-    name: startLevel
-    description: "When turned on with a set level command, choose whether the device transitions from the prior level or ramps up from 0. This setting applies only to commands from the hub."
-    required: true
-    preferenceType: enumeration
-    definition:
-      options:
-        0: "Ramp up from 0"
-        1: "Transition from prior level"
-      default: 1
   - title: "Maximum Dim Level"
     name: maxLevel
     description: "Maximum dimming level (0-254 = 0-100%). This setting applies only to commands from the hub."

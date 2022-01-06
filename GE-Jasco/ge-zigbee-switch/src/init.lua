@@ -88,20 +88,15 @@ local function set_level(driver, device, command)
   local level = raw_to_level(device,raw)
   local rate = command.args.rate or device.preferences['levelChangeTime'] or 0xFFFF
   local scaleRate = device.preferences['levelChangeScaling'] == '1'
-  local startAtZero = device.preferences['startLevel'] == '0'
   local cmd = {}
-  if startAtZero and (curr_state == 'off') then
-    table.insert(cmd,Level.server.commands.MoveToLevel(device, 1, 0))
-    curr_level = 0
-  end
   if scaleRate then
     local change = curr_level and math.abs(curr_level - raw) or 100
     rate = (rate == 0xFFFF) and 0xFFFF or math.floor(rate*change/100)
   end
   table.insert(cmd,Level.server.commands.MoveToLevelWithOnOff(device, level, rate))
-  if curr_state == 'off' then
-    table.insert(cmd,clusters.OnOff.server.commands.On(device))
-  end
+  --if curr_state == 'off' then
+  --  table.insert(cmd,clusters.OnOff.server.commands.On(device))
+  --end
   delay_send(device,cmd,0.5)
 end
 
