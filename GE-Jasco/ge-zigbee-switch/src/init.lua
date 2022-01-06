@@ -21,11 +21,8 @@ local clusters = require "st.zigbee.zcl.clusters"
 local ElectricalMeasurement = clusters.ElectricalMeasurement
 local SimpleMetering = clusters.SimpleMetering
 local Level = clusters.Level
-local OnOff = clusters.OnOff
 local constants = require "st.zigbee.constants"
-local log = require "log"
 local utils = require "st.utils"
-local delay_send = require "delay_send"
 
 --- @param driver ZigbeeDriver The current driver running containing necessary context for execution
 --- @param device st.zigbee.Device The device this message was received from containing identifying information
@@ -83,21 +80,15 @@ end
 --- @param command table The capability command table
 local function set_level(driver, device, command)
   local curr_level = device:get_latest_state(command.component,capabilities.switchLevel.ID,capabilities.switchLevel.level.NAME)
-  local curr_state = device:get_latest_state(command.component,capabilities.switch.ID,capabilities.switch.switch.NAME)
   local raw = command.args.level
   local level = raw_to_level(device,raw)
   local rate = command.args.rate or device.preferences['levelChangeTime'] or 0xFFFF
   local scaleRate = device.preferences['levelChangeScaling'] == '1'
-  local cmd = {}
   if scaleRate then
     local change = curr_level and math.abs(curr_level - raw) or 100
     rate = (rate == 0xFFFF) and 0xFFFF or math.floor(rate*change/100)
   end
-  table.insert(cmd,Level.server.commands.MoveToLevelWithOnOff(device, level, rate))
-  --if curr_state == 'off' then
-  --  table.insert(cmd,clusters.OnOff.server.commands.On(device))
-  --end
-  delay_send(device,cmd,0.5)
+  device:send(Level.server.commands.MoveToLevelWithOnOff(device, level, rate))
 end
 
 --- This converts the Uint8 value from 0-254 to SwitchLevel.level(0-100)
