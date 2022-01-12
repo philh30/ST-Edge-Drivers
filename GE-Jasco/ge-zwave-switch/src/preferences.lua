@@ -136,7 +136,7 @@ local devices = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
       product_types = {0x4952},
-      product_ids = {0x3135, 0x3137, 0x3139, 0x3231},
+      product_ids = {0x3135, 0x3137, 0x3139, 0x3231, 0x3237, 0x3238},
     },
     PARAMETERS = GE_SCENE.PARAMETERS,
     BUTTONS = GE_SCENE.BUTTONS,
@@ -145,7 +145,7 @@ local devices = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
       product_types = {0x4944},
-      product_ids = {0x3235, 0x3237, 0x3333, 0x3334},
+      product_ids = {0x3235, 0x3237, 0x3333, 0x3334, 0x3339},
     },
     PARAMETERS = GE_SCENE.PARAMETERS,
     BUTTONS = GE_SCENE.BUTTONS,

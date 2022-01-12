@@ -101,6 +101,12 @@ zwaveManufacturer:
     productType: 0x4944
     productId: 0x3334
     deviceProfileName: ge-dimmer-scene
+  - id: "0063/4944/3339"
+    deviceLabel: UltraPro Dimmer 39351
+    manufacturerId: 0x0063
+    productType: 0x4944
+    productId: 0x3339
+    deviceProfileName: ge-dimmer-scene
   - id: "0063/494D/3031"
     deviceLabel: GE Motion Switch 24770
     manufacturerId: 0x0063
@@ -221,6 +227,18 @@ zwaveManufacturer:
     productType: 0x4952
     productId: 0x3235
     deviceProfileName: ge-outlet-scene
+  - id: "0063/4952/3237"
+    deviceLabel: UltraPro Switch 39348
+    manufacturerId: 0x0063
+    productType: 0x4952
+    productId: 0x3237
+    deviceProfileName: ge-switch-scene
+  - id: "0063/4952/3238"
+    deviceLabel: UltraPro Switch 39354
+    manufacturerId: 0x0063
+    productType: 0x4952
+    productId: 0x3238
+    deviceProfileName: ge-switch-scene
   - id: "0063/4F50/3031"
     deviceLabel: GE Plug In Switch 12720
     manufacturerId: 0x0063
