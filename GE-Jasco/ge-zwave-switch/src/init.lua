@@ -27,6 +27,10 @@ local Basic = (require "st.zwave.CommandClass.Basic")({ version = 1 })
 local Configuration = (require "st.zwave.CommandClass.Configuration")({ version=4 })
 --- @type st.zwave.CommandClass.CentralScene
 local CentralScene = (require "st.zwave.CommandClass.CentralScene")({version=1,strict=true})
+--- @type st.zwave.CommandClass.Notification
+local Notification = (require "st.zwave.CommandClass.Notification")({version=3})
+--- @type st.zwave.CommandClass.SwitchBinary
+local SwitchBinary = (require "st.zwave.CommandClass.SwitchBinary")({version=2,strict=true})
 local preferencesMap = require "preferences"
 local splitAssocString = require "split_assoc_string"
 
@@ -147,10 +151,34 @@ local function central_scene_notification_handler(self, device, cmd)
   end
 end
 
+--- @param driver st.zwave.Driver
+--- @param device st.zwave.Device
+--- @param cmd st.zwave.CommandClass.Basic.Report
+local function basic_report(driver,device,cmd)
+  local event
+  if cmd.args.target_value ~= nil then
+    -- Target value is our best inidicator of eventual state.
+    -- If we see this, it should be considered authoritative.
+    if cmd.args.target_value == SwitchBinary.value.OFF_DISABLE then
+      event = capabilities.switch.switch.off()
+    else
+      event = capabilities.switch.switch.on()
+    end
+  else
+    if cmd.args.value == SwitchBinary.value.OFF_DISABLE then
+      event = capabilities.switch.switch.off()
+    else
+      event = capabilities.switch.switch.on()
+    end
+  end
+  device:emit_event_for_endpoint(cmd.src_channel, event)
+end
+
 local driver_template = {
   zwave_handlers = {
     [cc.BASIC] = {
       [Basic.SET] = basic_set,
+      [Basic.REPORT] = basic_report,
     },
     [cc.CENTRAL_SCENE] = {
       [CentralScene.NOTIFICATION] = central_scene_notification_handler,
