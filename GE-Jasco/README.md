@@ -5,7 +5,7 @@
 Provides power/energy reporting for models that support it. The GE/Jasco Zigbee switches and dimmers have little to no configuration options. There's no reason this driver shouldn't work for devices besides the GE/Jasco models (I have two plug-in switches from other manufacturers using it), though other models may have better configuration options that a specifically-tailored driver could take advantage of. The LED indicators don't even seem to be configurable by Zigbee, though I've seen that they can be changed with a sequence of button taps.
 
 ### Switch (Jasco 45856)
-Same functionality as what I expect will be included in the stock ST driver when it's released. Assuming the stock ST driver supports power monitoring, I'd recommend just using it for the 45856.
+Basic functionality with properly scaled power/energy metering.
 
 ### Dimmer (Jasco 45857)
 The following options are available for configuration in the settings menu:
@@ -64,6 +64,8 @@ Fingerprint | Device | Profile | Tested
 0063/4952/3137 | GE Smart Toggle Switch (14292 / 46202 / ZW4009) | ge-switch-scene | No
 0063/4952/3139 | GE Smart Switch (43072 / ZW4008DV) | ge-switch-scene | No
 0063/4952/3231 | GE Smart Toggle Switch (43074 / ZW4009DV) | ge-switch-scene | No
+0063/4952/3237 | UltraPro Smart Switch (39348 /54890 /54891/ ZW4008) | ge-switch-scene | No
+0063/4952/3238 | UltraPro Smart Toggle Switch (39354 / 54912 / ZW4009) | ge-switch-scene | No
 0063/5257/3533 | GE Smart Switch (45637 / ZW4001) | ge-switch-legacy | Yes
 0039/4952/3036 | Honeywell Smart Switch (39455 / ZW4005) | ge-switch-assoc | Yes
 0039/4952/3037 | Honeywell Smart Toggle Switch (39354 / ZW4003) | ge-switch-assoc | No
@@ -95,6 +97,7 @@ Fingerprint | Device | Profile | Tested
 0063/4944/3237 | GE Smart Toggle Dimmer (14295 / 46204 / ZW3011) | ge-dimmer-scene | No
 0063/4944/3333 | GE Smart Dimmer (52252 / 52253 / ZW3012) | ge-dimmer-scene | No
 0063/4944/3334 | GE Smart Dimmer (56590 / 56592 / ZW3012) | ge-dimmer-scene | No
+0063/4944/3339 | UltraPro Smart Dimmer (39351 / 54897 / 54898 / ZW3010) | ge-dimmer-scene | No
 0039/4944/3038 | Honeywell Smart Dimmer (39458 / ZW3005) | ge-dimmer-assoc | No
 0039/4944/3130 | Honeywell Smart Toggle Dimmer (39357 / ZW3004) | ge-dimmer-assoc | No
 0039/4944/3235 | Honeywell Smart Dimmer (39351 / ZW3010) | ge-dimmer-scene | No
