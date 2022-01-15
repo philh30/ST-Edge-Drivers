@@ -1,0 +1,4 @@
+name: 'Intermatic PE653 Pool Control'
+packageKey: 'intermatic-pe653'
+permissions:
+  zwave: {}

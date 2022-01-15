@@ -1,0 +1,125 @@
+name: configuration-mode
+components:
+- id: main
+  label: Configuration
+  capabilities:
+  - id: platinummassive43262.firmwareVersion
+    version: 1
+  - id: platinummassive43262.pe653PoolSpaConfig
+    version: 1
+  - id: platinummassive43262.pe653PumpTypeConfig
+    version: 1
+  - id: platinummassive43262.pe653BoosterPumpConfig
+    version: 1
+  - id: refresh
+    version: 1
+- id: heater
+  label: Heater Configuration
+  capabilities:
+  - id: platinummassive43262.pe653FiremanConfig
+    version: 1
+  - id: platinummassive43262.pe653HeaterSafetyConfig
+    version: 1
+- id: freezeControl
+  label: Freeze Control
+  capabilities:
+  - id: platinummassive43262.pe653Circuit1Freeze
+    version: 1
+  - id: platinummassive43262.pe653Circuit2Freeze
+    version: 1
+  - id: platinummassive43262.pe653Circuit3Freeze
+    version: 1
+  - id: platinummassive43262.pe653Circuit4Freeze
+    version: 1
+  - id: platinummassive43262.pe653Circuit5Freeze
+    version: 1
+  categories:
+    - name: Thermostat
+metadata:
+  deviceType: Thermostat
+  ocfDeviceType: oic.d.thermostat
+  deviceTypeId: Thermostat
+preferences:
+  - title: "Mode"
+    name: mode
+    description: "The SmartThings app must be restarted after changing modes"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        configuration: "Configuration Mode"
+        operation: "Operation Mode"
+      default: configuration
+  - title: "Change Profile"
+    name: changeProfile
+    description: "Choose profile to use"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        config: "Configuration Mode"
+        p_sssss_____: "P_-SSSSS-_-_-___"
+        p_sssss__w__: "P_-SSSSS-_-_-W__"
+        p_sssss__wa_: "P_-SSSSS-_-_-WA_"
+        p_sssss__was: "P_-SSSSS-_-_-WAS"
+        pssss__vh___: "PS-SSS__-V-H-___"
+        pssss__vhw__: "PS-SSS__-V-H-W__"
+        pssss__vhwa_: "PS-SSS__-V-H-WA_"
+        pssss__vhwas: "PS-SSS__-V-H-WAS"
+      default: config
+  - title: "Thermostat Setpoint Scale"
+    name: setpointScale
+    description: "Some firmware versions require the alternate setpoint scale. If thermostat setpoint changes do not work, try changing this setting."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "0 - default"
+        1: "1 - alternate"
+      default: 0
+  - title: "Time Zone (offset from UTC)"
+    name: timezoneUTC
+    description: "Enter the local time zone offset from UTC (-12 to +14 hours)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: -12
+      maximum: 14
+      default: -5
+  - title: "Daylight Savings Time"
+    name: timezoneDST
+    description: "Change the PE653 time to reflect daylight savings vs standard time."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Standard time (winter)"
+        1: "Daylight savings time (summer)"
+      default: 0
+  - title: "Water Temperature Offset"
+    name: offsetWater
+    description: "Water temperature offset (-5 to +5 degrees F)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: -5
+      maximum: 5
+      default: 0
+  - title: "Air Temperature Offset"
+    name: offsetAir
+    description: "Air temperature offset (-5 to +5 degrees F)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: -5
+      maximum: 5
+      default: 0
+  - title: "Solar Temperature Offset"
+    name: offsetSolar
+    description: "Solar temperature offset (-5 to +5 degrees F)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: -5
+      maximum: 5
+      default: 0

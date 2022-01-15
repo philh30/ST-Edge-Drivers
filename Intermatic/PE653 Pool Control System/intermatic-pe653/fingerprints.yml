@@ -1,0 +1,7 @@
+zwaveManufacturer:
+  - id: "Intermatic PE653"
+    deviceLabel: Intermatic PE653 Pool Control System
+    manufacturerId: 0x0005
+    productType: 0x5045
+    productId: 0x0653
+    deviceProfileName: configuration-mode
