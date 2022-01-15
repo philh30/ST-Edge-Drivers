@@ -116,6 +116,29 @@ end
 
 --- @param driver st.zwave.Driver
 --- @param device st.zwave.Device
+--- @param cmd st.zwave.CommandClass.Basic.Report
+local function basic_report(driver,device,cmd)
+  local event
+  if cmd.args.target_value ~= nil then
+    -- Target value is our best inidicator of eventual state.
+    -- If we see this, it should be considered authoritative.
+    if cmd.args.target_value == SwitchBinary.value.OFF_DISABLE then
+      event = capabilities.switch.switch.off()
+    else
+      event = capabilities.switch.switch.on()
+    end
+  else
+    if cmd.args.value == SwitchBinary.value.OFF_DISABLE then
+      event = capabilities.switch.switch.off()
+    else
+      event = capabilities.switch.switch.on()
+    end
+  end
+  device:emit_event_for_endpoint(cmd.src_channel, event)
+end
+
+--- @param driver st.zwave.Driver
+--- @param device st.zwave.Device
 local function refresh_handler(driver,device)
   if device:supports_capability_by_id(capabilities.switchLevel.ID) and device:is_cc_supported(cc.SWITCH_MULTILEVEL) then
     device:send(SwitchMultilevel:Get({}))
@@ -180,6 +203,9 @@ local driver_template = {
   zwave_handlers = {
     [cc.CONFIGURATION] = {
       [Configuration.REPORT] = configuration_report,
+    },
+    [cc.BASIC] = {
+      [Basic.REPORT] = basic_report,
     },
   },
   supported_capabilities = {
