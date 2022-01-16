@@ -8,7 +8,7 @@
 
 ## **GE Zigbee Switch/Dimmer (ge-zigbee-switch)**
 
-Provides power/energy reporting for models that support it. The GE/Jasco Zigbee switches and dimmers have little to no configuration options. There's no reason this driver shouldn't work for devices besides the GE/Jasco models (I have two plug-in switches from other manufacturers using it), though other models may have better configuration options that a specifically-tailored driver could take advantage of. The LED indicators don't even seem to be configurable by Zigbee, though I've seen that they can be changed with a sequence of button taps.
+Provides power/energy reporting for models that support it. The GE/Jasco Zigbee switches and dimmers have little to no configuration options. There's no reason this driver shouldn't work for devices besides the GE/Jasco models (I have two plug-in switches from other manufacturers using it), though other models may have better configuration options that a specifically-tailored driver could take advantage of. The LED indicators don't even seem to be configurable by Zigbee, though I've seen that they can be changed with a sequence of quick button taps (up x3 followed by down x1).
 
 ### Switch (Jasco 45856)
 Basic functionality with properly scaled power/energy metering.
