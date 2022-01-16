@@ -1,5 +1,11 @@
 # GE Drivers
 
+[GE Zigbee Switch/Dimmer](#ge-zigbee-switchdimmer-ge-zigbee-switch)
+
+[GE Z-Wave Motion Switch/Dimmer](#ge-z-wave-motion-switchdimmer-ge-zwave-motion-switch)
+
+[GE Z-Wave Switch/Dimmer/Fan/Outlet](#ge-z-wave-switchdimmerfanoutlet-ge-zwave-switch)
+
 ## **GE Zigbee Switch/Dimmer (ge-zigbee-switch)**
 
 Provides power/energy reporting for models that support it. The GE/Jasco Zigbee switches and dimmers have little to no configuration options. There's no reason this driver shouldn't work for devices besides the GE/Jasco models (I have two plug-in switches from other manufacturers using it), though other models may have better configuration options that a specifically-tailored driver could take advantage of. The LED indicators don't even seem to be configurable by Zigbee, though I've seen that they can be changed with a sequence of button taps.
