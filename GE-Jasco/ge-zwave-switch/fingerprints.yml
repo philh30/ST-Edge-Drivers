@@ -101,6 +101,12 @@ zwaveManufacturer:
     productType: 0x4944
     productId: 0x3334
     deviceProfileName: ge-dimmer-scene
+  - id: "0063/4944/3337"
+    deviceLabel: GE Fan 55258
+    manufacturerId: 0x0063
+    productType: 0x4944
+    productId: 0x3337
+    deviceProfileName: ge-fan-scene
   - id: "0063/4944/3339"
     deviceLabel: UltraPro Dimmer 39351
     manufacturerId: 0x0063

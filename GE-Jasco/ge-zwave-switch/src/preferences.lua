@@ -150,6 +150,15 @@ local devices = {
     PARAMETERS = GE_SCENE.PARAMETERS,
     BUTTONS = GE_SCENE.BUTTONS,
   },
+  GE_FAN_SCENE = {
+    MATCHING_MATRIX = {
+      mfrs = {0x0039, 0x0063},
+      product_types = {0x4944},
+      product_ids = {0x3337},
+    },
+    PARAMETERS = GE_SCENE.PARAMETERS,
+    BUTTONS = GE_SCENE.BUTTONS,
+  },
   GE_OUTLET_SCENE = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
