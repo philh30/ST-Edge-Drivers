@@ -1,4 +1,4 @@
-name: 'Zooz ZEN32'
+name: 'Zooz ZEN32 Scene Controller'
 packageKey: 'zen32'
 permissions:
   zwave: {}
