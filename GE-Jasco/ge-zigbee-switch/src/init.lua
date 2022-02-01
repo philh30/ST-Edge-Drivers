@@ -120,6 +120,32 @@ local function instantaneous_demand_handler(driver, device, value, zb_rx)
   device:emit_event_for_endpoint(zb_rx.address_header.src_endpoint.value, capabilities.powerMeter.power({value = raw_value, unit = "W" }))
 end
 
+--- Fix an error in the default handler for ActivePower attribute on ElectricalMeasurement cluster
+---
+--- This converts the Int16 instantaneous demand into the powerMeter.power capability event.  This will
+--- check the device for values set in the constants.ELECTRICAL_MEASUREMENT_MULTIPLIER_KEY and
+--- constants.ELECTRICAL_MEASUREMENT_DIVISOR_KEY to convert the raw value to the correctly scaled values.  These
+--- fields should be set by reading the values from the same cluster
+---
+--- @param driver ZigbeeDriver The current driver running containing necessary context for execution
+--- @param device st.zigbee.Device The device this message was received from containing identifying information
+--- @param value st.zigbee.data_types.Int16 the value of the ActivePower
+--- @param zb_rx st.zigbee.ZigbeeMessageRx the full message this report came in
+local function active_power_meter_handler(driver, device, value, zb_rx)
+  local raw_value = value.value
+  -- By default emit raw value
+  local multiplier = device:get_field(constants.ELECTRICAL_MEASUREMENT_MULTIPLIER_KEY) or 1
+  local divisor = device:get_field(constants.ELECTRICAL_MEASUREMENT_DIVISOR_KEY) or 1
+
+  if divisor == 0 then 
+    divisor = 1
+  end
+
+  raw_value = raw_value * multiplier/divisor
+
+  device:emit_event_for_endpoint(zb_rx.address_header.src_endpoint.value, capabilities.powerMeter.power({value = raw_value, unit = "W" }))
+end
+
 ---- Driver template config
 local driver_template = {
   supported_capabilities = {
@@ -141,7 +167,10 @@ local driver_template = {
       },
       [SimpleMetering.ID] = {
         [SimpleMetering.attributes.InstantaneousDemand.ID] = instantaneous_demand_handler,
-      }
+      },
+      [ElectricalMeasurement.ID] = {
+        [ElectricalMeasurement.attributes.ActivePower.ID] = active_power_meter_handler,
+      },
     }
   },
   capability_handlers = {
