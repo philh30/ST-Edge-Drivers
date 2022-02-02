@@ -197,6 +197,9 @@ local driver_template = {
     doConfigure = do_configure,
     added = added,
   },
+  sub_drivers = {
+    require("zwave-fan-3-speed")
+  },
   NAME = "ge zwave",
 }
 

@@ -35,7 +35,7 @@ local function map_fan_3_speed_to_switch_level (speed)
   elseif speed == fan_speed_helper.fan_speed.LOW then
     return fan_speed_helper.levels_for_3_speed.LOW -- low
   elseif speed == fan_speed_helper.fan_speed.MEDIUM then
-    return fan_speed_helper.levels_for_3_speed.MEDIUM -- mediom
+    return fan_speed_helper.levels_for_3_speed.MEDIUM -- medium
   elseif speed == fan_speed_helper.fan_speed.HIGH or speed == fan_speed_helper.fan_speed.MAX then
     return fan_speed_helper.levels_for_3_speed.HIGH -- high and max
   else
