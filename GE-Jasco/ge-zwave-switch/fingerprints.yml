@@ -185,6 +185,12 @@ zwaveManufacturer:
     productType: 0x4952
     productId: 0x3038
     deviceProfileName: ge-switch-assoc
+  - id: "0063/4952/3130"
+    deviceLabel: GE Switch 14318
+    manufacturerId: 0x0063
+    productType: 0x4952
+    productId: 0x3130
+    deviceProfileName: ge-switch-scene
   - id: "0063/4952/3133"
     deviceLabel: GE Outlet 14288
     manufacturerId: 0x0063
