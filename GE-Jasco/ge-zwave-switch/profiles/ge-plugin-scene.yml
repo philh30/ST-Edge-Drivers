@@ -10,6 +10,10 @@ components:
     version: 1
   categories:
   - name: SmartPlug
+metadata:
+  deviceType: SmartPlug
+  ocfDeviceType: oic.d.smartplug
+  deviceTypeId: SmartPlug
 preferences:
   - title: "Exclusion Sequence"
     name: excludeProtect

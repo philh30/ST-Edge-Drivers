@@ -12,6 +12,10 @@ components:
     version: 1
   categories:
   - name: Fan
+metadata:
+  deviceType: Fan
+  ocfDeviceType: oic.d.fan
+  deviceTypeId: Fan
 preferences:
   - title: "LED Indicator"
     name: ledIndicator

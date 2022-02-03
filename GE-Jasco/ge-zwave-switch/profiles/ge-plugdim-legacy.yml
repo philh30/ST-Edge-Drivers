@@ -9,7 +9,11 @@ components:
   - id: refresh
     version: 1
   categories:
-  - name: Switch
+  - name: SmartPlug
+metadata:
+  deviceType: SmartPlug
+  ocfDeviceType: oic.d.smartplug
+  deviceTypeId: SmartPlug
 preferences:
   - title: "Number of Dimming Steps (Z-Wave)"
     name: dimStepsZwave
