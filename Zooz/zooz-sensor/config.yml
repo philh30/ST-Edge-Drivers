@@ -1,0 +1,4 @@
+name: 'Zooz Sensor'
+packageKey: 'zooz-sensor'
+permissions:
+  zwave: {}

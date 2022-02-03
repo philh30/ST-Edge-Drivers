@@ -1,0 +1,25 @@
+zwaveManufacturer:
+  - id: "zooz/4in1"
+    deviceLabel: Zooz 4-in-1 sensor
+    manufacturerId: 0x027A
+    productType: 0x2021
+    productId: 0x2101
+    deviceProfileName: zooz-4-in-1-sensor
+  - id: "zooz/q-eu"
+    deviceLabel: Zooz Q sensor
+    manufacturerId: 0x027A
+    productType: 0x0200
+    productId: 0x0006
+    deviceProfileName: zooz-q-sensor
+  - id: "zooz/q-us"
+    deviceLabel: Zooz Q sensor
+    manufacturerId: 0x027A
+    productType: 0x0201
+    productId: 0x0006
+    deviceProfileName: zooz-q-sensor
+  - id: "zooz/q-au"
+    deviceLabel: Zooz Q sensor
+    manufacturerId: 0x027A
+    productType: 0x0202
+    productId: 0x0006
+    deviceProfileName: zooz-q-sensor
