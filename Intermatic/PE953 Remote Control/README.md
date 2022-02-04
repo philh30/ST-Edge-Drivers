@@ -27,6 +27,11 @@ Scenes are mapped to the button events in the table below. Note that there is no
 |SCENE 4|OFF|Toggled down|
 |SCENE 5|OFF|Toggled down|
 
+## Screenshots
+
+![Detail view in SmartThings app](https://github.com/philh30/ST-Edge-Drivers/tree/main/Intermatic/PE953%20Remote%20Control/PE953_detailview.png)
+![Settings view in SmartThings app](https://github.com/philh30/ST-Edge-Drivers/tree/main/Intermatic/PE953%20Remote%20Control/PE953_settings.png)
+
 ## Installation
 
 1. Install the driver using the channel invitation.
@@ -44,7 +49,7 @@ Scenes are mapped to the button events in the table below. Note that there is no
 
 **Send commands to set up scenes:** When turned ON, the driver will send a series of z-wave commands to the PE953 to attempt to include the hub node in each scene. This option should be left in the OFF state after scenes have successfully been linked to button events. *The PE953 must be awake when this setting is toggled on.*
 
-**Min delay between button events:** When a scene is activated, the PE953 transmits the command multiple times. This setting allows repetitive scene reports within the specified time frame (in seconds) to be ignored. The delay will not apply if a different scene is received within the specified time frame.
+**Minimum delay between button events:** When a scene is activated, the PE953 transmits the command multiple times. This setting allows repetitive scene reports within the specified time frame (in seconds) to be ignored. The delay will not apply if a different scene is received within the specified time frame.
 
 **Scene Names:** Scene names will be transmitted to the PE953 and reflected on the scene screen. There is a 10 character maximum, and the characters allowed are A-Z, 0-9, and space. *The PE953 must be awake when a new name is saved.*
 
