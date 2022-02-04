@@ -29,8 +29,9 @@ Scenes are mapped to the button events in the table below. Note that there is no
 
 ## Screenshots
 
-![Detail view in SmartThings app](https://github.com/philh30/ST-Edge-Drivers/tree/main/Intermatic/PE953%20Remote%20Control/PE953_detailview.png)
-![Settings view in SmartThings app](https://github.com/philh30/ST-Edge-Drivers/tree/main/Intermatic/PE953%20Remote%20Control/PE953_settings.png)
+![Detail view in SmartThings app](PE953_detailview.png)
+
+![Settings view in SmartThings app](PE953_settings.png)
 
 ## Installation
 
