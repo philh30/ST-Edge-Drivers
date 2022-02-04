@@ -24,7 +24,7 @@ metadata:
   deviceType: MultiFunctionalSensor
   ocfDeviceType: x.com.st.d.sensor.multifunction
   deviceTypeId: MultiFunctionalSensor
-  vid: 9a0cc4ee-1cb4-3871-864c-fef8812d04ef
+  vid: 1cdfa696-2755-3e13-b535-d126caa60b29
   mnmn: SmartThingsCommunity
 preferences:
   - name: "temperatureChange"
