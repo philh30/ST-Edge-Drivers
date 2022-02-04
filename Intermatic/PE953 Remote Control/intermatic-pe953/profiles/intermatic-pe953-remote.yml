@@ -2,6 +2,8 @@ name: intermatic-pe953-remote
 components:
   - id: main
     capabilities:
+    - id: button
+      version: 1
     - id: platinummassive43262.firmwareVersion
       version: 1
     - id: refresh
@@ -12,3 +14,70 @@ metadata:
   deviceType: RemoteController
   ocfDeviceType: x.com.st.d.remotecontroller
   deviceTypeId: RemoteController
+preferences:
+  - title: "Send commands to set up scenes"
+    name: setScene
+    description: "Turn on to resend scene set-up commands if they are not creating button events."
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  - title: "Min delay between button events"
+    name: buttonDelay
+    description: "Scenes are transmitted multiple times by the PE953. A scene event received before the end of the delay will be ignored."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 30
+      default: 10
+  - title: "Scene 1 Name"
+    name: scene1Name
+    description: "Enter the scene name to be displayed on the PE953 (A-Z, 0-9, and space are allowed)."
+    required: true
+    preferenceType: string
+    definition:
+      minLength: 1
+      maxLength: 10
+      stringType: text
+      default: 'SCENE 1'
+  - title: "Scene 2 Name"
+    name: scene2Name
+    description: "Enter the scene name to be displayed on the PE953 (A-Z, 0-9, and space are allowed)."
+    required: true
+    preferenceType: string
+    definition:
+      minLength: 1
+      maxLength: 10
+      stringType: text
+      default: 'SCENE 2'
+  - title: "Scene 3 Name"
+    name: scene3Name
+    description: "Enter the scene name to be displayed on the PE953 (A-Z, 01-9, and space are allowed)."
+    required: true
+    preferenceType: string
+    definition:
+      minLength: 1
+      maxLength: 10
+      stringType: text
+      default: 'SCENE 3'
+  - title: "Scene 4 Name"
+    name: scene4Name
+    description: "Enter the scene name to be displayed on the PE953 (A-Z, 0-9, and space are allowed)."
+    required: true
+    preferenceType: string
+    definition:
+      minLength: 1
+      maxLength: 10
+      stringType: text
+      default: 'SCENE 4'
+  - title: "Scene 5 Name"
+    name: scene5Name
+    description: "Enter the scene name to be displayed on the PE953 (A-Z, 0-9, and space are allowed)."
+    required: true
+    preferenceType: string
+    definition:
+      minLength: 1
+      maxLength: 10
+      stringType: text
+      default: 'SCENE 5'
