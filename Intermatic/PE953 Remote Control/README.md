@@ -29,9 +29,7 @@ Scenes are mapped to the button events in the table below. Note that there is no
 
 ## Screenshots
 
-![Detail view in SmartThings app](PE953_detailview.png)
-
-![Settings view in SmartThings app](PE953_settings.png)
+<img src="PE953_detailview.png" width=200> <img src="PE953_settings.png" width=200>
 
 ## Installation
 
