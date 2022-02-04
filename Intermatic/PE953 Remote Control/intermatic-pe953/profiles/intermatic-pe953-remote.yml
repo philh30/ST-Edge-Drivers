@@ -1,0 +1,14 @@
+name: intermatic-pe953-remote
+components:
+  - id: main
+    capabilities:
+    - id: platinummassive43262.firmwareVersion
+      version: 1
+    - id: refresh
+      version: 1
+    categories:
+    - name: RemoteController
+metadata:
+  deviceType: RemoteController
+  ocfDeviceType: x.com.st.d.remotecontroller
+  deviceTypeId: RemoteController

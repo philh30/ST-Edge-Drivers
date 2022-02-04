@@ -1,0 +1,7 @@
+zwaveManufacturer:
+  - id: "Intermatic PE953"
+    deviceLabel: Intermatic PE953 Remote Control
+    manufacturerId: 0x0000
+    productType: 0x0000
+    productId: 0x0000
+    deviceProfileName: intermatic-pe953-remote

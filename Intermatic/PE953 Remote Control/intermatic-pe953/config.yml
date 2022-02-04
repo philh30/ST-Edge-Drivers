@@ -1,0 +1,4 @@
+name: 'Intermatic PE953 Remote Control'
+packageKey: 'intermatic-pe953'
+permissions:
+  zwave: {}
