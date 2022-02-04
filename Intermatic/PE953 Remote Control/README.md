@@ -2,7 +2,7 @@
 
 [Product Website](https://www.intermatic.com/Product/PE953)
 
-[Driver Folder](https://github.com/philh30/ST-Edge-Drivers/tree/main/Intermatic/PE953%20Remote%20Control/intermatic-pe953)
+[Driver Folder](intermatic-pe953)
 
 ## Overview
 
