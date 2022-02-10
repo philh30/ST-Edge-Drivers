@@ -24,44 +24,26 @@ local Powerlevel = (require "st.zwave.CommandClass.Powerlevel")({ version = 1 })
 local Clock = (require "st.zwave.CommandClass.Clock")({ version = 1 })
 local Association = (require "st.zwave.CommandClass.Association")({ version = 1 })
 local Version = (require "st.zwave.CommandClass.Version")({ version = 1 })
-local ManufacturerProprietary = (require "st.zwave.CommandClass.ManufacturerProprietary")({ version = 1 })
 local capabilities = require "st.capabilities"
 local ZwaveDriver = require "st.zwave.driver"
 local defaults = require "st.zwave.defaults"
 local cc = require "st.zwave.CommandClass"
 local log = require "log"
-local zw = require "st.zwave"
-local constants = require "st.zwave.constants"
-local utils = require "st.utils"
 local capdefs = require "capabilitydefs"
+local config_cmd_handlers = require "config_cmd_handlers"
 
-capabilities[capdefs.firmwareVersion.name] = capdefs.firmwareVersion.capability
-capabilities[capdefs.pumpSpeed.name] = capdefs.pumpSpeed.capability
-capabilities[capdefs.schedule.name] = capdefs.schedule.capability
-capabilities[capdefs.scheduleTime.name] = capdefs.scheduleTime.capability
-capabilities[capdefs.poolSpaConfig.name] = capdefs.poolSpaConfig.capability
-capabilities[capdefs.pumpTypeConfig.name] = capdefs.pumpTypeConfig.capability
-capabilities[capdefs.firemanConfig.name] = capdefs.firemanConfig.capability
-capabilities[capdefs.heaterSafetyConfig.name] = capdefs.heaterSafetyConfig.capability
-capabilities[capdefs.circuit1FreezeControl.name] = capdefs.circuit1FreezeControl.capability
-capabilities[capdefs.circuit2FreezeControl.name] = capdefs.circuit2FreezeControl.capability
-capabilities[capdefs.circuit3FreezeControl.name] = capdefs.circuit3FreezeControl.capability
-capabilities[capdefs.circuit4FreezeControl.name] = capdefs.circuit4FreezeControl.capability
-capabilities[capdefs.circuit5FreezeControl.name] = capdefs.circuit5FreezeControl.capability
-
-local socket = require "cosock.socket"
 local utilities = require "utilities"
 local cc_handlers = require "cc_handlers"
 local commands = require "commands"
-local delay_send = require "delay_send"
+local throttle_send = require "throttle_send"
 local get = require "get_constants"
-local config = require "config"
+local map = require "cap_ep_map"
 
 local ZWAVE_FINGERPRINTS = {
   {mfr = 0x0005, prod = 0x5045, model = 0x0653}, -- PE653
 }
 
-local CONFIG_PARAMS = {}
+--local CONFIG_PARAMS = {}
 
 local function can_handle_zwave(opts, driver, device, ...)
   for _, fingerprint in ipairs(ZWAVE_FINGERPRINTS) do
@@ -82,9 +64,9 @@ local function dev_init(driver, device)
       if capability.id == 'refresh' then
         log.trace(component.id .. '|' .. capability.id .. ' mapping not required.')
       else
-        if config.CAP_MAP[component.id] then
-          if config.CAP_MAP[component.id][capability.id] then 
-            log.trace(utilities.pad(config.CAP_MAP[component.id][capability.id],25), '=', component.id .. '|' .. capability.id)
+        if map.CAP_MAP[component.id] then
+          if map.CAP_MAP[component.id][capability.id] then 
+            log.trace(utilities.pad(map.CAP_MAP[component.id][capability.id],25), '=', component.id .. '|' .. capability.id)
           else
             log.error(component.id .. '.' .. capability.id .. ' failed to map. Report this error.')
           end
@@ -127,21 +109,25 @@ end
 local function infoChanged_handler(driver, device, event, args)
   log.info(device.id .. ": " .. device.device_network_id .. " > INFO CHANGED")
 
-  if (args.old_st_store.preferences.changeProfile ~= device.preferences.changeProfile) and device.preferences.changeProfile ~= 'none' then
+  if args.old_st_store.preferences.mode ~= device.preferences.mode then
+    local mode = device.preferences.mode
     local pref=device.preferences.changeProfile
     local create_device_msg = {
-      profile = (pref=='config') and 'configuration-mode' or (pref:sub(1,2) .. '-' .. pref:sub(3,7) .. '-' .. pref:sub(8,8) .. '-' .. pref:sub(9,9) .. '-' .. pref:sub(10,12)),
+      profile = (mode=='configuration') and 'configuration-mode' or (pref:sub(1,2) .. '-' .. pref:sub(3,7) .. '-' .. pref:sub(8,8) .. '-' .. pref:sub(9,9) .. '-' .. pref:sub(10,12)),
     }
     assert (device:try_update_metadata(create_device_msg), "Failed to change device")
     log.warn('Changed to new profile. App restart required.')
   end
 
---[[
-  if not (args and args.old_st_store) or (args.old_st_store.preferences[id] ~= value and preferences and preferences[id]) then
-    local new_parameter_value = preferencesMap.to_numeric_value(device.preferences[id])
-    device:send(Configuration:Set({parameter_number = preferences[id].parameter_number, size = preferences[id].size, configuration_value = new_parameter_value}))
-  end
-]]
+  local water = (device.preferences.offsetWater < 0) and (256 + device.preferences.offsetWater) or device.preferences.offsetWater
+  local air = (device.preferences.offsetAir < 0) and (256 + device.preferences.offsetAir) or device.preferences.offsetAir
+  local solar = (device.preferences.offsetSolar < 0) and (256 + device.preferences.offsetSolar) or device.preferences.offsetSolar
+  local cmds = commands.set_config(3,4,water*256^3+air*256^2+solar*256)
+  local add_cmds = commands.get_config(3)
+	for _, cmd in ipairs (add_cmds) do
+		table.insert(cmds,cmd)
+	end
+  throttle_send(device,cmds)
 end
 
 --- Switch flipped in app
@@ -151,8 +137,8 @@ end
 local function set_switch(driver,device,command)
   log.debug(string.format('%s %s flipped to %s',command.capability,command.component,command.command))
   local cmds = {}
-  if config.CAP_MAP[command.component][command.capability] ~= 'poolSpaMode' then
-    local instance = config.INSTANCE_KEY[config.CAP_MAP[command.component][command.capability]]
+  if map.CAP_MAP[command.component][command.capability] ~= 'poolSpaMode' then
+    local instance = map.INSTANCE_KEY[map.CAP_MAP[command.component][command.capability]]
     cmds = commands.set_channel_state(instance,command.command)
   else
     cmds = commands.set_pool_spa_mode(device,command.command)
@@ -161,7 +147,7 @@ local function set_switch(driver,device,command)
 	for _, cmd in ipairs (add_cmds) do
 		table.insert(cmds,cmd)
 	end
-	delay_send(device,cmds,1)
+	throttle_send(device,cmds)
 end
 
 --- Heating setpoint changed in app
@@ -171,16 +157,16 @@ end
 local function set_heating_setpoint(driver,device,command)
   log.debug(string.format('%s %s flipped to %s',command.capability,command.component,command.args.setpoint))
   local cmds = {}
-  if config.CAP_MAP[command.component][command.capability] == 'thermostatSetpointPool' then
+  if map.CAP_MAP[command.component][command.capability] == 'thermostatSetpointPool' then
     cmds = commands.set_pool_setpoint(device,command.args.setpoint)
-  elseif config.CAP_MAP[command.component][command.capability] == 'thermostatSetpointSpa' then
+  elseif map.CAP_MAP[command.component][command.capability] == 'thermostatSetpointSpa' then
     cmds = commands.set_spa_setpoint(device,command.args.setpoint)
   end
   local add_cmds = commands.refresh_commands()
   for _, cmd in ipairs (add_cmds) do
 		table.insert(cmds,cmd)
 	end
-	delay_send(device,cmds,1)
+	throttle_send(device,cmds)
 end
 
 --- VSP speed changed in app
@@ -200,7 +186,7 @@ local function set_vsp(driver,device,command)
 	for _, cmd in ipairs (add_cmds) do
 		table.insert(cmds,cmd)
 	end
-	delay_send(device,cmds,1)
+	throttle_send(device,cmds)
 end
 
 --- Schedule selected in app
@@ -211,13 +197,13 @@ local function fetch_schedule(driver,device,command)
   local param_num = tonumber(command.args.schedule) - 100
   local friendly_name = get.CONFIG_PARAMS[param_num].friendlyname
   log.debug(string.format('Fetching parameter %s, schedule %s.',param_num,friendly_name))
-  local comp = config.GET_COMP(device,'schedule')
+  local comp = map.GET_COMP(device,'schedule')
   if comp then
-    device:emit_component_event(device.profile.components[comp],config.EP_MAP['schedule'].cap({ value = command.args.schedule }))
+    device:emit_component_event(device.profile.components[comp],map.EP_MAP['schedule'].cap({ value = command.args.schedule }))
     device:emit_component_event(device.profile.components[comp],capabilities[capdefs.scheduleTime.name].scheduleTime({ value = 'Querying schedule' }))
   end
   local cmd = commands.get_config(param_num)
-  delay_send(device,cmd,1)
+  throttle_send(device,cmd)
 end
 
 --- Schedule run time entered in app
@@ -229,149 +215,13 @@ local function set_schedule_time(driver,device,command)
   local times = { utilities.splitTime(command.args.scheduleTime) }
   if times[1] then
     log.debug(string.format('Setting schedule %s to %s:%s-%s:%s',get.CONFIG_PARAMS[param_num].friendlyname,times[1],times[2],times[3],times[4]))
-    delay_send(device,commands.set_schedule_by_param(param_num,times[1],times[2],times[3],times[4]),4)
+    throttle_send(device,commands.set_schedule_by_param(param_num,times[1],times[2],times[3],times[4]),4)
   else
     log.debug(string.format('Erasing schedule %s',get.CONFIG_PARAMS[param_num].friendlyname))
-    delay_send(device,commands.reset_schedule_by_param(param_num),2)
+    throttle_send(device,commands.reset_schedule_by_param(param_num),2)
   end
 end
 
---- Pool/spa config changed in app
----
---- @param driver st.zwave.Driver
---- @param device st.zwave.Device
-local function set_pool_spa_config(driver,device,command)
-  local param_num = get.POOL_SPA_CONFIG
-  local config_value = tonumber(command.args.poolSpaConfig)
-  log.debug(string.format('Setting Pool/Spa Configuration to %s',config_value))
-  local cmds = commands.set_config(param_num,1,config_value)
-  commands.add_config_refresh_and_send(device,cmds)
-  --[[
-  local add_cmds = commands.get_config(param_num)
-  for _, cmd in ipairs (add_cmds) do
-		table.insert(cmds,cmd)
-	end
-  delay_send(device,cmds,3)
-  --]]
-end
-
---- Pump type changed in app
----
---- @param driver st.zwave.Driver
---- @param device st.zwave.Device
-local function set_pump_type_config(driver,device,command)
-  local param_num = get.OPERATION_MODE_CONFIG
-  local booster_setting = device.state_cache.main[capdefs.boosterPumpConfig.name].boosterPumpConfig.value
-  local cmds = {}
-  if booster_setting then
-    booster_setting = tonumber(booster_setting)
-    local config_value1 = booster_setting
-    local config_value2 = tonumber(command.args.pumpType) + ((booster_setting == 1) and 0 or 1)
-    local config_value = config_value1 * 256 + config_value2
-    log.debug(string.format('Setting Pump Type to %s',config_value))
-    cmds = commands.set_config(param_num,2,config_value)
-  else
-    log.error('Booster configuration unknown. Refresh required before setting pump type.')
-  end
-  commands.add_config_refresh_and_send(device,cmds)
-end
-
---- Booster pump config changed in app
----
---- @param driver st.zwave.Driver
---- @param device st.zwave.Device
-local function set_booster_pump_config(driver,device,command)
-  local param_num = get.OPERATION_MODE_CONFIG
-  local pump_setting = device.state_cache.main[capdefs.pumpTypeConfig.name].pumpType.value
-  local cmds = {}
-  if pump_setting then
-    pump_setting = tonumber(pump_setting)
-    local config_value1 = tonumber(command.args.boosterPumpConfig)
-    local config_value2 = pump_setting + tonumber(command.args.boosterPumpConfig) + ((tonumber(command.args.boosterPumpConfig) == 1) and 0 or 1)
-    local config_value = config_value1 * 256 + config_value2
-    log.debug(string.format('Setting Booster Pump Type to %s',config_value))
-    cmds = commands.set_config(param_num,2,config_value)
-  else
-    log.error('Pump Type configuration unknown. Refresh required before setting pump type.')
-  end
-  commands.add_config_refresh_and_send(device,cmds)
-end
-
---- Fireman config changed in app
----
---- @param driver st.zwave.Driver
---- @param device st.zwave.Device
-local function set_fireman_config(driver,device,command)
-  local param_num = get.FIREMAN_CONFIG
-  local heatersafety_setting = device.state_cache.heater[capdefs.heaterSafetyConfig.name].heaterSafetyConfig.value
-  local cmds = {}
-  if heatersafety_setting then
-    heatersafety_setting = tonumber(heatersafety_setting)
-    local config_value1 = tonumber(command.args.firemanConfig) - 100
-    local config_value2 = heatersafety_setting
-    local config_value = config_value1 * 256 + config_value2
-    log.debug(string.format('Setting Fireman/Heater Safety to %s',config_value))
-    cmds = commands.set_config(param_num,2,config_value)
-  else
-    log.error('Heater safety configuration unknown. Refresh required before setting fireman.')
-  end
-  commands.add_config_refresh_and_send(device,cmds)
-end
-
---- Heater safety config changed in app
----
---- @param driver st.zwave.Driver
---- @param device st.zwave.Device
-local function set_heatersafety_config(driver,device,command)
-  utilities.disptable(command,'  ')
-  local param_num = get.FIREMAN_CONFIG
-  local fireman_setting = device.state_cache.heater[capdefs.firemanConfig.name].firemanConfig.value
-  local cmds = {}
-  if fireman_setting then
-    fireman_setting = tonumber(fireman_setting) - 100
-    local config_value1 = fireman_setting
-    local config_value2 = tonumber(command.args.heaterSafetyConfig)
-    local config_value = config_value1 * 256 + config_value2
-    log.debug(string.format('Setting Fireman/Heater Safety to %s',config_value))
-    cmds = commands.set_config(param_num,2,config_value)
-  else
-    log.error('Fireman configuration unknown. Refresh required before setting heater safety.')
-  end
-  commands.add_config_refresh_and_send(device,cmds)
-end
-
---- Circuit freeze control changed in app
----
---- @param driver st.zwave.Driver
---- @param device st.zwave.Device
-local function set_freeze_config(driver,device,command)
-  log.debug("Freeze flipped")
-  local curr_sw = command.command
-  local curr_set = command.args.freezeControl
-  log.debug(curr_sw,curr_set)
-  local freeze_settings = {
-    [0x01] = (curr_sw == 'setFreezeCircuitOne') and curr_set or device.state_cache.freezeControl[capdefs.circuit1FreezeControl.name].freezeControl.value,
-    [0x02] = (curr_sw == 'setFreezeCircuitTwo') and curr_set or device.state_cache.freezeControl[capdefs.circuit2FreezeControl.name].freezeControl.value,
-    [0x04] = (curr_sw == 'setFreezeCircuitThree') and curr_set or device.state_cache.freezeControl[capdefs.circuit3FreezeControl.name].freezeControl.value,
-    [0x08] = (curr_sw == 'setFreezeCircuitFour') and curr_set or device.state_cache.freezeControl[capdefs.circuit4FreezeControl.name].freezeControl.value,
-    [0x10] = (curr_sw == 'setFreezeCircuitFive') and curr_set or device.state_cache.freezeControl[capdefs.circuit5FreezeControl.name].freezeControl.value,
-  }
-  local config_value1 = 0
-  local config_value2 = 0
-  local config_value3 = 0
-  local config_value4 = 0
-  for value, status in pairs(freeze_settings) do
-    log.debug(value,status)
-    if status == 'on' then config_value2 = config_value2 + value end
-  end
-  local config_value = config_value1 * 256^3 + config_value2 * 256^2 + config_value3 * 256 + config_value4
-  local cmds = commands.set_config(0x32,4,config_value)
-  local add_cmds = commands.get_config(0x32)
-	for _, cmd in ipairs (add_cmds) do
-		table.insert(cmds,cmd)
-	end
-  delay_send(device,cmds,1)
-end
 
 ---------------------------
 -- Driver template
@@ -424,6 +274,19 @@ local driver_template = {
     capabilities.switch,
     capabilities.refresh,
     capabilities.thermostatHeatingSetpoint,
+    capdefs.pumpSpeed.capability,
+    capdefs.schedule.capability,
+    capdefs.scheduleTime.capability,
+    capdefs.poolSpaConfig.capability,
+    capdefs.pumpTypeConfig.capability,
+    capdefs.boosterPumpConfig.capability,
+    capdefs.firemanConfig.capability,
+    capdefs.heaterSafetyConfig.capability,
+    capdefs.circuit1FreezeControl.capability,
+    capdefs.circuit2FreezeControl.capability,
+    capdefs.circuit3FreezeControl.capability,
+    capdefs.circuit4FreezeControl.capability,
+    capdefs.circuit5FreezeControl.capability,
   },
   lifecycle_handlers = {
     init = dev_init,
@@ -451,34 +314,61 @@ local driver_template = {
       [capdefs.scheduleTime.capability.commands.setScheduleTime.NAME] = set_schedule_time,
     },
     [capdefs.poolSpaConfig.capability.ID] = {
-      [capdefs.poolSpaConfig.capability.commands.setPoolSpaConfig.NAME] = set_pool_spa_config,
+      [capdefs.poolSpaConfig.capability.commands.setPoolSpaConfig.NAME] = config_cmd_handlers.set_pool_spa_config,
     },
     [capdefs.pumpTypeConfig.capability.ID] = {
-      [capdefs.pumpTypeConfig.capability.commands.setPumpType.NAME] = set_pump_type_config,
+      [capdefs.pumpTypeConfig.capability.commands.setPumpType.NAME] = config_cmd_handlers.set_pump_type_config,
     },
     [capdefs.boosterPumpConfig.capability.ID] = {
-      [capdefs.boosterPumpConfig.capability.commands.setBoosterPumpConfig.NAME] = set_booster_pump_config,
+      [capdefs.boosterPumpConfig.capability.commands.setBoosterPumpConfig.NAME] = config_cmd_handlers.set_booster_pump_config,
     },
     [capdefs.firemanConfig.capability.ID] = {
-      [capdefs.firemanConfig.capability.commands.setFiremanConfig.NAME] = set_fireman_config,
+      [capdefs.firemanConfig.capability.commands.setFiremanConfig.NAME] = config_cmd_handlers.set_fireman_config,
     },
     [capdefs.heaterSafetyConfig.capability.ID] = {
-      [capdefs.heaterSafetyConfig.capability.commands.setHeaterSafetyConfig.NAME] = set_heatersafety_config,
+      [capdefs.heaterSafetyConfig.capability.commands.setHeaterSafetyConfig.NAME] = config_cmd_handlers.set_heatersafety_config,
+    },
+    [capdefs.vspSpeed1.capability.ID] = {
+      [capdefs.vspSpeed1.capability.commands.setVspSpeedOne.NAME] = config_cmd_handlers.set_vsp_speed_config,
+    },
+    [capdefs.vspSpeed2.capability.ID] = {
+      [capdefs.vspSpeed2.capability.commands.setVspSpeedTwo.NAME] = config_cmd_handlers.set_vsp_speed_config,
+    },
+    [capdefs.vspSpeed3.capability.ID] = {
+      [capdefs.vspSpeed3.capability.commands.setVspSpeedThree.NAME] = config_cmd_handlers.set_vsp_speed_config,
+    },
+    [capdefs.vspSpeed4.capability.ID] = {
+      [capdefs.vspSpeed4.capability.commands.setVspSpeedFour.NAME] = config_cmd_handlers.set_vsp_speed_config,
+    },
+    [capdefs.vspSpeedMax.capability.ID] = {
+      [capdefs.vspSpeedMax.capability.commands.setVspSpeedMax.NAME] = config_cmd_handlers.set_vsp_speed_config,
+    },
+    [capdefs.tempFreezeControl.capability.ID] = {
+      [capdefs.tempFreezeControl.capability.commands.setFreezeTemperature.NAME] = config_cmd_handlers.set_freeze_config,
     },
     [capdefs.circuit1FreezeControl.capability.ID] = {
-      [capdefs.circuit1FreezeControl.capability.commands.setFreezeCircuitOne.NAME] = set_freeze_config,
+      [capdefs.circuit1FreezeControl.capability.commands.setFreezeCircuitOne.NAME] = config_cmd_handlers.set_freeze_config,
     },
     [capdefs.circuit2FreezeControl.capability.ID] = {
-      [capdefs.circuit2FreezeControl.capability.commands.setFreezeCircuitTwo.NAME] = set_freeze_config,
+      [capdefs.circuit2FreezeControl.capability.commands.setFreezeCircuitTwo.NAME] = config_cmd_handlers.set_freeze_config,
     },
     [capdefs.circuit3FreezeControl.capability.ID] = {
-      [capdefs.circuit3FreezeControl.capability.commands.setFreezeCircuitThree.NAME] = set_freeze_config,
+      [capdefs.circuit3FreezeControl.capability.commands.setFreezeCircuitThree.NAME] = config_cmd_handlers.set_freeze_config,
     },
     [capdefs.circuit4FreezeControl.capability.ID] = {
-      [capdefs.circuit4FreezeControl.capability.commands.setFreezeCircuitFour.NAME] = set_freeze_config,
+      [capdefs.circuit4FreezeControl.capability.commands.setFreezeCircuitFour.NAME] = config_cmd_handlers.set_freeze_config,
     },
     [capdefs.circuit5FreezeControl.capability.ID] = {
-      [capdefs.circuit5FreezeControl.capability.commands.setFreezeCircuitFive.NAME] = set_freeze_config,
+      [capdefs.circuit5FreezeControl.capability.commands.setFreezeCircuitFive.NAME] = config_cmd_handlers.set_freeze_config,
+    },
+    [capdefs.vspFreezeControl.capability.ID] = {
+      [capdefs.vspFreezeControl.capability.commands.setVspFreeze.NAME] = config_cmd_handlers.set_freeze_config,
+    },
+    [capdefs.heaterFreezeControl.capability.ID] = {
+      [capdefs.heaterFreezeControl.capability.commands.setHeaterFreeze.NAME] = config_cmd_handlers.set_freeze_config,
+    },
+    [capdefs.poolSpaFreezeControl.capability.ID] = {
+      [capdefs.poolSpaFreezeControl.capability.commands.setPoolSpaFreezeCycle.NAME] = config_cmd_handlers.set_freeze_config,
     },
   },
   NAME = "intermatic-pe653",

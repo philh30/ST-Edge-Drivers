@@ -12,46 +12,16 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-local Basic = (require "st.zwave.CommandClass.Basic")({ version = 1 })
-local SensorMultilevel = (require "st.zwave.CommandClass.SensorMultilevel")({ version = 1 })
-local ThermostatSetpoint = (require "st.zwave.CommandClass.ThermostatSetpoint")({ version = 1 })
-local ThermostatMode = (require "st.zwave.CommandClass.ThermostatMode")({ version = 1 })
-local ThermostatFanMode = (require "st.zwave.CommandClass.ThermostatFanMode")({ version = 1 })
-local ThermostatOperatingState = (require "st.zwave.CommandClass.ThermostatOperatingState")({ version = 1 })
-local Configuration = (require "st.zwave.CommandClass.Configuration")({ version = 2 })
-local capabilities = require "st.capabilities"
-local ZwaveDriver = require "st.zwave.driver"
-local defaults = require "st.zwave.defaults"
-local cc = require "st.zwave.CommandClass"
 local log = require "log"
-local zw = require "st.zwave"
-local constants = require "st.zwave.constants"
-local utils = require "st.utils"
-local capdefs = require "capabilitydefs"
-local socket = require "cosock.socket"
 local utilities = require "utilities"
 local get = require "get_constants"
+local capabilities = require "st.capabilities"
 local manufacturer = require "manufacturer"
 local config = require "configuration"
 local evt = require "events"
+local map = require "cap_ep_map"
 
 local cc_handlers = {}
-
---[[
-    0x20,	//	Basic
-	0x25,	//	Switch Binary
-	0x27,	//	Switch All
-	0x31,	//	Sensor Multilevel
-	0x43,	//	Thermostat setpoint
-	0x60,	//	Multi Instance
-	0x70,	//	Configuration
-	0x72,	//	Manufacturer Specific
-	0x73,	//	Powerlevel
-	0x81,	//	Clock
-	0x85,	//	Association
-	0x86,	//	Version
-	0x91	//	Manufacturer Proprietary
-]]
 
 --- Basic:Report handler
 ---
@@ -91,8 +61,6 @@ end
 --- @param device st.zwave.Device
 --- @param command st.zwave.CommandClass.SwitchMultilevel.Report
 function cc_handlers.sensor_multilevel_report(driver,device,command)
-    log.trace('SENSOR MULTILEVEL REPORT: ')
-    utilities.disptable(command.args,'  ')
     local update = {
         { type = 'waterTemp', state = command.args.sensor_value, unit = command.args.scale },
     }
@@ -109,6 +77,13 @@ function cc_handlers.thermostat_setpoint_report(driver,device,command)
     local update = {
         { type = setpoint_type, state = command.args.value },
     }
+    local pool_spa_config = device:get_field('POOL_SPA')
+    local pool_spa_comp = map.GET_COMP(device,'poolSpaMode')
+    local pool_spa_mode = pool_spa_comp and (((device.state_cache[pool_spa_comp].switch.switch.value or 'off') == 'on') and 'thermostatSetpointSpa') or 'thermostatSetpointPool'
+    local current_setpoint = ((pool_spa_config == 0) and 'thermostatSetpointPool') or ((pool_spa_config == 1) and 'thermostatSetpointSpa') or pool_spa_mode
+    if setpoint_type == current_setpoint then
+        table.insert(update,{ type = 'activeSetpoint', command.args.value })
+    end
     evt.post_event(device,command.cmd_class,command.cmd_id,update)
 end
 
@@ -135,24 +110,37 @@ function cc_handlers.multi_instance_encap(driver,device,command)
         parameter = string.byte(command.payload,4),
     }
     local instance_key = {
-        [1] = 'switch1',
-        [2] = 'switch2',
-        [3] = 'switch3',
-        [4] = get.SWITCH_4(device),
-        [5] = 'switch5',
-        [get.POOL_SPA_CHAN_P5043] = 'poolSpaMode',
-        [get.VSP_CHAN_NO(1)] = 'vsp1',
-        [get.VSP_CHAN_NO(2)] = 'vsp2',
-		[get.VSP_CHAN_NO(3)] = 'vsp3',
-		[get.VSP_CHAN_NO(4)] = 'vsp4',
+        [1] = { key = 'switch1', type = 'switch' },
+        [2] = { key = 'switch2', type = 'switch' },
+        [3] = { key = 'switch3', type = 'switch' },
+        [4] = { key = get.SWITCH_4(device), type = 'switch' },
+        [5] = { key = 'switch5', type = 'switch' },
+        [get.POOL_SPA_CHAN_P5043] = { key = 'poolSpaMode', type = 'poolSpa' },
+        [get.VSP_CHAN_NO(1)] = { key = 'vsp1', type = 'vsp', num = 1 },
+        [get.VSP_CHAN_NO(2)] = { key = 'vsp2', type = 'vsp', num = 1 },
+		[get.VSP_CHAN_NO(3)] = { key = 'vsp3', type = 'vsp', num = 1 },
+		[get.VSP_CHAN_NO(4)] = { key = 'vsp4', type = 'vsp', num = 1 },
     }
     local resp = {}
     resp.val = (cmd.parameter == 0) and 'off' or 'on'
     if instance_key[cmd.instance] then
-        resp.id = instance_key[cmd.instance]
+        resp.id = instance_key[cmd.instance].key
         local update = {
-            { type = resp.id, state = (cmd.parameter == 0) and 'off' or 'on' },
+            { type = resp.id, state = resp.val },
         }
+        if instance_key[cmd.instance].type == 'poolSpa' then
+            local msg = {}
+            msg.id = 'activeMode'
+            msg.val = (cmd.parameter == 0) and 'pool' or 'spa'
+            table.insert(update,{ type=msg.id, state=msg.val})
+            local pool_comp = map.GET_COMP(device,'thermostatSetpointPool')
+            local spa_comp = map.GET_COMP(device,'thermostatSetpointSpa')
+            local pool_setpoint = pool_comp and (device.state_cache[pool_comp].thermostatHeatingSetpoint.heatingSetpoint.value) or 0
+            local spa_setpoint = spa_comp and (device.state_cache[spa_comp].thermostatHeatingSetpoint.heatingSetpoint.value) or 0
+            msg.id = 'activeSetpoint'
+            msg.val = (cmd.parameter == 0) and pool_setpoint or spa_setpoint
+            table.insert(update,{ type=msg.id, state=msg.val})
+        end
         evt.post_event(device,command.cmd_class,command.cmd_id,update)
     else
         log.warn(string.format('Unhandled mutli-instance report: Instance %s, CmdClass %s, CmdID %s, Paramater %s',cmd.instance,cmd.class,cmd.id,cmd.parameter))
@@ -169,7 +157,7 @@ function cc_handlers.configuration_report(driver, device, command)
     local payload = {str:byte(1,#str)}
     local param = command.args.parameter_number
     if get.CONFIG_PARAMS[param] then
-        local update = config[get.CONFIG_PARAMS[param].handler](payload)
+        local update = config[get.CONFIG_PARAMS[param].handler](device,payload)
         evt.post_event(device,command.cmd_class,command.cmd_id,update)
     else
         log.trace('Unknown configuration parameter: ' .. param)

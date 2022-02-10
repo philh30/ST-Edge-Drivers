@@ -12,36 +12,42 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-local get = require "get_constants"
-local utilities = require "utilities"
 local log = require "log"
+local get = require "get_constants"
+local sched = require "schedules"
 
 local config = {}
 
-function config.operation_mode_handler(payload)
+function config.operation_mode_handler(device,payload)
     local configValue1 = payload[3]
     local configValue2 = payload[4]
+    local curr_opmode2 = device:get_field('OP_MODE_2')
+    if curr_opmode2 ~= tonumber(configValue2) then
+        log.debug('Storing operation mode 2 config ' .. configValue2)
+        device:set_field('OP_MODE_2', tonumber(configValue2), {persist = true})
+    end
     return {
-        { type = 'boosterCleanerPumpSpeed', state = get.CONFIG_BOOSTER_CIRCUIT[configValue1] },
-        { type = 'pumpType', state = get.CONFIG_INSTALLED_PUMP_TYPE[configValue2 & 0x02] },
-        { type = 'pumpTypeConfig', state = configValue2 & 0x02 },
+        { type = 'pumpTypeConfig', desc = get.CONFIG_INSTALLED_PUMP_TYPE[configValue2 & 0x02], state = configValue2 & 0x02 },
         { type = 'boosterCleanerInstalled', state = get.CONFIG_BOOSTER_CLEANER_INSTALLED[configValue2 & 0x01] },
-        { type = 'boosterPumpConfig', state = configValue1 },
+        { type = 'boosterPumpConfig', desc = get.CONFIG_BOOSTER_CIRCUIT[configValue1], state = configValue1 },
     }
 end
 
-function config.fireman_handler(payload)
+function config.fireman_handler(device,payload)
     local configValue1 = payload[3]
     local configValue2 = payload[4]
+    local curr_fireman = device:get_field('FIREMAN')
+    if curr_fireman ~= tonumber(configValue1) then
+        log.debug('Storing fireman config ' .. configValue1)
+        device:set_field('FIREMAN', tonumber(configValue1), {persist = true})
+    end
     return {
-        { type = 'firemanTimeout', state = get.CONFIG_FIREMAN_TIMEOUT[configValue1] },
-        { type = 'firemanConfig', state = configValue1 + 100 },
-        { type = 'heaterSafety', state = get.CONFIG_HEATER_SAFETY[configValue2] },
-        { type = 'heaterSafetyConfig', state = configValue2 },
+        { type = 'firemanConfig', desc = get.CONFIG_FIREMAN_TIMEOUT[configValue1], state = configValue1 + 100 },
+        { type = 'heaterSafetyConfig', desc = get.CONFIG_HEATER_SAFETY[configValue2], state = configValue2 },
     }
 end
 
-function config.temp_offset_handler(payload)
+function config.temp_offset_handler(device,payload)
     local configValue1 = payload[3]
     local configValue2 = payload[4]
     local configValue3 = payload[5]
@@ -52,15 +58,19 @@ function config.temp_offset_handler(payload)
     }
 end
 
-function config.pool_spa_handler(payload)
+function config.pool_spa_handler(device,payload)
     local configValue1 = payload[3]
+    local curr_poolspa = device:get_field('POOL_SPA')
+    if curr_poolspa ~= tonumber(configValue1) then
+        log.debug('Storing pool/spa config ' .. configValue1)
+        device:set_field('POOL_SPA', tonumber(configValue1), {persist = true})
+    end
     return {
-        { type = 'poolSpa', state = get.CONFIG_POOL_SPA[configValue1] },
-        { type = 'poolSpaConfig', state = configValue1 },
+        { type = 'poolSpaConfig', desc = get.CONFIG_POOL_SPA[configValue1], state = configValue1 },
     }
 end
 
-function config.schedule_handler(payload)
+function config.schedule_handler(device,payload)
     local configValue1 = payload[3]
     local configValue2 = payload[4]
     local configValue3 = payload[5]
@@ -80,22 +90,31 @@ function config.schedule_handler(payload)
     local on_str = on.hours and (on.hours .. ':' .. ((on.mins < 10) and '0' or '') .. on.mins) or nil
     local off_str = off.hours and (off.hours .. ':' .. ((off.mins < 10) and '0' or '') .. off.mins) or nil
     local str = ((on_str and off_str) and on_str .. '-' .. off_str) or nil
+    sched.update_sched(device,{ name = get.CONFIG_PARAMS[payload[1]].shortname, start = on_str, stop = off_str})
     return {
         { type = 'scheduleTime', desc = get.CONFIG_PARAMS[payload[1]].friendlyname, param = payload[1], state = str }
-        --{ type = get.CONFIG_PARAMS[payload[1]].friendlyname, state = on.hours and (on.hours .. ':' .. ((on.mins < 10) and '0' or '') .. on.mins) or nil },
-        --{ type = get.CONFIG_PARAMS[payload[1]].friendlyname, state = off.hours and (off.hours .. ':' .. ((off.mins < 10) and '0' or '') .. off.mins) or nil },
     }
 end
 
-function config.pump_speed_handler(payload)
+function config.pump_speed_handler(device,payload)
     local configValue1 = payload[3]
     local configValue2 = payload[4]
+    local param = payload[1]
+    local evtType = get.CONFIG_PARAMS[param].description
+    local speed = configValue1 * 256 + configValue2
+    if param ~= 0x31 then
+        local curr_speed = device:get_field(evtType)
+        if curr_speed ~= speed then
+            log.debug('Storing pump speed ' .. speed)
+            device:set_field(evtType, speed, {persist = true})
+        end
+    end
     return {
-        { type = get.CONFIG_PARAMS[payload[1]].description, state = configValue1 * 256 + configValue2 },
+        { type = evtType, state = speed },
     }
 end
 
-function config.freeze_control_handler(payload)
+function config.freeze_control_handler(device,payload)
     local configValue1 = payload[3]
     local configValue2 = payload[4]
     local configValue3 = payload[5]
@@ -107,9 +126,9 @@ function config.freeze_control_handler(payload)
         { type = 'freezeSwitch3', state = (configValue2 & 0x04 ~= 0) and 'on' or 'off' },
         { type = 'freezeSwitch4', state = (configValue2 & 0x08 ~= 0) and 'on' or 'off' },
         { type = 'freezeSwitch5', state = (configValue2 & 0x10 ~= 0) and 'on' or 'off' },
-        { type = 'freezeVsp', state = get.CONFIG_FREEZE_CONTROL_VSP_SPD[configValue3] },
-        { type = 'freezeHeater', state = (configValue4 & 0x80 ~=0) and 'enabled' or 'disabled' },
-        { type = 'freezePoolSpaCycle', state = configValue4 & 0x7F }
+        { type = 'freezeVsp', desc = get.CONFIG_FREEZE_CONTROL_VSP_SPD[configValue3], state = configValue3 },
+        { type = 'freezeHeater', desc = (configValue4 & 0x80 ~=0) and 'enabled' or 'disabled', state = (configValue4 & 0x80 == 0) and 0 or 1 },
+        { type = 'freezePoolSpaCycle', desc = configValue4 & 0x7F, state = configValue4 & 0x7F }
     }
 end
 

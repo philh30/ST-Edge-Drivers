@@ -13,6 +13,8 @@ components:
     version: 1
   - id: refresh
     version: 1
+  categories:
+    - name: WaterValve
 - id: heater
   label: Heater Configuration
   capabilities:
@@ -20,9 +22,28 @@ components:
     version: 1
   - id: platinummassive43262.pe653HeaterSafetyConfig
     version: 1
-- id: freezeControl
-  label: Freeze Control
+  categories:
+    - name: WaterValve
+- id: vsp
+  label: Variable Speed Pump Configuration
   capabilities:
+  - id: platinummassive43262.pe653VspSpeed1Config
+    version: 1
+  - id: platinummassive43262.pe653VspSpeed2Config
+    version: 1
+  - id: platinummassive43262.pe653VspSpeed3Config
+    version: 1
+  - id: platinummassive43262.pe653VspSpeed4Config
+    version: 1
+  - id: platinummassive43262.pe653VspMaxSpeedConfig
+    version: 1
+  categories:
+    - name: WaterValve
+- id: freezeControl
+  label: Freeze Control Configuration
+  capabilities:
+  - id: platinummassive43262.pe653FreezeTemperature
+    version: 1
   - id: platinummassive43262.pe653Circuit1Freeze
     version: 1
   - id: platinummassive43262.pe653Circuit2Freeze
@@ -33,16 +54,33 @@ components:
     version: 1
   - id: platinummassive43262.pe653Circuit5Freeze
     version: 1
+  - id: platinummassive43262.pe653VspFreeze
+    version: 1
+  - id: platinummassive43262.pe653PoolSpaFreezeCycle
+    version: 1
+  - id: platinummassive43262.pe653HeaterFreeze
+    version: 1
   categories:
-    - name: Thermostat
+    - name: WaterValve
+- id: temperatureOffsets
+  label: Temperature Offsets
+  capabilities:
+  - id: platinummassive43262.pe653WaterOffset
+    version: 1
+  - id: platinummassive43262.pe653AirOffset
+    version: 1
+  - id: platinummassive43262.pe653SolarOffset
+    version: 1
+  categories:
+    - name: WaterValve
 metadata:
-  deviceType: Thermostat
-  ocfDeviceType: oic.d.thermostat
-  deviceTypeId: Thermostat
+  deviceType: WaterValve
+  ocfDeviceType: oic.d.watervalve
+  deviceTypeId: WaterValve
 preferences:
   - title: "Mode"
     name: mode
-    description: "The SmartThings app must be restarted after changing modes"
+    description: "Switch between configuration and operation mode"
     required: true
     preferenceType: enumeration
     definition:
@@ -57,26 +95,16 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
-        config: "Configuration Mode"
         p_sssss_____: "P_-SSSSS-_-_-___"
         p_sssss__w__: "P_-SSSSS-_-_-W__"
         p_sssss__wa_: "P_-SSSSS-_-_-WA_"
+        p_sssss__w_s: "P_-SSSSS-_-_-W_S"
         p_sssss__was: "P_-SSSSS-_-_-WAS"
-        pssss__vh___: "PS-SSS__-V-H-___"
         pssss__vhw__: "PS-SSS__-V-H-W__"
         pssss__vhwa_: "PS-SSS__-V-H-WA_"
+        pssss__vhw_s: "PS-SSS__-V-H-W_S"
         pssss__vhwas: "PS-SSS__-V-H-WAS"
-      default: config
-  - title: "Thermostat Setpoint Scale"
-    name: setpointScale
-    description: "Some firmware versions require the alternate setpoint scale. If thermostat setpoint changes do not work, try changing this setting."
-    required: true
-    preferenceType: enumeration
-    definition:
-      options:
-        0: "0 - default"
-        1: "1 - alternate"
-      default: 0
+      default: p_sssss_____
   - title: "Time Zone (offset from UTC)"
     name: timezoneUTC
     description: "Enter the local time zone offset from UTC (-12 to +14 hours)"
@@ -123,3 +151,22 @@ preferences:
       minimum: -5
       maximum: 5
       default: 0
+  - title: "Thermostat Setpoint Scale"
+    name: setpointScale
+    description: "Some firmware versions require the alternate setpoint scale. If thermostat setpoint changes do not work, try changing this setting."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "0 - default"
+        1: "1 - alternate"
+      default: 0
+  - title: "Z-Wave Delay (in milliseconds)"
+    name: zwDelay
+    description: "Delay between z-wave commands sent to the PE653. Default is 1000ms (1s)."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 10000
+      default: 1000

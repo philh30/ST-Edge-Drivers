@@ -14,7 +14,7 @@
 
 local log = require "log"
 local capabilities = require "st.capabilities"
-local config = require "config"
+local map = require "cap_ep_map"
 local capdefs = require "capabilitydefs"
 
 local events = {}
@@ -30,6 +30,9 @@ local event_types = {
         [0x03] = 'THERMOSTAT SETPOINT REPORT: ',
         [0x05] = 'THERMOSTAT SETPOINT SUPPORTED REPORT: ',
         [0x0A] = 'THERMOSTAT SETPOINT CAPABILITIES REPORT: ',
+    },
+    [0x60] = {
+        [0x06] = 'MULTI CHANNEL CMD ENCAP',
     },
     [0x70] = {
         [0x06] = 'CONFIGURATION REPORT: ',
@@ -60,9 +63,9 @@ function events.firmware_event(device,event)
         log.debug('Storing firmware version ' .. event.state)
         device:set_field('FIRMWARE', event.state, {persist = true})
     end
-    local comp = config.GET_COMP(device,event.type)
+    local comp = map.GET_COMP(device,event.type)
     if comp then
-        device:emit_component_event(device.profile.components[comp],config.EP_MAP[event.type].cap({ value = event.state .. '' }))
+        device:emit_component_event(device.profile.components[comp],map.EP_MAP[event.type].cap({ value = event.state .. '' }))
     end
 end
 
@@ -77,45 +80,45 @@ end
 
 --- @param device st.zwave.Device
 function events.basic_event(device,event)
-    local comp = config.GET_COMP(device,event.type)
+    local comp = map.GET_COMP(device,event.type)
     if comp then
-        device:emit_component_event(device.profile.components[comp],config.EP_MAP[event.type].cap({ value = config.EP_MAP[event.type][event.state] }))
+        device:emit_component_event(device.profile.components[comp],map.EP_MAP[event.type].cap({ value = map.EP_MAP[event.type][event.state] }))
     end
 end
 
 --- @param device st.zwave.Device
-function events.temp_event(device,event)
-    local comp = config.GET_COMP(device,event.type)
+function events.unit_event(device,event)
+    local comp = map.GET_COMP(device,event.type)
     if comp then
-        device:emit_component_event(device.profile.components[comp],config.EP_MAP[event.type].cap({ value = event.state, unit = 'F' }))
+        device:emit_component_event(device.profile.components[comp],map.EP_MAP[event.type].cap({ value = event.state, unit = map.EP_MAP[event.type].unit }))
     end
 end
 
 --- @param device st.zwave.Device
-function events.vsp_event(device,event)
-    local comp = config.GET_COMP(device,event.type)
+function events.raw_event(device,event)
+    local comp = map.GET_COMP(device,event.type)
     if comp then
-        device:emit_component_event(device.profile.components[comp],config.EP_MAP[event.type].cap({ value = event.state .. '' }))
+        device:emit_component_event(device.profile.components[comp],map.EP_MAP[event.type].cap({ value = event.state }))
+    end
+end
+
+--- @param device st.zwave.Device
+function events.string_event(device,event)
+    local comp = map.GET_COMP(device,event.type)
+    if comp then
+        device:emit_component_event(device.profile.components[comp],map.EP_MAP[event.type].cap({ value = event.state .. '' }))
     end
 end
 
 --- @param device st.zwave.Device
 function events.schedule_event(device,event)
-    local comp = config.GET_COMP(device,'scheduleTime')
+    local comp = map.GET_COMP(device,'scheduleTime')
     local curr_param = device.state_cache.schedules[capdefs.schedule.name].schedule.value - 100
     if comp then
         if curr_param == event.param then
-            device:emit_component_event(device.profile.components[comp],config.EP_MAP['scheduleTime'].cap({ value = (event.state or '99:99-99:99') }))
+            device:emit_component_event(device.profile.components[comp],map.EP_MAP['scheduleTime'].cap({ value = (event.state or '99:99-99:99') }))
             device:emit_component_event(device.profile.components[comp],capdefs.scheduleTime.capability.parameter({ value = event.param }))
         end
-    end
-end
-
---- @param device st.zwave.Device
-function events.config_event(device,event)
-    local comp = config.GET_COMP(device,event.type)
-    if comp then
-        device:emit_component_event(device.profile.components[comp],config.EP_MAP[event.type].cap({ value = event.state .. '' }))
     end
 end
 
@@ -131,10 +134,10 @@ function events.post_event(device,cmd_cls,cmd_id,update)
         for _, event in ipairs(update) do
             if event.type == 'scheduleTime' then
                 log.trace('---------- ' .. event.type .. ' ' .. event.desc .. ' : ' .. (event.state or 'Not scheduled'))
-                if config.EP_MAP[event.type] then events[config.EP_MAP[event.type].handler](device,event) end
+                if map.EP_MAP[event.type] then events[map.EP_MAP[event.type].handler](device,event) end
             elseif event.state then
-                log.trace('---------- ' .. event.type .. ' : ' .. event.state)
-                if config.EP_MAP[event.type] then events[config.EP_MAP[event.type].handler](device,event) end
+                log.trace('---------- ' .. event.type .. ' : ' .. (event.desc or event.state))
+                if map.EP_MAP[event.type] then events[map.EP_MAP[event.type].handler](device,event) end
             else
                 log.trace('---------- ' .. event.type .. ' : Nil state reported')
             end

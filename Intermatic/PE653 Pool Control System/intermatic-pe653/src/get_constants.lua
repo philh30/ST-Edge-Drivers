@@ -31,6 +31,7 @@ end
 get_resp.POOL_SPA_CONFIG = 22             		-- Pool/Spa mode config - 0x16
 get_resp.OPERATION_MODE_CONFIG = 1				-- Operation mode - 0x01
 get_resp.FIREMAN_CONFIG = 2						-- Fireman and Heater Safety - 0x02
+get_resp.FREEZE_CONFIG = 50						-- Freeze Control - 0x32
 
 function get_resp.VSP_SCHED_PARAM(sp, sch)      -- VSP Speed 1-4 Schedule 1-3 - 0x24
     return (36 + (sp-1)*3 + (sch-1))
@@ -95,25 +96,23 @@ function get_resp.EXPANSION_5043(device)
 	return expansionVersion == '3.4'
 end
 
----------------------------------------------------------------------------------
--- Work on these!!!!!!!!!!!!!
 function get_resp.POOL_SPA_CHAN(device)				-- Pool/Spa channel - 0x27 if P5043 otherwise 0x04 (Switch 4)
 	return get_resp.EXPANSION_5043(device) and 39 or 4
 end
 
 function get_resp.VSP_ENABLED(device)					-- True if a Variable Speed Pump configured
-	local operationMode2 = '5'					-- NEED TO POPULATE THIS IN A FIELD FIRST
-	return (operationMode2 >= '4') and 1 or 0
+	local operationMode2 = device:get_field('OP_MODE_2')
+	return (operationMode2 >= 4) and 1 or 0
 end
 
 function get_resp.HAS_HEATER(device)					-- True if Heater equipped
-	local fireman = 0							-- NEED TO POPULATE THIS IN A FIELD FIRST
+	local fireman = device:get_field('FIREMAN')
 	return tonumber(fireman) ~= 255
 end
 
 function get_resp.POOL_SPA_COMBO(device)				-- True if both Pool and Spa
-	local poolSpa1 = '2'						-- NEED TO POPULATE THIS IN A FIELD FIRST
-	return (poolSpa1 == '2') and 1 or 0
+	local poolSpa = device:get_field('POOL_SPA')
+	return (poolSpa == 2) and 1 or 0
 end
 
 function get_resp.SWITCH_4(device)					-- Report sw4 change as Pool/Spa unless P5043
@@ -123,15 +122,6 @@ function get_resp.SWITCH_4(device)					-- Report sw4 change as Pool/Spa unless P
 		return 'switch4'
     end
 end
-
-
--- Ver 3.1 firmware offsets (per logs from ethelredkent)
--- Pool switch : 6
--- waterTemp : 10
--- airTempFreeze : 11
--- airTempSolar : 12
-
--- All of these updated +1 to account for Lua arrays starting at 1
 
 function get_resp.ADJ_84(device)						-- Determine the adjustment for old firmware
 	local firmwareVersion = device:get_field('FIRMWARE')
@@ -187,42 +177,42 @@ get_resp.CLOCK_MINUTE_87 = 25					-- Clock Minute
 get_resp.CONFIG_PARAMS = {
 	[0x01] = { description = 'PE653_OPERATION_MODE', handler = 'operation_mode_handler', size = 2 },
 	[0x02] = { description = 'FIREMAN_TIMEOUT', handler = 'fireman_handler', size = 2 },
-	[0x03] = { description = 'TEMP_CALIBRATION_OFFSETS', handler = 'temp_offset_handler'},
-	[0x04] = { description = 'CIR_1_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 1, Schedule 1' },
-	[0x05] = { description = 'CIR_1_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 1, Schedule 2' },
-	[0x06] = { description = 'CIR_1_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 1, Schedule 3' },
-	[0x07] = { description = 'CIR_2_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 2, Schedule 1' },
-	[0x08] = { description = 'CIR_2_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 2, Schedule 2' },
-	[0x09] = { description = 'CIR_2_EV_SCHED_3', handler = 'schedule_handler', size = 1, friendlyname = 'Circuit 2, Schedule 3' },
-	[0x0A] = { description = 'CIR_3_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 3, Schedule 1' },
-	[0x0B] = { description = 'CIR_3_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 3, Schedule 2' },
-	[0x0C] = { description = 'CIR_3_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 3, Schedule 3' },
-	[0x0D] = { description = 'CIR_4_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 4, Schedule 1' },
-	[0x0E] = { description = 'CIR_4_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 4, Schedule 2' },
-	[0x0F] = { description = 'CIR_4_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 4, Schedule 3' },
-	[0x10] = { description = 'CIR_5_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 5, Schedule 1' },
-	[0x11] = { description = 'CIR_5_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 5, Schedule 2' },
-	[0x12] = { description = 'CIR_5_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 5, Schedule 3' },
-	[0x13] = { description = 'POOL_SPA_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'Pool/Spa Mode, Schedule 1' },
-	[0x14] = { description = 'POOL_SPA_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'Pool/Spa Mode, Schedule 2' },
-	[0x15] = { description = 'POOL_SPA_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'Pool/Spa Mode, Schedule 3' },
+	[0x03] = { description = 'TEMP_CALIBRATION_OFFSETS', handler = 'temp_offset_handler', size = 4},
+	[0x04] = { description = 'CIR_1_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 1, Schedule 1', shortname = 'Circuit 1 - 1' },
+	[0x05] = { description = 'CIR_1_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 1, Schedule 2', shortname = 'Circuit 1 - 2' },
+	[0x06] = { description = 'CIR_1_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 1, Schedule 3', shortname = 'Circuit 1 - 3' },
+	[0x07] = { description = 'CIR_2_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 2, Schedule 1', shortname = 'Circuit 2 - 1' },
+	[0x08] = { description = 'CIR_2_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 2, Schedule 2', shortname = 'Circuit 2 - 2' },
+	[0x09] = { description = 'CIR_2_EV_SCHED_3', handler = 'schedule_handler', size = 1, friendlyname = 'Circuit 2, Schedule 3', shortname = 'Circuit 2 - 3' },
+	[0x0A] = { description = 'CIR_3_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 3, Schedule 1', shortname = 'Circuit 3 - 1' },
+	[0x0B] = { description = 'CIR_3_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 3, Schedule 2', shortname = 'Circuit 3 - 2' },
+	[0x0C] = { description = 'CIR_3_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 3, Schedule 3', shortname = 'Circuit 3 - 3' },
+	[0x0D] = { description = 'CIR_4_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 4, Schedule 1', shortname = 'Circuit 4 - 1' },
+	[0x0E] = { description = 'CIR_4_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 4, Schedule 2', shortname = 'Circuit 4 - 2' },
+	[0x0F] = { description = 'CIR_4_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 4, Schedule 3', shortname = 'Circuit 4 - 3' },
+	[0x10] = { description = 'CIR_5_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 5, Schedule 1', shortname = 'Circuit 5 - 1' },
+	[0x11] = { description = 'CIR_5_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 5, Schedule 2', shortname = 'Circuit 5 - 2' },
+	[0x12] = { description = 'CIR_5_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'Circuit 5, Schedule 3', shortname = 'Circuit 5 - 3' },
+	[0x13] = { description = 'POOL_SPA_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'Pool/Spa Mode, Schedule 1', shortname = 'Pool|Spa - 1' },
+	[0x14] = { description = 'POOL_SPA_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'Pool/Spa Mode, Schedule 2', shortname = 'Pool|Spa - 2' },
+	[0x15] = { description = 'POOL_SPA_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'Pool/Spa Mode, Schedule 3', shortname = 'Pool|Spa - 3' },
 	[0x16] = { description = 'POOL_SPA_SUPPORT_MODE', handler = 'pool_spa_handler'},
 	[0x20] = { description = 'VSP_SPD_SETTING_1', handler = 'pump_speed_handler'},
 	[0x21] = { description = 'VSP_SPD_SETTING_2', handler = 'pump_speed_handler'},
 	[0x22] = { description = 'VSP_SPD_SETTING_3', handler = 'pump_speed_handler'},
 	[0x23] = { description = 'VSP_SPD_SETTING_4', handler = 'pump_speed_handler'},
-	[0x24] = { description = 'VSP_SPD_1_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 1, Schedule 1' },
-	[0x25] = { description = 'VSP_SPD_1_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 1, Schedule 2' },
-	[0x26] = { description = 'VSP_SPD_1_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 1, Schedule 3' },
-	[0x27] = { description = 'VSP_SPD_2_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 2, Schedule 1' },
-	[0x28] = { description = 'VSP_SPD_2_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 2, Schedule 2' },
-	[0x29] = { description = 'VSP_SPD_2_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 2, Schedule 3' },
-	[0x2A] = { description = 'VSP_SPD_3_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 3, Schedule 1' },
-	[0x2B] = { description = 'VSP_SPD_3_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 3, Schedule 2' },
-	[0x2C] = { description = 'VSP_SPD_3_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 3, Schedule 3' },
-	[0x2D] = { description = 'VSP_SPD_4_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 4, Schedule 1' },
-	[0x2E] = { description = 'VSP_SPD_4_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 4, Schedule 2' },
-	[0x2F] = { description = 'VSP_SPD_4_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 4, Schedule 3' },
+	[0x24] = { description = 'VSP_SPD_1_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 1, Schedule 1', shortname = 'VSP Speed 1 - 1' },
+	[0x25] = { description = 'VSP_SPD_1_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 1, Schedule 2', shortname = 'VSP Speed 1 - 2' },
+	[0x26] = { description = 'VSP_SPD_1_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 1, Schedule 3', shortname = 'VSP Speed 1 - 3' },
+	[0x27] = { description = 'VSP_SPD_2_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 2, Schedule 1', shortname = 'VSP Speed 2 - 1' },
+	[0x28] = { description = 'VSP_SPD_2_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 2, Schedule 2', shortname = 'VSP Speed 2 - 2' },
+	[0x29] = { description = 'VSP_SPD_2_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 2, Schedule 3', shortname = 'VSP Speed 2 - 3' },
+	[0x2A] = { description = 'VSP_SPD_3_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 3, Schedule 1', shortname = 'VSP Speed 3 - 1' },
+	[0x2B] = { description = 'VSP_SPD_3_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 3, Schedule 2', shortname = 'VSP Speed 3 - 2' },
+	[0x2C] = { description = 'VSP_SPD_3_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 3, Schedule 3', shortname = 'VSP Speed 3 - 3' },
+	[0x2D] = { description = 'VSP_SPD_4_EV_SCHED_1', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 4, Schedule 1', shortname = 'VSP Speed 4 - 1' },
+	[0x2E] = { description = 'VSP_SPD_4_EV_SCHED_2', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 4, Schedule 2', shortname = 'VSP Speed 4 - 2' },
+	[0x2F] = { description = 'VSP_SPD_4_EV_SCHED_3', handler = 'schedule_handler', size = 4, friendlyname = 'VSP Speed 4, Schedule 3', shortname = 'VSP Speed 4 - 3' },
 	[0x31] = { description = 'VSP_MAX_PUMP_SPEED', handler = 'pump_speed_handler'},
 	[0x32] = { description = 'FREEZE_CONTROL', handler = 'freeze_control_handler'},
 }

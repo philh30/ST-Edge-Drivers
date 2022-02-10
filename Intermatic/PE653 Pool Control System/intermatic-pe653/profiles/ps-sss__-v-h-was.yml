@@ -3,7 +3,13 @@ components:
 - id: main
   label: Pool
   capabilities:
+  - id: platinummassive43262.pe653ActiveMode
+    version: 1
+  - id: platinummassive43262.pe653ActiveSetpoint
+    version: 1
   - id: platinummassive43262.pe653VariableSpeedPump
+    version: 1
+  - id: platinummassive43262.pe653VspCurrentSpeed
     version: 1
   - id: temperatureMeasurement
     version: 1
@@ -13,6 +19,8 @@ components:
     version: 1
   - id: refresh
     version: 1
+  categories:
+  - name: WaterValve
 - id: spa
   label: Spa
   capabilities:
@@ -20,31 +28,43 @@ components:
     version: 1
   - id: thermostatHeatingSetpoint
     version: 1
+  categories:
+  - name: WaterValve
 - id: circuit1
   label: Circuit 1
   capabilities:
   - id: switch
     version: 1
+  categories:
+  - name: Switch
 - id: circuit2
   label: Circuit 2
   capabilities:
   - id: switch
     version: 1
+  categories:
+  - name: Switch
 - id: circuit3
   label: Circuit 3
   capabilities:
   - id: switch
     version: 1
+  categories:
+  - name: Switch
 - id: air
   label: Air
   capabilities:
   - id: temperatureMeasurement
     version: 1
+  categories:
+  - name: Thermostat
 - id: solar
   label: Solar
   capabilities:
   - id: temperatureMeasurement
     version: 1
+  categories:
+  - name: Thermostat
 - id: schedules
   label: Schedules
   capabilities:
@@ -52,13 +72,27 @@ components:
     version: 1
   - id: platinummassive43262.pe653ScheduleTime
     version: 1
+  - id: platinummassive43262.pe653Schedules
+    version: 1
   categories:
-    - name: Thermostat
+  - name: WaterValve
 metadata:
-  deviceType: Thermostat
-  ocfDeviceType: oic.d.thermostat
-  deviceTypeId: Thermostat
+  deviceType: WaterValve
+  ocfDeviceType: oic.d.watervalve
+  deviceTypeId: WaterValve
+  vid: 08c4de68-f076-3034-b5a0-185357aed322
+  mnmn: SmartThingsCommunity
 preferences:
+  - title: "Mode"
+    name: mode
+    description: "Switch between configuration and operation mode"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        configuration: "Configuration Mode"
+        operation: "Operation Mode"
+      default: operation
   - title: "Change Profile"
     name: changeProfile
     description: "Choose profile to use"
@@ -66,26 +100,16 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
-        config: "Configuration Mode"
         p_sssss_____: "P_-SSSSS-_-_-___"
         p_sssss__w__: "P_-SSSSS-_-_-W__"
         p_sssss__wa_: "P_-SSSSS-_-_-WA_"
+        p_sssss__w_s: "P_-SSSSS-_-_-W_S"
         p_sssss__was: "P_-SSSSS-_-_-WAS"
-        pssss__vh___: "PS-SSS__-V-H-___"
         pssss__vhw__: "PS-SSS__-V-H-W__"
         pssss__vhwa_: "PS-SSS__-V-H-WA_"
+        pssss__vhw_s: "PS-SSS__-V-H-W_S"
         pssss__vhwas: "PS-SSS__-V-H-WAS"
-      default: config
-  - title: "Thermostat Setpoint Scale"
-    name: setpointScale
-    description: "Some firmware versions require the alternate setpoint scale. If thermostat setpoint changes do not work, try changing this setting."
-    required: true
-    preferenceType: enumeration
-    definition:
-      options:
-        0: "0 - default"
-        1: "1 - alternate"
-      default: 0
+      default: pssss__vhwas
   - title: "Time Zone (offset from UTC)"
     name: timezoneUTC
     description: "Enter the local time zone offset from UTC (-12 to +14 hours)"
@@ -132,3 +156,22 @@ preferences:
       minimum: -5
       maximum: 5
       default: 0
+  - title: "Thermostat Setpoint Scale"
+    name: setpointScale
+    description: "Some firmware versions require the alternate setpoint scale. If thermostat setpoint changes do not work, try changing this setting."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "0 - default"
+        1: "1 - alternate"
+      default: 0
+  - title: "Z-Wave Delay (in milliseconds)"
+    name: zwDelay
+    description: "Delay between z-wave commands sent to the PE653. Default is 1000ms (1s)."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 10000
+      default: 1000
