@@ -1,4 +1,4 @@
--- Author: philh30
+-- Copyright 2022 philh30
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -18,182 +18,26 @@ local capabilitydefs = {}
 
 capabilitydefs.LightSensing = {}
 capabilitydefs.LightSensing.name = "platinummassive43262.jascoLightSensing"
-capabilitydefs.LightSensing.json = [[
-{
-    "id": "platinummassive43262.jascoLightSensing",
-    "version": 1,
-    "status": "proposed",
-    "name": "Jasco Light Sensing",
-    "ephemeral": false,
-    "attributes": {
-        "lightSensing": {
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "value": {
-                        "type": "string"
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "value"
-                ]
-            },
-            "setter": "setLightSensing",
-            "enumCommands": []
-        }
-    },
-    "commands": {
-        "setLightSensing": {
-            "name": "setLightSensing",
-            "arguments": [
-                {
-                    "name": "value",
-                    "optional": false,
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            ]
-        }
-    }
-}
-]]
-capabilitydefs.LightSensing.capability = capabilities.build_cap_from_json_string(capabilitydefs.LightSensing.json)
+capabilitydefs.LightSensing.capability = capabilities[capabilitydefs.LightSensing.name]
 
 capabilitydefs.OperationMode = {}
 capabilitydefs.OperationMode.name = "platinummassive43262.jascoOperationMode"
-capabilitydefs.OperationMode.json = [[
-{
-    "id": "platinummassive43262.jascoOperationMode",
-    "version": 1,
-    "status": "proposed",
-    "name": "Jasco Operation Mode",
-    "ephemeral": false,
-    "attributes": {
-        "operationMode": {
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "value": {
-                        "type": "string"
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "value"
-                ]
-            },
-            "setter": "setOperationMode",
-            "enumCommands": []
-        }
-    },
-    "commands": {
-        "setOperationMode": {
-            "name": "setOperationMode",
-            "arguments": [
-                {
-                    "name": "operationMode",
-                    "optional": false,
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            ]
-        }
-    }
-}
-]]
-capabilitydefs.OperationMode.capability = capabilities.build_cap_from_json_string(capabilitydefs.OperationMode.json)
+capabilitydefs.OperationMode.capability = capabilities[capabilitydefs.OperationMode.name]
 
 capabilitydefs.MotionSensitivity = {}
 capabilitydefs.MotionSensitivity.name = "platinummassive43262.jascoMotionSensitivity"
-capabilitydefs.MotionSensitivity.json = [[
-{
-    "id": "platinummassive43262.jascoMotionSensitivity",
-    "version": 1,
-    "status": "proposed",
-    "name": "Jasco Motion Sensitivity",
-    "ephemeral": false,
-    "attributes": {
-        "motionSensitivity": {
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "value": {
-                        "type": "string"
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "value"
-                ]
-            },
-            "setter": "setMotionSensitivity",
-            "enumCommands": []
-        }
-    },
-    "commands": {
-        "setMotionSensitivity": {
-            "name": "setMotionSensitivity",
-            "arguments": [
-                {
-                    "name": "motionSensitivity",
-                    "optional": false,
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            ]
-        }
-    }
-}
-]]
-capabilitydefs.MotionSensitivity.capability = capabilities.build_cap_from_json_string(capabilitydefs.MotionSensitivity.json)
+capabilitydefs.MotionSensitivity.capability = capabilities[capabilitydefs.MotionSensitivity.name]
 
 capabilitydefs.TimeoutDuration = {}
 capabilitydefs.TimeoutDuration.name = "platinummassive43262.jascoTimeoutDuration"
-capabilitydefs.TimeoutDuration.json = [[
-{
-    "id": "platinummassive43262.jascoTimeoutDuration",
-    "version": 1,
-    "status": "proposed",
-    "name": "Jasco Timeout Duration",
-    "ephemeral": false,
-    "attributes": {
-        "timeoutDuration": {
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "value": {
-                        "type": "string"
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "value"
-                ]
-            },
-            "setter": "setTimeoutDuration",
-            "enumCommands": []
-        }
-    },
-    "commands": {
-        "setTimeoutDuration": {
-            "name": "setTimeoutDuration",
-            "arguments": [
-                {
-                    "name": "timeoutDuration",
-                    "optional": false,
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            ]
-        }
-    }
-}
-]]
-capabilitydefs.TimeoutDuration.capability = capabilities.build_cap_from_json_string(capabilitydefs.TimeoutDuration.json)
+capabilitydefs.TimeoutDuration.capability = capabilities[capabilitydefs.TimeoutDuration.name]
+
+capabilitydefs.TimeoutDuration = {}
+capabilitydefs.TimeoutDuration.name = "platinummassive43262.jascoTimeoutDuration"
+capabilitydefs.TimeoutDuration.capability = capabilities[capabilitydefs.TimeoutDuration.name]
+
+capabilitydefs.DefaultLevel = {}
+capabilitydefs.DefaultLevel.name = "platinummassive43262.jascoDefaultLevel"
+capabilitydefs.DefaultLevel.capability = capabilities[capabilitydefs.DefaultLevel.name]
 
 return capabilitydefs

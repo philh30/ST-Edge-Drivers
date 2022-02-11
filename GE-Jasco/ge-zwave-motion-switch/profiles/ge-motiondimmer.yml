@@ -16,6 +16,8 @@ components:
     version: 1
   - id: platinummassive43262.jascoLightSensing
     version: 1
+  - id: platinummassive43262.jascoDefaultLevel
+    version: 1
   - id: refresh
     version: 1
   categories:
@@ -24,7 +26,7 @@ metadata:
   deviceType: Switch
   ocfDeviceType: oic.d.switch
   deviceTypeId: Switch
-  vid: 86d3b7ab-c553-3d63-be6f-2d04c3c40e5b
+  vid: 2ecc4fe9-d65b-3645-bcf0-4cd9b6c17f63
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Enable/Disable Motion Sensor"
@@ -119,15 +121,6 @@ preferences:
       options:
         0: "Dimmer Mode"
         1: "Switch Mode"
-      default: 0
-  - title: "Switch Level"
-    name: switchLevel
-    description: "Switch level (0=disabled, 1-99=brightness level)"
-    required: true
-    preferenceType: integer
-    definition:
-      minimum: 0
-      maximum: 99
       default: 0
   - title: "Exclusion Sequence"
     name: excludeProtect

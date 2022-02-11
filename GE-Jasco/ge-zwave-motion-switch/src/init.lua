@@ -1,6 +1,4 @@
--- Author: philh30
---
--- Copyright 2021 SmartThings
+-- Copyright 2022 philh30
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -38,18 +36,11 @@ local splitAssocString = require "split_assoc_string"
 local capdefs = require('capabilitydefs')
 local config_handlers = require "config_handlers"
 
-capabilities[capdefs.TimeoutDuration.name] = capdefs.TimeoutDuration.capability
-local TimeoutDuration = capabilities[capdefs.TimeoutDuration.name]
-
-capabilities[capdefs.OperationMode.name] = capdefs.OperationMode.capability
-local OperationMode = capabilities[capdefs.OperationMode.name]
-
-capabilities[capdefs.MotionSensitivity.name] = capdefs.MotionSensitivity.capability
-local MotionSensitivity = capabilities[capdefs.MotionSensitivity.name]
-
-capabilities[capdefs.LightSensing.name] = capdefs.LightSensing.capability
-local LightSensing = capabilities[capdefs.LightSensing.name]
-
+local TimeoutDuration = capdefs.TimeoutDuration.capability
+local OperationMode = capdefs.OperationMode.capability
+local MotionSensitivity = capdefs.MotionSensitivity.capability
+local LightSensing = capdefs.LightSensing.capability
+local DefaultLevel = capdefs.DefaultLevel.capability
 
 --- @param driver st.zwave.Driver
 --- @param device st.zwave.Device
@@ -65,8 +56,8 @@ local function update_preferences(driver, device, args)
         local group = preferences[id].group
         local maxnodes = preferences[id].maxnodes
         local addhub = preferences[id].addhub
-        local nodes = splitAssocString(value,',',maxnodes,addhub)
         local hubnode = device.driver.environment_info.hub_zwave_id
+        local nodes = splitAssocString(value,',',maxnodes,addhub,hubnode)
         device:send(Association:Remove({grouping_identifier = group, node_ids = {}}))
         if addhub then device:send(Association:Set({grouping_identifier = group, node_ids = {hubnode}})) end --add hub to group 3 for double click reporting
         if #nodes > 0 then
@@ -108,6 +99,7 @@ local function configuration_report(driver,device,command)
     [3]   = { handler = 'operationMode' },
     [13]  = { handler = 'motionSensitivity' },
     [14]  = { handler = 'lightSensing' },
+    [17]  = { handler = 'defaultLevel' },
   }
   if param_map[param] then
     config_handlers[param_map[param].handler](device,command.args.configuration_value)
@@ -119,20 +111,10 @@ end
 --- @param cmd st.zwave.CommandClass.Basic.Report
 local function basic_report(driver,device,cmd)
   local event
-  if cmd.args.target_value ~= nil then
-    -- Target value is our best inidicator of eventual state.
-    -- If we see this, it should be considered authoritative.
-    if cmd.args.target_value == SwitchBinary.value.OFF_DISABLE then
-      event = capabilities.switch.switch.off()
-    else
-      event = capabilities.switch.switch.on()
-    end
+  if cmd.args.value == SwitchBinary.value.OFF_DISABLE then
+    event = capabilities.switch.switch.off()
   else
-    if cmd.args.value == SwitchBinary.value.OFF_DISABLE then
-      event = capabilities.switch.switch.off()
-    else
-      event = capabilities.switch.switch.on()
-    end
+    event = capabilities.switch.switch.on()
   end
   device:emit_event_for_endpoint(cmd.src_channel, event)
 end
@@ -152,6 +134,9 @@ local function refresh_handler(driver,device)
   device:send(Configuration:Get({parameter_number = 3}))
   device:send(Configuration:Get({parameter_number = 13}))
   device:send(Configuration:Get({parameter_number = 14}))
+  if device:supports_capability_by_id(DefaultLevel.ID) then
+    device:send(Configuration:Get({parameter_number = 17}))
+  end
 end
 
 --- @param driver st.zwave.Driver
@@ -199,6 +184,14 @@ local function lightsensing_handler(driver,device,command)
   device:send(Configuration:Get({parameter_number = 14}))
 end
 
+--- @param driver st.zwave.Driver
+--- @param device st.zwave.Device
+local function defaultlevel_handler(driver,device,command)
+  local config_value = (command.args.defaultLevel == 100) and 99 or command.args.defaultLevel
+  device:send(Configuration:Set({parameter_number = 17, size = 1, configuration_value = config_value}))
+  device:send(Configuration:Get({parameter_number = 17}))
+end
+
 local driver_template = {
   zwave_handlers = {
     [cc.CONFIGURATION] = {
@@ -217,6 +210,7 @@ local driver_template = {
     OperationMode,
     MotionSensitivity,
     LightSensing,
+    DefaultLevel,
   },
   lifecycle_handlers = {
     infoChanged = info_changed,
@@ -238,6 +232,9 @@ local driver_template = {
     },
     [LightSensing.ID] = {
       [LightSensing.commands.setLightSensing.NAME] = lightsensing_handler,
+    },
+    [DefaultLevel.ID] = {
+      [DefaultLevel.commands.setDefaultLevel.NAME] = defaultlevel_handler,
     },
   },
   NAME = "ge zwave",

@@ -26,7 +26,7 @@ local GE_MOTION = {
     dimTimeAll        = {type = 'config', parameter_number = 12, size = 2},
     resetCycle        = {type = 'config', parameter_number = 15, size = 2},
     switchMode        = {type = 'config', parameter_number = 16, size = 1},
-    switchLevel       = {type = 'config', parameter_number = 17, size = 1},
+    --switchLevel       = {type = 'config', parameter_number = 17, size = 1},
     dimRate           = {type = 'config', parameter_number = 18, size = 1},
     excludeProtect    = {type = 'config', parameter_number = 19, size = 1},
     assocGroup2       = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},

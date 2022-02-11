@@ -28,6 +28,7 @@ Adds custom capabilities to control configuration parameters on motion switch/di
 - Light Sensing (On/Off)
 - Motion Sensor Sensitivity (High/Medium/Low)
 - Light Duration After Motion Stops (5s/1m/5m/15m/30m)
+- Default Dim Level (0=Previous/1-100%)
 
 ### ***In-Wall Motion Switches***
 Fingerprint | Device | Profile

@@ -22,7 +22,7 @@ metadata:
   deviceType: Switch
   ocfDeviceType: oic.d.switch
   deviceTypeId: Switch
-  vid: 44b23b56-7f19-338d-b237-9932401f93f6
+  vid: 2ecc4fe9-d65b-3645-bcf0-4cd9b6c17f63
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Enable/Disable Motion Sensor"

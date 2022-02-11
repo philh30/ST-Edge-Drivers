@@ -1,4 +1,4 @@
--- Author: philh30
+-- Copyright 2022 philh30
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
 
 local log = require "log"
 
-local function splitAssocString (inputstr, sep, maxnodes, addhub)
+local function splitAssocString (inputstr, sep, maxnodes, addhub, hubnode)
   if sep == nil then
     sep = "%s"
   end
   local t={}
   for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-    if tonumber(str,16) and ((tonumber(str,16) ~= 1) or not addhub) then table.insert(t, tonumber(str,16)) end
+    if tonumber(str,16) and ((tonumber(str,16) ~= hubnode) or not addhub) then table.insert(t, tonumber(str,16)) end
   end
   if #t > maxnodes then
     local temp = {}

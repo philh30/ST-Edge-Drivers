@@ -1,4 +1,4 @@
--- Author: philh30
+-- Copyright 2022 philh30
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -15,10 +15,11 @@
 local capabilities = require "st.capabilities"
 local capdefs = require('capabilitydefs')
 
-local TimeoutDuration = capabilities[capdefs.TimeoutDuration.name]
-local OperationMode = capabilities[capdefs.OperationMode.name]
-local LightSensing = capabilities[capdefs.LightSensing.name]
-local MotionSensitivity = capabilities[capdefs.MotionSensitivity.name]
+local TimeoutDuration = capdefs.TimeoutDuration.capability
+local OperationMode = capdefs.OperationMode.capability
+local LightSensing = capdefs.LightSensing.capability
+local MotionSensitivity = capdefs.MotionSensitivity.capability
+local DefaultLevel = capdefs.DefaultLevel.capability
 
 local handler = {}
 
@@ -53,6 +54,11 @@ end
 
 function handler.lightSensing(device,config_value)
     device:emit_event(LightSensing.lightSensing({value = (config_value == 0) and 'off' or 'on'}))
+end
+
+function handler.defaultLevel(device,config_value)
+    config_value = (config_value == 99) and 100 or config_value
+    device:emit_event(DefaultLevel.defaultLevel({value = config_value, unit = '%'}))
 end
 
 return handler
