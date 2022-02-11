@@ -14,6 +14,8 @@
 
 local capabilities = require "st.capabilities"
 local capdefs = require "capabilitydefs"
+local log = require "log"
+local utilities = require "utilities"
 
 local maintain_schedules = {}
 
@@ -90,8 +92,9 @@ function maintain_schedules.update_sched(device,sched)
         ['VSP Speed 4 - 2'] = 29,
         ['VSP Speed 4 - 3'] = 30,
     }
-
-    local sched_table = device.state_cache.schedules[capdefs.schedules.name].schedules.value
+    
+    --utilities.disptable(device.state_cache,'  ')
+    local sched_table = (device.state_cache.schedules and device.state_cache.schedules[capdefs.schedules.name] and device.state_cache.schedules[capdefs.schedules.name].schedules and device.state_cache.schedules[capdefs.schedules.name].schedules.value) or ''
     local sched_array = parse_table(sched_table)
     --sched_table = '<small><table style="width:100%">'
     sched_table = '<table style="font-size:65%;width:100%">'

@@ -1,4 +1,4 @@
-name: ps-sss__-v-h-wa_
+name: ps-sss__-v-h-w__
 components:
 - id: main
   label: Pool
@@ -51,13 +51,6 @@ components:
     version: 1
   categories:
   - name: Switch
-- id: air
-  label: Air
-  capabilities:
-  - id: temperatureMeasurement
-    version: 1
-  categories:
-  - name: Thermostat
 - id: schedules
   label: Schedules
   capabilities:
@@ -68,7 +61,7 @@ components:
   - id: platinummassive43262.pe653Schedules
     version: 1
   categories:
-  - name: RemoteController
+  - name: WaterValve
 metadata:
   deviceType: WaterValve
   ocfDeviceType: oic.d.watervalve
@@ -93,8 +86,8 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
-        pssss__vhwa_: "PS-SSS__-V-H-WA_"
-      default: pssss__vhwa_
+        pssss__vhw__: "PS-SSS__-V-H-W__"
+      default: pssss__vhw__
   - title: "Time Zone (offset from UTC)"
     name: timezoneUTC
     description: "Enter the local time zone offset from UTC (-12 to +14 hours)"

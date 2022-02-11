@@ -1,115 +1,115 @@
 name: p_-sssss-_-_-was
 components:
 - id: main
-  label: pool
+  label: Pool
   capabilities:
   - id: temperatureMeasurement
     version: 1
   - id: refresh
     version: 1
+  categories:
+  - name: Thermostat
 - id: circuit1
   label: Circuit 1
   capabilities:
   - id: switch
     version: 1
+  categories:
+  - name: Switch
 - id: circuit2
   label: Circuit 2
   capabilities:
   - id: switch
     version: 1
+  categories:
+  - name: Switch
 - id: circuit3
   label: Circuit 3
   capabilities:
   - id: switch
     version: 1
+  categories:
+  - name: Switch
 - id: circuit4
   label: Circuit 4
   capabilities:
   - id: switch
     version: 1
+  categories:
+  - name: Switch
 - id: circuit5
   label: Circuit 5
   capabilities:
   - id: switch
     version: 1
+  categories:
+  - name: Switch
 - id: air
   capabilities:
   - id: temperatureMeasurement
     version: 1
   categories:
-    - name: Thermostat
+  - name: Thermostat
 - id: solar
   capabilities:
   - id: temperatureMeasurement
     version: 1
   categories:
-    - name: Thermostat
+  - name: Thermostat
+- id: schedules
+  label: Schedules
+  capabilities:
+  - id: platinummassive43262.pe653Schedule
+    version: 1
+  - id: platinummassive43262.pe653ScheduleTime
+    version: 1
+  - id: platinummassive43262.pe653Schedules
+    version: 1
+  categories:
+  - name: RemoteController
 metadata:
-  deviceType: Thermostat
-  ocfDeviceType: oic.d.thermostat
-  deviceTypeId: Thermostat
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch
 preferences:
-  - title: "Pump Type"
-    name: pumpType
-    description: "Pump configuration"
+  - title: "Mode"
+    name: mode
+    description: "Switch between configuration and operation mode"
     required: true
     preferenceType: enumeration
     definition:
       options:
-        0: "One Speed"
-        2: "Two Speed"
-        4: "Variable Speed Pump"
+        configuration: "Configuration Mode"
+        operation: "Operation Mode"
+      default: operation
+  - title: "Change Profile"
+    name: changeProfile
+    description: "Choose profile to use"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        p_sssss__was: "P_-SSSSS-_-_-WAS"
+      default: p_sssss__was
+  - title: "Time Zone (offset from UTC)"
+    name: timezoneUTC
+    description: "Enter the local time zone offset from UTC (-12 to +14 hours)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: -12
+      maximum: 14
+      default: -5
+  - title: "Daylight Savings Time"
+    name: timezoneDST
+    description: "Change the PE653 time to reflect daylight savings vs standard time."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Standard time (winter)"
+        1: "Daylight savings time (summer)"
       default: 0
-  - title: "Booster/Cleaner Pump Configuration"
-    name: boosterPump
-    description: "Booster/cleaner pump configuration"
-    required: true
-    preferenceType: enumeration
-    definition:
-      options:
-        1: "No"
-        2: "Uses Circuit 1"
-        3: "Variable Speed Pump - Speed 1"
-        4: "Variable Speed Pump - Speed 2"
-        5: "Variable Speed Pump - Speed 3"
-        6: "Variable Speed Pump - Speed 4"
-      default: 1
-  - title: "Pool/Spa Configuration"
-    name: poolSpa
-    description: "Pool or Spa"
-    required: true
-    preferenceType: enumeration
-    definition:
-      options:
-        0: "Pool"
-        1: "Spa"
-        2: "Both"
-      default: 0
-  - title: "Fireman Timeout"
-    name: fireman
-    description: "Set Fireman Timeout"
-    required: true
-    preferenceType: enumeration
-    definition:
-      options:
-        255: "No heater installed"
-        0: "No cool down period"
-        1: "1 minute"
-        2: "2 minutes"
-        3: "3 minutes"
-        4: "4 minutes"
-        5: "5 minutes"
-        6: "6 minutes"
-        7: "7 minutes"
-        8: "8 minutes"
-        9: "9 minutes"
-        10: "10 minutes"
-        11: "11 minutes"
-        12: "12 minutes"
-        13: "13 minutes"
-        14: "14 minutes"
-        15: "15 minutes"
-      default: 255
   - title: "Water Temperature Offset"
     name: offsetWater
     description: "Water temperature offset (-5 to +5 degrees F)"
@@ -137,92 +137,22 @@ preferences:
       minimum: -5
       maximum: 5
       default: 0
-  - title: "Freeze Control - Circuit 1"
-    name: freezeControl1
-    description: "Turn on circuit 1 when freeze detected"
-    required: true
-    preferenceType: boolean
-    definition:
-      default: false
-  - title: "Freeze Control - Circuit 2"
-    name: freezeControl2
-    description: "Turn on circuit 2 when freeze detected"
-    required: true
-    preferenceType: boolean
-    definition:
-      default: false
-  - title: "Freeze Control - Circuit 3"
-    name: freezeControl3
-    description: "Turn on circuit 3 when freeze detected"
-    required: true
-    preferenceType: boolean
-    definition:
-      default: false
-  - title: "Freeze Control - Circuit 4"
-    name: freezeControl4
-    description: "Turn on circuit 4 when freeze detected"
-    required: true
-    preferenceType: boolean
-    definition:
-      default: false
-  - title: "Freeze Control - Circuit 5"
-    name: freezeControl5
-    description: "Turn on circuit 5 when freeze detected"
-    required: true
-    preferenceType: boolean
-    definition:
-      default: false
-  - title: "Freeze Control - Variable Pump Speed"
-    name: freezeControlSpeed
-    description: "Set variable speed pump speed when freeze detected"
+  - title: "Thermostat Setpoint Scale"
+    name: setpointScale
+    description: "Some firmware versions require the alternate setpoint scale. If thermostat setpoint changes do not work, try changing this setting."
     required: true
     preferenceType: enumeration
     definition:
       options:
-        0: "None"
-        1: "Variable Speed Pump - Speed 1"
-        2: "Variable Speed Pump - Speed 2"
-        3: "Variable Speed Pump - Speed 3"
-        4: "Variable Speed Pump - Speed 4"
+        0: "0 - default"
+        1: "1 - alternate"
       default: 0
-  - title: "Schedule Type"
-    name: schedType
-    description: "Choose schedule to set"
+  - title: "Z-Wave Delay (in milliseconds)"
+    name: zwDelay
+    description: "Delay between z-wave commands sent to the PE653. Default is 1000ms (1s)."
     required: true
-    preferenceType: enumeration
+    preferenceType: integer
     definition:
-      options:
-        none: "None"
-        switch1: "Circuit 1"
-        switch2: "Circuit 2"
-        switch3: "Circuit 3"
-        switch4: "Circuit 4"
-        switch5: "Circuit 5"
-        poolSpaMode: "Pool/Spa Mode"
-        vsp1: "VSP 1"
-        vsp2: "VSP 2"
-        vsp3: "VSP 3"
-        vsp4: "VSP 4"
-      default: none
-  - title: "Schedule Instance"
-    name: schedInstance
-    description: "Schedule instance (1 to 3)"
-    required: true
-    preferenceType: enumeration
-    definition:
-      options:
-        0: "None"
-        1: "1"
-        2: "2"
-        3: "3"
-      default: 0
-  - title: "Schedule Time"
-    name: schedTime
-    description: "Schedule time in format '00:00-23:59'. Enter 'delete' to clear schedule"
-    required: true
-    preferenceType: string
-    definition:
-      stringType: text
-      minLength: 0
-      maxLength: 11
-      default: "08:00-17:00"
+      minimum: 0
+      maximum: 10000
+      default: 1000

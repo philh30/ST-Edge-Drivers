@@ -21,6 +21,7 @@ local config = {}
 
 config.CAP_MAP = {
   main = {
+    switch = 'switch1',
     [capdefs.activeMode.name] = 'activeMode',
     [capdefs.activeSetpoint.name] = 'activeSetpoint',
     [capdefs.pumpSpeed.name] = 'vspSpeed',

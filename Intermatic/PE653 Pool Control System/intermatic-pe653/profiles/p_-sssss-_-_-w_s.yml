@@ -1,35 +1,14 @@
-name: ps-sss__-v-h-wa_
+name: p_-sssss-_-_-w_s
 components:
 - id: main
   label: Pool
   capabilities:
-  - id: platinummassive43262.pe653ActiveMode
-    version: 1
-  - id: platinummassive43262.pe653ActiveSetpoint
-    version: 1
-  - id: platinummassive43262.pe653VariableSpeedPump
-    version: 1
-  - id: platinummassive43262.pe653VspCurrentSpeed
-    version: 1
   - id: temperatureMeasurement
-    version: 1
-  - id: thermostatOperatingState
-    version: 1
-  - id: thermostatHeatingSetpoint
     version: 1
   - id: refresh
     version: 1
   categories:
-  - name: WaterValve
-- id: spa
-  label: Spa
-  capabilities:
-  - id: switch
-    version: 1
-  - id: thermostatHeatingSetpoint
-    version: 1
-  categories:
-  - name: WaterValve
+  - name: Thermostat
 - id: circuit1
   label: Circuit 1
   capabilities:
@@ -51,8 +30,21 @@ components:
     version: 1
   categories:
   - name: Switch
-- id: air
-  label: Air
+- id: circuit4
+  label: Circuit 4
+  capabilities:
+  - id: switch
+    version: 1
+  categories:
+  - name: Switch
+- id: circuit5
+  label: Circuit 5
+  capabilities:
+  - id: switch
+    version: 1
+  categories:
+  - name: Switch
+- id: solar
   capabilities:
   - id: temperatureMeasurement
     version: 1
@@ -70,11 +62,9 @@ components:
   categories:
   - name: RemoteController
 metadata:
-  deviceType: WaterValve
-  ocfDeviceType: oic.d.watervalve
-  deviceTypeId: WaterValve
-  vid: 08c4de68-f076-3034-b5a0-185357aed322
-  mnmn: SmartThingsCommunity
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch
 preferences:
   - title: "Mode"
     name: mode
@@ -93,8 +83,8 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
-        pssss__vhwa_: "PS-SSS__-V-H-WA_"
-      default: pssss__vhwa_
+        p_sssss__w_s: "P_-SSSSS-_-_-W_S"
+      default: p_sssss__w_s
   - title: "Time Zone (offset from UTC)"
     name: timezoneUTC
     description: "Enter the local time zone offset from UTC (-12 to +14 hours)"

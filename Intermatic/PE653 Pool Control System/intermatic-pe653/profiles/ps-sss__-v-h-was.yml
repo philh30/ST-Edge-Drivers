@@ -100,14 +100,6 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
-        p_sssss_____: "P_-SSSSS-_-_-___"
-        p_sssss__w__: "P_-SSSSS-_-_-W__"
-        p_sssss__wa_: "P_-SSSSS-_-_-WA_"
-        p_sssss__w_s: "P_-SSSSS-_-_-W_S"
-        p_sssss__was: "P_-SSSSS-_-_-WAS"
-        pssss__vhw__: "PS-SSS__-V-H-W__"
-        pssss__vhwa_: "PS-SSS__-V-H-WA_"
-        pssss__vhw_s: "PS-SSS__-V-H-W_S"
         pssss__vhwas: "PS-SSS__-V-H-WAS"
       default: pssss__vhwas
   - title: "Time Zone (offset from UTC)"

@@ -122,24 +122,19 @@ function cc_handlers.multi_instance_encap(driver,device,command)
 		[get.VSP_CHAN_NO(4)] = { key = 'vsp4', type = 'vsp', num = 1 },
     }
     local resp = {}
-    resp.val = (cmd.parameter == 0) and 'off' or 'on'
+    resp.state = (cmd.parameter == 0) and 'off' or 'on'
     if instance_key[cmd.instance] then
-        resp.id = instance_key[cmd.instance].key
-        local update = {
-            { type = resp.id, state = resp.val },
-        }
+        resp.type = instance_key[cmd.instance].key
+        local update = { resp }
         if instance_key[cmd.instance].type == 'poolSpa' then
-            local msg = {}
-            msg.id = 'activeMode'
-            msg.val = (cmd.parameter == 0) and 'pool' or 'spa'
-            table.insert(update,{ type=msg.id, state=msg.val})
+            local msg = { type = 'activeMode', state = (cmd.parameter == 0) and 'pool' or 'spa' }
+            table.insert(update,msg)
             local pool_comp = map.GET_COMP(device,'thermostatSetpointPool')
             local spa_comp = map.GET_COMP(device,'thermostatSetpointSpa')
             local pool_setpoint = pool_comp and (device.state_cache[pool_comp].thermostatHeatingSetpoint.heatingSetpoint.value) or 0
             local spa_setpoint = spa_comp and (device.state_cache[spa_comp].thermostatHeatingSetpoint.heatingSetpoint.value) or 0
-            msg.id = 'activeSetpoint'
-            msg.val = (cmd.parameter == 0) and pool_setpoint or spa_setpoint
-            table.insert(update,{ type=msg.id, state=msg.val})
+            msg = { type = 'activeSetpoint', state = (cmd.parameter == 0) and pool_setpoint or spa_setpoint }
+            table.insert(update,msg)
         end
         evt.post_event(device,command.cmd_class,command.cmd_id,update)
     else
