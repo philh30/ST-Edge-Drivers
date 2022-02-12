@@ -1,21 +1,15 @@
-name: ps-sss__-v-h-w__
+name: ps-sss_s-v-_-was
 components:
 - id: main
   label: Pool
   capabilities:
   - id: platinummassive43262.pe653ActiveMode
     version: 1
-  - id: platinummassive43262.pe653ActiveSetpoint
-    version: 1
   - id: platinummassive43262.pe653VariableSpeedPump
     version: 1
   - id: platinummassive43262.pe653VspCurrentSpeed
     version: 1
   - id: temperatureMeasurement
-    version: 1
-  - id: thermostatOperatingState
-    version: 1
-  - id: thermostatHeatingSetpoint
     version: 1
   - id: refresh
     version: 1
@@ -25,8 +19,6 @@ components:
   label: Spa
   capabilities:
   - id: switch
-    version: 1
-  - id: thermostatHeatingSetpoint
     version: 1
   categories:
   - name: WaterValve
@@ -51,6 +43,27 @@ components:
     version: 1
   categories:
   - name: Switch
+- id: circuit5
+  label: Circuit 5
+  capabilities:
+  - id: switch
+    version: 1
+  categories:
+  - name: Switch
+- id: air
+  label: Air
+  capabilities:
+  - id: temperatureMeasurement
+    version: 1
+  categories:
+  - name: Thermostat
+- id: solar
+  label: Solar
+  capabilities:
+  - id: temperatureMeasurement
+    version: 1
+  categories:
+  - name: Thermostat
 - id: schedules
   label: Schedules
   capabilities:
@@ -61,12 +74,12 @@ components:
   - id: platinummassive43262.pe653Schedules
     version: 1
   categories:
-  - name: WaterValve
+  - name: RemoteController
 metadata:
   deviceType: WaterValve
   ocfDeviceType: oic.d.watervalve
   deviceTypeId: WaterValve
-  vid: 08c4de68-f076-3034-b5a0-185357aed322
+  vid: c1260c40-b29c-3b99-83db-5f233c07575b
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Mode"
@@ -79,15 +92,15 @@ preferences:
         configuration: "Configuration Mode"
         operation: "Operation Mode"
       default: operation
-  - title: "Change Profile"
+  - title: "Current Profile"
     name: changeProfile
     description: "Choose profile to use"
     required: true
     preferenceType: enumeration
     definition:
       options:
-        pssss__vhw__: "PS-SSS__-V-H-W__"
-      default: pssss__vhw__
+        pssss_sv_was: "PS-SSS_S-V-_-WAS"
+      default: pssss_sv_was
   - title: "Time Zone (offset from UTC)"
     name: timezoneUTC
     description: "Enter the local time zone offset from UTC (-12 to +14 hours)"

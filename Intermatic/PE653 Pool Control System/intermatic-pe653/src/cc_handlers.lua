@@ -20,6 +20,7 @@ local manufacturer = require "manufacturer"
 local config = require "configuration"
 local evt = require "events"
 local map = require "cap_ep_map"
+local active = require "active_mode"
 
 local cc_handlers = {}
 
@@ -79,7 +80,7 @@ function cc_handlers.thermostat_setpoint_report(driver,device,command)
     }
     local pool_spa_config = device:get_field('POOL_SPA')
     local pool_spa_comp = map.GET_COMP(device,'poolSpaMode')
-    local pool_spa_mode = pool_spa_comp and (((device.state_cache[pool_spa_comp].switch.switch.value or 'off') == 'on') and 'thermostatSetpointSpa') or 'thermostatSetpointPool'
+    local pool_spa_mode = pool_spa_comp and ((device:get_latest_state(pool_spa_comp,'switch','switch','off') == 'on') and 'thermostatSetpointSpa') or 'thermostatSetpointPool'
     local current_setpoint = ((pool_spa_config == 0) and 'thermostatSetpointPool') or ((pool_spa_config == 1) and 'thermostatSetpointSpa') or pool_spa_mode
     if setpoint_type == current_setpoint then
         table.insert(update,{ type = 'activeSetpoint', command.args.value })
@@ -127,14 +128,17 @@ function cc_handlers.multi_instance_encap(driver,device,command)
         resp.type = instance_key[cmd.instance].key
         local update = { resp }
         if instance_key[cmd.instance].type == 'poolSpa' then
-            local msg = { type = 'activeMode', state = (cmd.parameter == 0) and 'pool' or 'spa' }
+            local msg = { type = 'activeMode', state = active.mode(device,{poolSpa = (cmd.parameter == 0) and 'pool' or 'spa'}) }
             table.insert(update,msg)
             local pool_comp = map.GET_COMP(device,'thermostatSetpointPool')
             local spa_comp = map.GET_COMP(device,'thermostatSetpointSpa')
-            local pool_setpoint = pool_comp and (device.state_cache[pool_comp].thermostatHeatingSetpoint.heatingSetpoint.value) or 0
-            local spa_setpoint = spa_comp and (device.state_cache[spa_comp].thermostatHeatingSetpoint.heatingSetpoint.value) or 0
+            local pool_setpoint = device:get_latest_state(pool_comp,'thermostatHeatingSetpoint','heatingSetpoint',0)
+            local spa_setpoint = device:get_latest_state(spa_comp,'thermostatHeatingSetpoint','heatingSetpoint',0)
             msg = { type = 'activeSetpoint', state = (cmd.parameter == 0) and pool_setpoint or spa_setpoint }
             table.insert(update,msg)
+        end
+        if (instance_key[cmd.instance].type == 'switch') or (instance_key[cmd.instance].type == 'vsp') then
+            local msg = { type = 'activeMode', state = active.mode(device,{[instance_key[cmd.instance].key] = (cmd.parameter == 0) and 'off' or 'on'}) }
         end
         evt.post_event(device,command.cmd_class,command.cmd_id,update)
     else

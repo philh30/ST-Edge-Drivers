@@ -43,7 +43,7 @@ end
 --- @param device st.zwave.Device
 function config_cmd_handlers.set_pump_type_config(driver,device,command)
   local param_num = get.OPERATION_MODE_CONFIG
-  local booster_setting = device.state_cache.main[capdefs.boosterPumpConfig.name].boosterPumpConfig.value
+  local booster_setting = device:get_latest_state('main',capdefs.boosterPumpConfig.name,'boosterPumpConfig')
   local cmds = {}
   if booster_setting then
     booster_setting = tonumber(booster_setting)
@@ -67,7 +67,7 @@ end
 --- @param device st.zwave.Device
 function config_cmd_handlers.set_booster_pump_config(driver,device,command)
   local param_num = get.OPERATION_MODE_CONFIG
-  local pump_setting = device.state_cache.main[capdefs.pumpTypeConfig.name].pumpType.value
+  local pump_setting = device:get_latest_state('main',capdefs.pumpTypeConfig.name,'pumpType')
   local cmds = {}
   if pump_setting then
     pump_setting = tonumber(pump_setting)
@@ -91,7 +91,7 @@ end
 --- @param device st.zwave.Device
 function config_cmd_handlers.set_fireman_config(driver,device,command)
   local param_num = get.FIREMAN_CONFIG
-  local heatersafety_setting = device.state_cache.heater[capdefs.heaterSafetyConfig.name].heaterSafetyConfig.value
+  local heatersafety_setting = device:get_latest_state('heater',capdefs.heaterSafetyConfig.name,'heaterSafetyConfig')
   local cmds = {}
   if heatersafety_setting then
     heatersafety_setting = tonumber(heatersafety_setting)
@@ -115,7 +115,7 @@ end
 --- @param device st.zwave.Device
 function config_cmd_handlers.set_heatersafety_config(driver,device,command)
   local param_num = get.FIREMAN_CONFIG
-  local fireman_setting = device.state_cache.heater[capdefs.firemanConfig.name].firemanConfig.value
+  local fireman_setting = device:get_latest_state('heater',capdefs.firemanConfig.name,'firemanConfig')
   local cmds = {}
   if fireman_setting then
     fireman_setting = tonumber(fireman_setting) - 100
@@ -142,20 +142,20 @@ function config_cmd_handlers.set_freeze_config(driver,device,command)
   local curr_sw = command.command
   local curr_set = command.args.freezeControl or command.args.vspFreeze or command.args.freezeTemperature or command.args.heaterFreeze or command.args.poolSpaFreezeCycle
   local freeze_settings = {
-    [0x01] = (curr_sw == 'setFreezeCircuitOne') and curr_set or device.state_cache.freezeControl[capdefs.circuit1FreezeControl.name].freezeControl.value,
-    [0x02] = (curr_sw == 'setFreezeCircuitTwo') and curr_set or device.state_cache.freezeControl[capdefs.circuit2FreezeControl.name].freezeControl.value,
-    [0x04] = (curr_sw == 'setFreezeCircuitThree') and curr_set or device.state_cache.freezeControl[capdefs.circuit3FreezeControl.name].freezeControl.value,
-    [0x08] = (curr_sw == 'setFreezeCircuitFour') and curr_set or device.state_cache.freezeControl[capdefs.circuit4FreezeControl.name].freezeControl.value,
-    [0x10] = (curr_sw == 'setFreezeCircuitFive') and curr_set or device.state_cache.freezeControl[capdefs.circuit5FreezeControl.name].freezeControl.value,
+    [0x01] = (curr_sw == 'setFreezeCircuitOne') and curr_set or device:get_latest_state('freezeControl',capdefs.circuit1FreezeControl.name,'freezeControl'),
+    [0x02] = (curr_sw == 'setFreezeCircuitTwo') and curr_set or device:get_latest_state('freezeControl',capdefs.circuit2FreezeControl.name,'freezeControl'),
+    [0x04] = (curr_sw == 'setFreezeCircuitThree') and curr_set or device:get_latest_state('freezeControl',capdefs.circuit3FreezeControl.name,'freezeControl'),
+    [0x08] = (curr_sw == 'setFreezeCircuitFour') and curr_set or device:get_latest_state('freezeControl',capdefs.circuit4FreezeControl.name,'freezeControl'),
+    [0x10] = (curr_sw == 'setFreezeCircuitFive') and curr_set or device:get_latest_state('freezeControl',capdefs.circuit5FreezeControl.name,'freezeControl'),
   }
-  local config_value1 = curr_sw == 'setFreezeTemperature' and curr_set or device.state_cache.freezeControl[capdefs.tempFreezeControl.name].freezeTemperature.value
+  local config_value1 = curr_sw == 'setFreezeTemperature' and curr_set or device:get_latest_state('freezeControl',capdefs.tempFreezeControl.name,'freezeTemperature')
   local config_value2 = 0
   for value, status in pairs(freeze_settings) do
     if status == 'on' then config_value2 = config_value2 + value end
   end
-  local config_value3 = curr_sw == 'setVspFreeze' and curr_set or device.state_cache.freezeControl[capdefs.vspFreezeControl.name].vspFreeze.value
-  local heater = (tonumber(curr_sw == 'setHeaterFreeze' and curr_set or device.state_cache.freezeControl[capdefs.heaterFreezeControl.name].heaterFreeze.value) == 0) and 0x00 or 0x80
-  local poolspa = curr_sw == 'setPoolSpaFreezeCycle' and curr_set or device.state_cache.freezeControl[capdefs.poolSpaFreezeControl.name].poolSpaFreezeCycle.value
+  local config_value3 = curr_sw == 'setVspFreeze' and curr_set or device:get_latest_state('freezeControl',capdefs.vspFreezeControl.name,'vspFreeze')
+  local heater = (tonumber(curr_sw == 'setHeaterFreeze' and curr_set or device:get_latest_state('freezeControl',capdefs.heaterFreezeControl.name,'heaterFreeze')) == 0) and 0x00 or 0x80
+  local poolspa = curr_sw == 'setPoolSpaFreezeCycle' and curr_set or device:get_latest_state('freezeControl',capdefs.poolSpaFreezeControl.name,'poolSpaFreezeCycle')
   local config_value4 = heater + poolspa
   local config_value = config_value1 * 256^3 + config_value2 * 256^2 + config_value3 * 256 + config_value4
   local cmds = commands.set_config(param_num,4,config_value)

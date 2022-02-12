@@ -27,7 +27,7 @@ function config.operation_mode_handler(device,payload)
         device:set_field('OP_MODE_2', tonumber(configValue2), {persist = true})
     end
     return {
-        { type = 'pumpTypeConfig', desc = get.CONFIG_INSTALLED_PUMP_TYPE[configValue2 & 0x02], state = configValue2 & 0x02 },
+        { type = 'pumpTypeConfig', desc = get.CONFIG_INSTALLED_PUMP_TYPE[configValue2 - (configValue2 & 0x01)], state = configValue2 - (configValue2 & 0x01) },
         { type = 'boosterCleanerInstalled', state = get.CONFIG_BOOSTER_CLEANER_INSTALLED[configValue2 & 0x01] },
         { type = 'boosterPumpConfig', desc = get.CONFIG_BOOSTER_CIRCUIT[configValue1], state = configValue1 },
     }

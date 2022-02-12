@@ -77,6 +77,7 @@ function commands.refresh(driver,device)
 		{ msg = Configuration:Get({ parameter_number = 0x01 })}, -- Operation Mode
 		{ msg = Configuration:Get({ parameter_number = 0x02 })}, -- Fireman Timeout
 		{ msg = Configuration:Get({ parameter_number = 0x03 })}, -- Temp Offsets
+		{ msg = Configuration:Get({ parameter_number = 0x32 })}, -- Freeze Control
 		{ msg = Configuration:Get({ parameter_number = get.POOL_SPA_CONFIG })},
 		{ msg = ThermostatSetpoint:Get({ setpoint_type = get.POOL_SETPOINTTYPE })},
 		{ msg = ThermostatSetpoint:Get({ setpoint_type = get.SPA_SETPOINTTYPE })},

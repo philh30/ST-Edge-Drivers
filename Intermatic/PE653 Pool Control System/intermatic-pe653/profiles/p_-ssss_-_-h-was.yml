@@ -1,14 +1,22 @@
-name: p_-sssss-_-_-w_s
+name: p_-ssss_-_-h-was
 components:
 - id: main
   label: Pool
   capabilities:
+  - id: platinummassive43262.pe653ActiveMode
+    version: 1
+  - id: platinummassive43262.pe653ActiveSetpoint
+    version: 1
   - id: temperatureMeasurement
+    version: 1
+  - id: thermostatOperatingState
+    version: 1
+  - id: thermostatHeatingSetpoint
     version: 1
   - id: refresh
     version: 1
   categories:
-  - name: Thermostat
+  - name: WaterValve
 - id: circuit1
   label: Circuit 1
   capabilities:
@@ -37,14 +45,15 @@ components:
     version: 1
   categories:
   - name: Switch
-- id: circuit5
-  label: Circuit 5
+- id: air
+  label: Air
   capabilities:
-  - id: switch
+  - id: temperatureMeasurement
     version: 1
   categories:
-  - name: Switch
+  - name: Thermostat
 - id: solar
+  label: Solar
   capabilities:
   - id: temperatureMeasurement
     version: 1
@@ -62,9 +71,11 @@ components:
   categories:
   - name: RemoteController
 metadata:
-  deviceType: Switch
-  ocfDeviceType: oic.d.switch
-  deviceTypeId: Switch
+  deviceType: WaterValve
+  ocfDeviceType: oic.d.watervalve
+  deviceTypeId: WaterValve
+  vid: c1260c40-b29c-3b99-83db-5f233c07575b
+  mnmn: SmartThingsCommunity
 preferences:
   - title: "Mode"
     name: mode
@@ -76,15 +87,15 @@ preferences:
         configuration: "Configuration Mode"
         operation: "Operation Mode"
       default: operation
-  - title: "Change Profile"
+  - title: "Current Profile"
     name: changeProfile
     description: "Choose profile to use"
     required: true
     preferenceType: enumeration
     definition:
       options:
-        p_sssss__w_s: "P_-SSSSS-_-_-W_S"
-      default: p_sssss__w_s
+        psssss__hwas: "P_-SSSS_-_-H-WAS"
+      default: psssss__hwas
   - title: "Time Zone (offset from UTC)"
     name: timezoneUTC
     description: "Enter the local time zone offset from UTC (-12 to +14 hours)"

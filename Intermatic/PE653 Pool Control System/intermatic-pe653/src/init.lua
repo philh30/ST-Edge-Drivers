@@ -211,7 +211,7 @@ end
 --- @param driver st.zwave.Driver
 --- @param device st.zwave.Device
 local function set_schedule_time(driver,device,command)
-  local param_num = device.state_cache.schedules[capdefs.schedule.name].schedule.value - 100
+  local param_num = device:get_latest_state('schedules',capdefs.schedule.name,'schedule') - 100
   local times = { utilities.splitTime(command.args.scheduleTime) }
   if times[1] then
     log.debug(string.format('Setting schedule %s to %s:%s-%s:%s',get.CONFIG_PARAMS[param_num].friendlyname,times[1],times[2],times[3],times[4]))
@@ -303,7 +303,6 @@ local driver_template = {
     capdefs.vspSpeed2.capability,
     capdefs.vspSpeed3.capability,
     capdefs.vspSpeed4.capability,
-    capdefs.vspSpeed5.capability,
     capdefs.vspSpeedMax.capability,
     capdefs.waterOffset.capability,
   },

@@ -3,6 +3,8 @@ components:
 - id: main
   label: Pool
   capabilities:
+  - id: platinummassive43262.pe653ActiveMode
+    version: 1
   - id: temperatureMeasurement
     version: 1
   - id: refresh
@@ -68,9 +70,11 @@ components:
   categories:
   - name: RemoteController
 metadata:
-  deviceType: Switch
-  ocfDeviceType: oic.d.switch
-  deviceTypeId: Switch
+  deviceType: WaterValve
+  ocfDeviceType: oic.d.watervalve
+  deviceTypeId: WaterValve
+  vid: c1260c40-b29c-3b99-83db-5f233c07575b
+  mnmn: SmartThingsCommunity
 preferences:
   - title: "Mode"
     name: mode
@@ -82,7 +86,7 @@ preferences:
         configuration: "Configuration Mode"
         operation: "Operation Mode"
       default: operation
-  - title: "Change Profile"
+  - title: "Current Profile"
     name: changeProfile
     description: "Choose profile to use"
     required: true

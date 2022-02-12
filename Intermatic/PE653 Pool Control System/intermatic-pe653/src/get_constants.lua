@@ -132,6 +132,10 @@ function get_resp.SWITCHES_84(device)					-- Bit mask of 5 switches. SW1 = 01X, 
 	return 9  + get_resp.ADJ_84(device)
 end
 
+function get_resp.COOLDOWN_ACTIVE_84(device)				-- Fireman cooldown active 01x, inactive 00x
+	return 10 + get_resp.ADJ_84(device)
+end
+
 function get_resp.POOL_SPA_MODE_84(device)			-- Pool/Spa mode. 01x Pool mode, 00x Spa mode
 	return 12 + get_resp.ADJ_84(device)
 end
@@ -154,6 +158,14 @@ end
 
 function get_resp.CLOCK_MINUTE_84(device)				-- Clock Minute
 	return 17 + get_resp.ADJ_84(device)
+end
+
+function get_resp.COOLDOWN_TIMER_S_84(device)				-- Fireman cooldown countdown in seconds
+	return 19 + get_resp.ADJ_84(device)
+end
+
+function get_resp.COOLDOWN_TIMER_L_84(device)				-- Fireman cooldown countdown in seconds
+	return 20 + get_resp.ADJ_84(device)
 end
 
 function get_resp.VSP_SPEED_84(device)				-- VSP Speed bit mask. 01x = VSP1, 08x = VSP4
@@ -242,6 +254,7 @@ get_resp.CONFIG_BOOSTER_CIRCUIT = {
 get_resp.CONFIG_INSTALLED_PUMP_TYPE = {
 	[0x00] = 'One Speed',
 	[0x02] = 'Two Speed',
+	[0x04] = 'Variable Speed'
 }
 
 get_resp.CONFIG_BOOSTER_CLEANER_INSTALLED = {

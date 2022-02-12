@@ -59,6 +59,7 @@ local function parse_table(inputstr)
     return t
 end
 
+--- @param device st.zwave.Device
 function maintain_schedules.update_sched(device,sched)
     local sched_order = {
         ['Circuit 1 - 1'] = 1,
@@ -93,10 +94,8 @@ function maintain_schedules.update_sched(device,sched)
         ['VSP Speed 4 - 3'] = 30,
     }
     
-    --utilities.disptable(device.state_cache,'  ')
-    local sched_table = (device.state_cache.schedules and device.state_cache.schedules[capdefs.schedules.name] and device.state_cache.schedules[capdefs.schedules.name].schedules and device.state_cache.schedules[capdefs.schedules.name].schedules.value) or ''
+    local sched_table = device:get_latest_state('schedules',capdefs.schedules.name,'schedules','')
     local sched_array = parse_table(sched_table)
-    --sched_table = '<small><table style="width:100%">'
     sched_table = '<table style="font-size:65%;width:100%">'
     sched_table = sched_table .. table_header({ 'Schedule', 'On', 'Off' })
     sched.order = sched_order[sched.name]

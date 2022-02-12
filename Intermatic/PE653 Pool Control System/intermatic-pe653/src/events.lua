@@ -113,7 +113,7 @@ end
 --- @param device st.zwave.Device
 function events.schedule_event(device,event)
     local comp = map.GET_COMP(device,'scheduleTime')
-    local curr_param = device.state_cache.schedules[capdefs.schedule.name].schedule.value - 100
+    local curr_param = device:get_latest_state(comp,capdefs.schedule.name,'schedule') - 100
     if comp then
         if curr_param == event.param then
             device:emit_component_event(device.profile.components[comp],map.EP_MAP['scheduleTime'].cap({ value = (event.state or '99:99-99:99') }))

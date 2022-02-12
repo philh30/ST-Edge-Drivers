@@ -15,6 +15,7 @@
 local get = require "get_constants"
 local evt = require "events"
 local map = require "cap_ep_map"
+local active = require "active_mode"
 
 local man_prop = {}
 
@@ -29,8 +30,15 @@ function man_prop.process84Event(device,payload)
 	local poolSpa = get.EXPANSION_5043(device) and (((payload[get.POOL_SPA_MODE_84(device)] & 0x01) == 0) and 'on' or 'off') or (((payload[get.SWITCHES_84(device)] & 0x08) ~= 0) and 'on' or 'off')
 	local pool_comp = map.GET_COMP(device,'thermostatSetpointPool')
 	local spa_comp = map.GET_COMP(device,'thermostatSetpointSpa')
-	local pool_setpoint = pool_comp and (device.state_cache[pool_comp].thermostatHeatingSetpoint.heatingSetpoint.value) or 0
-	local spa_setpoint = spa_comp and (device.state_cache[spa_comp].thermostatHeatingSetpoint.heatingSetpoint.value) or 0
+	local pool_setpoint = pool_comp and device:get_latest_state(pool_comp,'thermostatHeatingSetpoint','heatingSetpoint') or 0
+	local spa_setpoint = spa_comp and device:get_latest_state(spa_comp,'thermostatHeatingSetpoint','heatingSetpoint') or 0
+	local switch1 = ((payload[get.SWITCHES_84(device)] & 1) ~= 0) and 'on' or 'off'
+	local switch2 = ((payload[get.SWITCHES_84(device)] & 2) ~= 0) and 'on' or 'off'
+	local cooldown = (payload[get.COOLDOWN_ACTIVE_84(device)] ~= 0) and 'on' or 'off'
+	local cooldownTimer = {raw=payload[get.COOLDOWN_TIMER_L_84(device)] * 256 + payload[get.COOLDOWN_TIMER_S_84(device)]}
+	cooldownTimer.minutes = math.floor(cooldownTimer.raw / 60)
+	cooldownTimer.seconds = cooldownTimer.raw - cooldownTimer.minutes * 60
+	cooldownTimer.formatted = cooldownTimer.minutes and (cooldownTimer.minutes .. ':' .. ((cooldownTimer.seconds < 10) and '0' or '') .. cooldownTimer.seconds) or nil
 	local update = {
 		{ type = 'firmwareVersion', state = payload[get.VER_MAIN_MAJOR_84(device)] .. '.' .. payload[get.VER_MAIN_MINOR_84(device)]},
 		{ type = 'switch1', state = ((payload[get.SWITCHES_84(device)] & 1) ~= 0) and 'on' or 'off'},
@@ -45,9 +53,11 @@ function man_prop.process84Event(device,payload)
 		{ type = 'vspSpeed', state = vspSpeed},
 		{ type = 'vspRPM', state = vspRPM},
 		{ type = 'poolSpaMode', state = poolSpa},
-		{ type = 'activeMode', state = (poolSpa == 'off' and 'pool' or 'spa') .. vspSpeed },
+		active.mode(device,{ poolSpa = (poolSpa == 'on') and 'spa' or 'pool', switch1 = switch1, switch2 = switch2, vsp = vspSpeed, cooldown = cooldown }),
 		{ type = 'activeSetpoint', state = (poolSpa == 'off' and pool_setpoint or spa_setpoint) },
 		{ type = 'heater', state = (not get.EXPANSION_5043(device)) and (((payload[get.SWITCHES_84(device)] & 0x10) ~= 0) and 'on' or 'off') or nil},
+		{ type = 'heaterCooldown', state = cooldown},
+		{ type = 'heaterCooldownTimer', state = cooldownTimer.formatted},
 		{ type = 'waterTemp', state = (payload[get.WATER_TEMP_84(device)] >= 0) and payload[get.WATER_TEMP_84(device)] or payload[get.WATER_TEMP_84(device)] + 255},
 		{ type = 'airTemp', state = (payload[get.AIR_TEMP_FREEZE_84(device)] >= 0) and payload[get.AIR_TEMP_FREEZE_84(device)] or payload[get.AIR_TEMP_FREEZE_84(device)] + 255},
 		{ type = 'solarTemp', state = (payload[get.AIR_TEMP_SOLAR_84(device)] >= 0) and payload[get.AIR_TEMP_SOLAR_84(device)] or payload[get.AIR_TEMP_SOLAR_84(device)] + 255},
