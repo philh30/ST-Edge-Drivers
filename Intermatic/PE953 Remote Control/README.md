@@ -34,7 +34,7 @@ Scenes are mapped to the button events in the table below. Note that there is no
 ## Installation
 
 1. Install the driver using the channel invitation.
-2. Follow the PE653 installation instructions, which include instructions for adding the PE953 to your SmartThings z-wave network.
+2. Follow the [PE653 pairing instructions](../PAIRING.md), which include instructions for adding the PE953 to your SmartThings z-wave network.
 3. Navigate to the device in the SmartThings app.
 4. Press the ENTER key on the PE953 remote control to wake it up. Keep the PE953 awake while performing the following steps in the app:
    - Swipe down on the screen to trigger the Refresh command. This will retrieve the firmware version from the PE953.
@@ -52,21 +52,5 @@ Scenes are mapped to the button events in the table below. Note that there is no
 
 **Scene Names:** Scene names will be transmitted to the PE953 and reflected on the scene screen. There is a 10 character maximum, and the characters allowed are A-Z, 0-9, and space. *The PE953 must be awake when a new name is saved.*
 
-## Live Logging (CLI)
-
-To view live logging for Edge drivers, you must use the SmartThings Command Line Interface (CLI).
-
-1. Download the most recent release from https://github.com/SmartThingsCommunity/smartthings-cli/releases.
-2. Open a Command Prompt window and navigate to the directory where the CLI was downloaded.
-3. The first time you use the CLI, you will be prompted to log into your SmartThings account. Run a list of your devices by typing:
-```
-smartthings devices
-```
-4. After authenticating the CLI, find the Driver ID for this driver by running:
-```
-smartthings edge:drivers:installed
-```
-5. Now start live logging by running the command below, entering the Driver ID found above and the IP address of your ST Hub in place of \<DriverID> and \<HubIP>:
-```
-smartthings edge:drivers:logcat <DriverID> --hub-address <HubIP>
-```
+## Live Logging
+[Instructions](../../LIVELOGGING.md)
