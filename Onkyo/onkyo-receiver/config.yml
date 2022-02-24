@@ -1,0 +1,5 @@
+name: 'Onkyo Receiver'
+packageKey: 'onkyo-receiver'
+permissions:
+  lan: {}
+  discovery: {}

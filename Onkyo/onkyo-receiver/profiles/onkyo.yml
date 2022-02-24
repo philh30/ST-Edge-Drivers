@@ -1,0 +1,47 @@
+name: onkyo
+components:
+- id: main
+  label: Main
+  capabilities:
+  - id: switch
+    version: 1
+  - id: audioVolume
+    version: 1
+  - id: audioMute
+    version: 1
+  - id: platinummassive43262.onkyoInputSource
+    version: 1
+  - id: refresh
+    version: 1
+  - id: platinummassive43262.onkyoRawCommand
+    version: 1
+  categories:
+    - name: NetworkAudio
+metadata:
+  deviceType: NetworkAudio
+  ocfDeviceType: oic.d.networkaudio
+  deviceTypeId: NetworkAudio
+  vid: 2d141e2b-713c-354d-b5e3-3bd4d148dbd0
+  mnmn: SmartThingsCommunity
+preferences:
+  - title: "Zones Displayed"
+    name: zoneCount
+    description: "Select the zones to be displayed."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        1: "Main Only"
+        2: "Main and Zone 2"
+      default: 1
+  - title: "Volume Scale"
+    name: volumeScale
+    description: "Select the appropriate volume scale for your device."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        80: "0-80; 1 increment"
+        100: "0-100%; 1% increment"
+        200: "0.0-100.0%; 0.5% increment"
+      default: 100
