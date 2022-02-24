@@ -1,7 +1,7 @@
 # SmartThings Edge Driver for Onkyo AV Receivers
 
-[SmartThings Community topic](https://community.smartthings.com/t/st-edge-onkyo-pioneer-av-receivers/239992?u=philh30)
-[Driver Folder](onkyo-receiver)
+- [SmartThings Community topic](https://community.smartthings.com/t/st-edge-onkyo-pioneer-av-receivers/239992?u=philh30)
+- [Driver Folder](onkyo-receiver)
 
 ## Overview
 
