@@ -50,6 +50,14 @@ Allows the five PE953 scenes to be used as button presses that can trigger autom
 - [Installation instructions](/Intermatic/PE953%20Remote%20Control/README.md)
 - [Driver folder](/Intermatic/PE953%20Remote%20Control/intermatic-pe953)
 
+## Onkyo
+
+### Onkyo/Pioneer AV Receivers
+Connection to Onkyo and Pioneer AV receivers that support eISCP commands.
+- [SmartThings Community topic](https://community.smartthings.com/t/st-edge-onkyo-pioneer-av-receivers/239992?u=philh30)
+- [Installation instructions](/Onkyo/README.md)
+- [Driver folder](/Onkyo/onkyo-receiver/)
+
 ## SmartThings Node Proxy
 Integrations using the SmartThings Node Proxy server developed by redloro.
 
