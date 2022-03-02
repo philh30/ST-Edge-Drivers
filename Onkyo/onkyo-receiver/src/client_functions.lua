@@ -29,7 +29,7 @@ local function parse_eiscp(device,rcv)
     local str = ''
     local cmd
     local sub_cmd
-    local eiscp_decode = eiscp_map()
+    local eiscp_decode = eiscp_map(device)
 
     if DEVICE_MAP[device.device_network_id].response then
         device.thread:cancel_timer(DEVICE_MAP[device.device_network_id].response)

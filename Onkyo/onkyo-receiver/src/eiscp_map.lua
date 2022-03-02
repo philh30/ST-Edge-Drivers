@@ -12,9 +12,10 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-local map = require('cap_map')
+local cap_map = require('cap_map')
 
-local reflect_cap_map = function()
+local reflect_cap_map = function(device)
+    local map = cap_map(device)
     local reflected = {}
     for comp_key, comp in pairs(map) do
         for cap_key, cap in pairs(comp) do

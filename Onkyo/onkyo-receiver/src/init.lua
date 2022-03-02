@@ -17,23 +17,27 @@ local caps = require("st.capabilities")
 local log = require("log")
 local build_eiscp = require("build_eiscp")
 local disco = require("disco")
-local map = require("cap_map")
+local cap_map = require("cap_map")
 local client_functions = require("client_functions")
 local split_string = require("split_string")
 local wrap = require("wrap_eiscp")
 local config = require("config")
 local inputCapability = config.inputCapability
 local commandCapability = config.commandCapability
+local get_inputs = require("inputs")
 
 DEVICE_MAP = {}
 
-local function disptable(table, tab)
-  for key, value in pairs(table) do
-    log.debug (tab .. key, value)
-    if type(value) == 'table' then
-      disptable(value, '  ' .. tab)
+--- @param device st.Device
+local function source_list(device)
+  local map = get_inputs(device)
+  local sources = {}
+  for name, _ in pairs(map) do
+    if name ~= 'cmd' and name ~= 'query' and name ~='UNKNOWN' then
+      table.insert(sources,name)
     end
   end
+  return sources
 end
 
 --- @param driver Driver
@@ -47,12 +51,7 @@ local function info_changed(driver,device,event,args)
     assert (device:try_update_metadata(create_device_msg), "Failed to change device")
     log.warn(string.format('Changed to %s profile. App restart may be required.',create_device_msg.profile))
   end
-  local sources = {}
-  for name, value in pairs(map.main[inputCapability.ID][inputCapability.inputSource.ID]) do
-    if name ~= 'cmd' and name ~= 'query' and name ~='UNKNOWN' then
-      table.insert(sources,name)
-    end
-  end
+  local sources = source_list(device)
   local evt = inputCapability.supportedInputSources({value=sources})
   evt.visibility = {displayed = false}
   device:emit_component_event(device.profile.components['main'],evt)
@@ -85,52 +84,54 @@ local function wait_for_response(driver,device,component,capability,attribute)
   end
 end
 
+--- Check connection and send.
+---
 --- @param driver Driver
 --- @param device st.Device
-local function set_switch(driver,device,command)
-  local switch_state = command.command
-  local attribute = 'switch'
-  local msg = build_eiscp(device,command.component,command.capability,attribute,switch_state)
+local function send_cmd(driver,device,command,attribute,state)
+  local msg = build_eiscp(device,command.component,command.capability,attribute,state)
   client_functions.check_connection(driver,device)
   if msg and DEVICE_MAP[device.device_network_id].sock then DEVICE_MAP[device.device_network_id].sock:send(msg) end
   wait_for_response(driver,device,command.component,command.capability,attribute)
+end
+
+--- @param driver Driver
+--- @param device st.Device
+local function set_switch(driver,device,command)
+  local state = command.command
+  local attribute = 'switch'
+  send_cmd(driver,device,command,attribute,state)
 end
 
 --- @param driver Driver
 --- @param device st.Device
 local function set_mute(driver,device,command)
-  local mute_state = ((command.command == 'setMute') and command.args.state or command.command) .. 'd'
+  local state = ((command.command == 'setMute') and command.args.state or command.command) .. 'd'
   local attribute = 'mute'
-  local msg = build_eiscp(device,command.component,command.capability,attribute,mute_state)
-  client_functions.check_connection(driver,device)
-  if msg and DEVICE_MAP[device.device_network_id].sock then DEVICE_MAP[device.device_network_id].sock:send(msg) end
-  wait_for_response(driver,device,command.component,command.capability,attribute)
+  send_cmd(driver,device,command,attribute,state)
 end
 
 --- @param driver Driver
 --- @param device st.Device
 local function set_volume(driver,device,command)
-  local level = string.format('%x',math.floor(tonumber(command.args.volume) * device.preferences.volumeScale / 100))
+  local state = string.format('%x',math.floor(tonumber(command.args.volume) * device.preferences.volumeScale / 100))
   local attribute = 'volume'
-  local msg = build_eiscp(device,command.component,command.capability,attribute,level)
-  client_functions.check_connection(driver,device)
-  if msg and DEVICE_MAP[device.device_network_id].sock then DEVICE_MAP[device.device_network_id].sock:send(msg) end
-  wait_for_response(driver,device,command.component,command.capability,attribute)
+  send_cmd(driver,device,command,attribute,state)
 end
 
 --- @param driver Driver
 --- @param device st.Device
 local function set_media_source(driver,device,command)
   local attribute = 'inputSource'
-  local msg = build_eiscp(device,command.component,command.capability,attribute,command.args.inputSource)
-  client_functions.check_connection(driver,device)
-  if msg and DEVICE_MAP[device.device_network_id].sock then DEVICE_MAP[device.device_network_id].sock:send(msg) end
-  wait_for_response(driver,device,command.component,command.capability,attribute)
+  local state = command.args.inputSource
+  send_cmd(driver,device,command,attribute,state)
 end
 
 --- @param driver Driver
 --- @param device st.Device
 local function refresh_handler(driver,device,command)
+  log.trace('REFRESH')
+  local map = cap_map(device)
   for _, comp in pairs(device.profile.components) do
     for _, cap in pairs(comp.capabilities) do
       if (map[comp.id] or {})[cap.id] then
@@ -161,12 +162,7 @@ end
 --- @param driver Driver
 --- @param device st.Device
 local function init(driver,device,command)
-  local sources = {}
-  for name, value in pairs(map.main[inputCapability.ID][inputCapability.inputSource.ID]) do
-    if name ~= 'cmd' and name ~= 'query' and name ~='UNKNOWN' then
-      table.insert(sources,name)
-    end
-  end
+  local sources = source_list(device)
   device:emit_component_event(device.profile.components['main'],inputCapability.supportedInputSources({value=sources}))
   if device:component_exists('zone2') then
     device:emit_component_event(device.profile.components['zone2'],inputCapability.supportedInputSources({value=sources}))

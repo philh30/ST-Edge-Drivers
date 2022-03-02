@@ -13,10 +13,11 @@
 -- limitations under the License.
 
 local log = require('log')
-local map = require('cap_map')
+local cap_map = require('cap_map')
 local wrap = require('wrap_eiscp')
 
 local builder = function(device,comp,cap,attr,state)
+    local map = cap_map(device)
     if (((map[comp] or {})[cap] or {})[attr] or {}).cmd then
         local cmd = map[comp][cap][attr].cmd .. (map[comp][cap][attr][state] or state)
         local msg = wrap(cmd)

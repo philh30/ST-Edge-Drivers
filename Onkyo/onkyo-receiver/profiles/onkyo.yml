@@ -45,3 +45,290 @@ preferences:
         100: "0-100%; 1% increment"
         200: "0.0-100.0%; 0.5% increment"
       default: 100
+  - title: "Input 0x00"
+    name: input00
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        DVR: "DVR"
+        VCR: "VCR"
+        VIDEO1: "Video 1"
+        NONE: "None"
+      default: NONE
+  - title: "Input 0x01"
+    name: input01
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        CABLE: "Cable"
+        SATELLITE: "Satellite"
+        VIDEO2: "Video 2"
+        NONE: "None"
+      default: CABLE
+  - title: "Input 0x02"
+    name: input02
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        GAME: "Game"
+        GAME1: "Game 1"
+        TV: "TV"
+        VIDEO3: "Video 3"
+        NONE: "None"
+      default: GAME
+  - title: "Input 0x03"
+    name: input03
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        AUX: "Aux"
+        AUX1: "Aux 1"
+        VIDEO4: "Video 4"
+        NONE: "None"
+      default: AUX
+  - title: "Input 0x04"
+    name: input04
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        AUX2: "Aux 2"
+        GAME2: "Game 2"
+        VIDEO5: "Video 5"
+        NONE: "None"
+      default: NONE
+  - title: "Input 0x05"
+    name: input05
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        PC: "PC"
+        VIDEO6: "Video 6"
+        NONE: "None"
+      default: PC
+  - title: "Input 0x06"
+    name: input06
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        VIDEO7: "Video 7"
+        NONE: "None"
+      default: NONE
+  - title: "Input 0x07"
+    name: input07
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        EXTRA1: "Extra 1"
+        NONE: "None"
+      default: NONE
+  - title: "Input 0x08"
+    name: input08
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        EXTRA2: "Extra 2"
+        NONE: "None"
+      default: NONE
+  - title: "Input 0x09"
+    name: input09
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        EXTRA3: "Extra 3"
+        NONE: "None"
+      default: NONE
+  - title: "Input 0x10"
+    name: input10
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        BDDVD: "BD/DVD"
+        BLURAY: "Blu-ray"
+        DVD: "DVD"
+        NONE: "None"
+      default: BDDVD
+  - title: "Input 0x11"
+    name: input11
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        STREAMINGBOX: "Streaming Box"
+        NONE: "None"
+      default: STREAMINGBOX
+  - title: "Input 0x12"
+    name: input12
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        TV: "TV"
+        NONE: "None"
+      default: TV
+  - title: "Input 0x20"
+    name: input20
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        TAPE1: "Tape 1"
+        TV: "TV"
+        NONE: "None"
+      default: NONE
+  - title: "Input 0x21"
+    name: input21
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        TAPE2: "Tape 2"
+        NONE: "None"
+      default: NONE
+  - title: "Input 0x22"
+    name: input22
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        PHONO: "Phono"
+        NONE: "None"
+      default: PHONO
+  - title: "Input 0x23"
+    name: input23
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        CD: "CD"
+        TV: "TV"
+        NONE: "None"
+      default: CD
+  - title: "Input 0x24"
+    name: input24
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        FM: "FM"
+        NONE: "None"
+      default: FM
+  - title: "Input 0x25"
+    name: input25
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        AM: "AM"
+        NONE: "None"
+      default: AM
+  - title: "Input 0x26"
+    name: input26
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        TUNER: "Tuner"
+        NONE: "None"
+      default: TUNER
+  - title: "Input 0x27"
+    name: input27
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        MUSICSERVER: "Music Server"
+        NONE: "None"
+      default: NONE
+  - title: "Input 0x28"
+    name: input28
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        INTERNETRADIO: "Internet Radio"
+        NONE: "None"
+      default: NONE
+  - title: "Input 0x29"
+    name: input29
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        USB: "USB"
+        USB1: "USB 1"
+        NONE: "None"
+      default: USB
+  - title: "Input 0x2A"
+    name: input2A
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        USB2: "USB 2"
+        NONE: "None"
+      default: NONE
+  - title: "Input 0x2B"
+    name: input2B
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        NET: "Net"
+        NONE: "None"
+      default: NET
+  - title: "Input 0x2C"
+    name: input2C
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        USB: "USB"
+        NONE: "None"
+      default: NONE
+  - title: "Input 0x2E"
+    name: input2E
+    description: "Select the label to map to this input."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        BLUETOOTH: "Bluetooth"
+        NONE: "None"
+      default: BLUETOOTH

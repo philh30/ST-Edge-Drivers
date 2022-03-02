@@ -12,8 +12,6 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-local log = require "log"
-
 local function splitString (inputstr, sep)
   if sep == nil then
     sep = "%s"
