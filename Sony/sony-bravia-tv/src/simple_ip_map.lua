@@ -24,10 +24,11 @@ local reflect_cap_map = function()
                         comp = comp_key,
                         cap = cap_key,
                         attr = attr_key,
+                        type = attr.type,
                         values = {},
                     }
                     for key, value in pairs(attr) do
-                        if key ~= 'cmd' then
+                        if key ~= 'cmd' and key ~= 'type' and key ~= 'query' then
                             reflected[attr.cmd].values[value] = key
                         end
                     end

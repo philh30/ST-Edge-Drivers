@@ -14,28 +14,10 @@
 
 local caps = require("st.capabilities")
 
-local map = {
-    ['main'] = {
-        [caps.switch.ID] = {
-            [caps.switch.switch.ID] = {
-                cmd = 'POWR',
-                on = '0000000000000001',
-                off = '0000000000000000',
-            },
-        },
-        [caps.audioMute.ID] = {
-            [caps.audioMute.mute.ID] = {
-                cmd = 'AMUT',
-                muted = '0000000000000001',
-                unmuted = '0000000000000000',
-            },
-        },
-        [caps.audioVolume.ID] = {
-            [caps.audioVolume.volume.ID] = {
-                cmd = 'VOLU',
-            },
-        },
-    }
+return {
+    pictureMute = caps["platinummassive43262.pictureMute"],
+    inputSource = caps["platinummassive43262.sonyInputSource"],
+    irccCommand = caps["platinummassive43262.sonyIrccCommand"],
+    homeButton = caps["platinummassive43262.homeButton"],
+    tvChannel = caps["platinummassive43262.tvChannel"],
 }
-
-return map

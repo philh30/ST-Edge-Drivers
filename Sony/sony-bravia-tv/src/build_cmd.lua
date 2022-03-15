@@ -34,10 +34,30 @@ end
 local builder = function(device,comp,cap,attr,state)
     if (((map[comp] or {})[cap] or {})[attr] or {}).cmd then
         local cmd = map[comp][cap][attr].cmd
+        local type = map[comp][cap][attr].type
         if state == 'query' then
-            cmd = 'E' .. cmd .. pad('','#',16,'left')
+            if map[comp][cap][attr].query then
+                cmd = 'E' .. cmd .. pad('','#',16,'left')
+            else
+                return nil
+            end
         else
-            cmd = 'C' .. cmd .. pad(map[comp][cap][attr][state] or (state .. ''),'0',16,'left')
+            if type == 'binary' or type == 'input' then
+                cmd = 'C' .. cmd .. pad(map[comp][cap][attr][state],'0',16,'left')
+            elseif type == 'integer' then
+                cmd = 'C' .. cmd .. pad(state .. '','0',16,'left')
+            elseif type == 'decimal' then
+                local dec_match = string.match(state,'%d+%.%d+')
+                local int_match = string.match(state,'%d+')
+                if dec_match then
+                    local left, right = string.match(dec_match,'(%d+)%.(%d+)')
+                    cmd = 'C' .. cmd .. pad(left,'0',8,'left') .. '.' .. pad(right,'0',7,'right')
+                elseif int_match then
+                    cmd = 'C' .. cmd .. pad(int_match,'0',8,'left') .. '.' .. pad('','0',7,'right')
+                else
+                    return nil
+                end
+            end
         end
         cmd = '*S' .. cmd
         log.trace(string.format('TX > %s',cmd))

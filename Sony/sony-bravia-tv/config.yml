@@ -1,0 +1,5 @@
+name: 'Sony Bravia TV v1'
+packageKey: 'sony-bravia-tv-v1'
+permissions:
+  lan: {}
+  discovery: {}

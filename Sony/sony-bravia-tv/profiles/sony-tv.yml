@@ -1,0 +1,128 @@
+name: sony-tv
+components:
+- id: main
+  label: Main
+  capabilities:
+  - id: switch
+    version: 1
+  - id: audioVolume
+    version: 1
+  - id: audioMute
+    version: 1
+  - id: platinummassive43262.sonyInputSource
+    version: 1
+  - id: platinummassive43262.tvChannel
+    version: 1
+  - id: mediaPresets
+    version: 1
+  - id: platinummassive43262.pictureMute
+    version: 1
+  - id: platinummassive43262.homeButton
+    version: 1
+  - id: platinummassive43262.sonyIrccCommand
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+    - name: Television
+metadata:
+  deviceType: Television
+  ocfDeviceType: oic.d.tv
+  deviceTypeId: Television
+  vid: 322c4c2e-5bad-3cc7-bd21-2c01e576d0b3
+  mnmn: SmartThingsCommunity
+preferences:
+  - title: "Passkey"
+    name: passkey
+    description: "Passkey configured in TV network settings"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      minLength: 1
+      maxLength: 20
+      default: "passkey"
+  - title: "HDMI Inputs"
+    name: inputsHDMI
+    description: "Enter the number of HDMI inputs"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 10
+      default: 4
+  - title: "Component Inputs"
+    name: inputsCOMPONENT
+    description: "Enter the number of Component inputs"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 10
+      default: 4
+  - title: "Composite Inputs"
+    name: inputsCOMPOSITE
+    description: "Enter the number of Composite inputs"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 10
+      default: 4
+  - title: "Screen Mirroring Inputs"
+    name: inputsMIRROR
+    description: "Enter the number of Screen Mirroring inputs"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 10
+      default: 0
+  - title: "PC Inputs"
+    name: inputsPC
+    description: "Enter the number of PC inputs"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 10
+      default: 0
+  - title: "SCART Inputs"
+    name: inputsSCART
+    description: "Enter the number of SCART inputs"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 10
+      default: 0
+  - title: "Re-query App List on Refresh"
+    name: refreshApps
+    description: "Re-query the app list on refresh. Otherwise, app list is re-queried when driver restarts."
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  - title: "Remove System Apps from List"
+    name: blacklistApps
+    description: "Remove system apps from the menu of presets to launch."
+    required: true
+    preferenceType: boolean
+    definition:
+      default: true
+  - title: "Remove Duplicate Apps from List"
+    name: duplicateApps
+    description: "Remove duplicate app names from the menu of presets to launch."
+    required: true
+    preferenceType: boolean
+    definition:
+      default: true
+  - title: "IRCC Command Delay"
+    name: delayIRCC
+    description: "Enter the delay between IRCC commands (in milliseconds)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 5000
+      default: 250

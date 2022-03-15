@@ -16,6 +16,7 @@ local socket = require('socket')
 local log = require('log')
 local config = require('config')
 local upnpcommon = require('upnpcommon')
+local api_cmd = require('api_cmd')
 
 local disco = {}
 
@@ -59,13 +60,15 @@ end
 local function create_device(driver, device)
   log.info(string.format('===== CREATING DEVICE: %s',device.id))
   
+  local model = api_cmd.get_model_name(device.ip,'')
+
   local metadata = {
     type = config.DEVICE_TYPE,
     device_network_id = device.id,
-    label = 'Sony Bravia TV',
+    label = 'Sony Bravia ' .. (model or 'TV'),
     profile = config.DEVICE_PROFILE,
     manufacturer = 'Sony',
-    model = 'Sony Bravia TV',
+    model = 'Sony Bravia ' .. (model or 'TV'),
     vendor_provided_label = 'Sony Bravia TV'
   }
   return driver:try_create_device(metadata)
