@@ -112,6 +112,7 @@ function client_functions.connect(driver, device, ip, port)
 
     if ret == nil then
         log.error (string.format('%s CONNECTION TO %s:%s FAILED',device.device_network_id,ip,port))
+        device:offline()
         client:close()
         return nil
     else
@@ -120,6 +121,7 @@ function client_functions.connect(driver, device, ip, port)
         DEVICE_MAP[device.device_network_id].sock = client
         driver:register_channel_handler(client, client_functions.msghandler, string.format("%s",device.device_network_id))
         log.debug(string.format('%s CONNECTED TO %s:%s',device.device_network_id,ip,port))
+        device:online()
         local old_ip = device:get_field('IP')
         if ip ~= old_ip then device:set_field('IP',ip,{persist = true}) end
         DEVICE_MAP[device.device_network_id].ip = ip
@@ -158,11 +160,17 @@ function client_functions.check_connection(driver,device)
                 log.info(string.format('DEVICE %s NOT FOUND',dev.device_network_id))
             end
         end
+    else
+        device:online()
     end
     if ((DEVICE_MAP or {})[device.device_network_id] or {}).ip and not DEVICE_MAP[device.device_network_id].sock then
-        client_functions.connect(driver,device,DEVICE_MAP[device.device_network_id].ip,config.PORT)
+        success = client_functions.connect(driver,device,DEVICE_MAP[device.device_network_id].ip,config.PORT)
+        if success then
+            return success
+        end
     elseif not ((DEVICE_MAP or {})[device.device_network_id] or {}).ip then
         log.error(string.format("%s CANNOT CONNECT. CHECK CONNECTION AND REFRESH",device.device_network_id))
+        device:offline()
     end
 end
 
@@ -174,6 +182,7 @@ function client_functions.refresh_connection(driver,device)
     end
     if (DEVICE_MAP[device.device_network_id] or {}).sock then
         log.trace(string.format('%s DISCONNECTING - CONNECTION REFRESH',device.device_network_id))
+        device:offline()
         driver:unregister_channel_handler(string.format("%s",device.device_network_id))
         DEVICE_MAP[device.device_network_id].sock:close()
         DEVICE_MAP[device.device_network_id].sock = nil

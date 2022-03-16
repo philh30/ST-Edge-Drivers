@@ -16,13 +16,15 @@ local client_functions = require("client_functions")
 local get_app_list = require("app_list")
 local emit_source_list = require("source_list")
 local command_handlers = require("command_handlers")
+local cap_defs = require("cap_defs")
 local log = require("log")
 
 local function keep_alive(driver,device)
     local function poll()
         log.trace(string.format('%s POLLING TO KEEP CONNECTION ALIVE',device.device_network_id))
         client_functions.check_connection(driver,device)
-        command_handlers.send_cmd(driver,device,{component='main',capability='switch'},'switch','query')
+        command_handlers.refresh_handler(driver,device)
+        --command_handlers.send_cmd(driver,device,{component='main',capability='switch'},'switch','query')
     end
     if not (DEVICE_MAP[device.device_network_id] or {}).alive then
         if not DEVICE_MAP[device.device_network_id] then DEVICE_MAP[device.device_network_id] = {} end
@@ -33,6 +35,7 @@ end
 --- @param driver Driver
 --- @param device st.Device
 local function init(driver,device,command)
+    device:emit_event(cap_defs.irccCommand.irccCommand({value='Ready'}))
     client_functions.check_connection(driver,device)
     if (DEVICE_MAP[device.device_network_id] or {}).ip then
         get_app_list(driver,device)
@@ -47,7 +50,7 @@ local function removed(driver,device)
     log.trace(string.format("%s REMOVED",device.device_network_id))
     if DEVICE_MAP[device.device_network_id] then
         if DEVICE_MAP[device.device_network_id].alive then
-            device.thread:cancel_time(DEVICE_MAP[device.device_network_id].alive)
+            device.thread:cancel_timer(DEVICE_MAP[device.device_network_id].alive)
             DEVICE_MAP[device.device_network_id].alive = nil
         end
         DEVICE_MAP[device.device_network_id].sock:close()
@@ -60,6 +63,9 @@ end
 local function updated(driver,device)
     log.trace(string.format("%s UPDATED",device.device_network_id))
     emit_source_list(device)
+    if DEVICE_MAP[device.device_network_id].ip then
+      get_app_list(driver,device)
+    end
 end
 
 return {

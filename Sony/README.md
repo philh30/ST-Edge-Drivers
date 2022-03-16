@@ -20,3 +20,6 @@ In SmartThings:
 - Enroll in the channel and install the driver
 - With the TV on, select to scan nearby for new devices in the SmartThings app
 - In the settings menu of the new device, enter the pre-shared key and configure the number of inputs
+
+## Live Logging
+[Instructions](../../LIVELOGGING.md)

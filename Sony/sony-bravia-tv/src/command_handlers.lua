@@ -131,6 +131,7 @@ function command_handlers.ircc_command(driver,device,command)
   local state = command.args.irccCommand
   local cmds = split_string(state,',')
   delay_send(device,cmds,(device.preferences.delayIRCC or 10)/1000)
+  device:emit_event(cap_defs.irccCommand.irccCommand({value='Ready'}))
 end
 
 --- @param driver Driver

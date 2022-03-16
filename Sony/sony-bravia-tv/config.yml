@@ -1,4 +1,4 @@
-name: 'Sony Bravia TV v1'
+name: 'Sony Bravia TV'
 packageKey: 'sony-bravia-tv-v1'
 permissions:
   lan: {}

@@ -69,6 +69,14 @@ Integrations using the SmartThings Node Proxy server developed by redloro.
 Driver to connect to a SmartThings Node Proxy server that monitors a chlorine generator.
 - [Driver folder](/SmartThings%20Node%20Proxy/Salt%20Chlorine%20Generator/salt-stnp)
 
+## Sony
+
+### Sonyy Bravia TVs
+Connection to Sony Bravia TVs using Simple IP Control.
+- [SmartThings Community topic](https://community.smartthings.com/)
+- [Installation instructions](/Sony/README.md)
+- [Driver folder](/Sony/sony-bravia-tv/)
+
 ## Trane
 
 ### Thermostat
