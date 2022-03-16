@@ -73,7 +73,7 @@ Driver to connect to a SmartThings Node Proxy server that monitors a chlorine ge
 
 ### Sonyy Bravia TVs
 Connection to Sony Bravia TVs using Simple IP Control.
-- [SmartThings Community topic](https://community.smartthings.com/)
+- [SmartThings Community topic](https://community.smartthings.com/t/st-edge-sony-bravia-tvs/240685)
 - [Installation instructions](/Sony/README.md)
 - [Driver folder](/Sony/sony-bravia-tv/)
 
@@ -92,5 +92,4 @@ Supports all button scenes except *released* (ST limitation), supports setting a
 
 ### Zooz Sensors
 Supports the ZSE11 Q Sensor and ZSE40 4-in-1 Sensor.
-
 - [Driver folder](/Zooz/zooz-sensor)
