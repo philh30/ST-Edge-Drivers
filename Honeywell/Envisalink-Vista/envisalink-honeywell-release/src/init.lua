@@ -24,6 +24,7 @@ local lifecycles = require('lifecycles')
 
 ---------------------------------------
 -- custom capabilities
+--[[
 caps[capdefs.statusMessage.name]      = capdefs.statusMessage.capability
 caps[capdefs.alarmMode.name]          = capdefs.alarmMode.capability
 caps[capdefs.bypass.name]             = capdefs.bypass.capability
@@ -33,7 +34,7 @@ caps[capdefs.glassBreakZone.name]     = capdefs.glassBreakZone.capability
 caps[capdefs.leakZone.name]           = capdefs.leakZone.capability
 caps[capdefs.motionZone.name]         = capdefs.motionZone.capability
 caps[capdefs.smokeZone.name]          = capdefs.smokeZone.capability
-
+--]]
 ---------------------------------------
 -- variables
 initialized = false

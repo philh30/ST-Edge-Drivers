@@ -13,8 +13,6 @@
 -- limitations under the License.
 
 local log = require('log')
-local http = require('socket.http')
-local ltn12 = require('ltn12')
 local utilities = require('utilities')
 local capabilitydefs = require('capabilitydefs')
 local socket = require "cosock.socket"

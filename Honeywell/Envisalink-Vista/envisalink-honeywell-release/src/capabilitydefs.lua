@@ -29,322 +29,38 @@ local capabilitydefs = {}
 
 capabilitydefs.statusMessage = {}
 capabilitydefs.statusMessage.name = "platinummassive43262.statusMessage"
-capabilitydefs.statusMessage.json = [[
-{
-    "id": "platinummassive43262.statusMessage",
-    "version": 1,
-    "status": "proposed",
-    "name": "Status Message",
-    "attributes": {
-        "statusMessage": {
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "value": {
-                        "type": "string"
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "value"
-                ]
-            },
-            "enumCommands": []
-        }
-    },
-    "commands": {}
-}
-]]
-capabilitydefs.statusMessage.capability = capabilities.build_cap_from_json_string(capabilitydefs.statusMessage.json)
+capabilitydefs.statusMessage.capability = capabilities[capabilitydefs.statusMessage.name]
 
 capabilitydefs.alarmMode = {}
 capabilitydefs.alarmMode.name = "platinummassive43262.alarmMode"
-capabilitydefs.alarmMode.json = [[
-{
-    "id": "platinummassive43262.alarmMode",
-    "version": 1,
-    "status": "proposed",
-    "name": "Alarm Mode",
-    "attributes": {
-        "alarmMode": {
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "value": {
-                        "type": "string"
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "value"
-                ]
-            },
-            "setter": "setAlarmMode",
-            "enumCommands": []
-        },
-        "supportedAlarmModes": {
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "value": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "additionalProperties": false,
-                "required": []
-            },
-            "enumCommands": []
-        }
-    },
-    "commands": {
-        "setAlarmMode": {
-            "name": "setAlarmMode",
-            "arguments": [
-                {
-                    "name": "alarmMode",
-                    "optional": false,
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            ]
-        }
-    }
-}
-]]
-capabilitydefs.alarmMode.capability = capabilities.build_cap_from_json_string(capabilitydefs.alarmMode.json)
+capabilitydefs.alarmMode.capability = capabilities[capabilitydefs.alarmMode.name]
 
 capabilitydefs.bypass = {}
 capabilitydefs.bypass.name = "platinummassive43262.bypass"
-capabilitydefs.bypass.json = [[
-{
-    "id": "platinummassive43262.bypass",
-    "version": 1,
-    "status": "proposed",
-    "name": "Bypass",
-    "attributes": {},
-    "commands": {
-        "bypass": {
-            "name": "bypass",
-            "arguments": []
-        }
-    }
-}
-]]
-capabilitydefs.bypass.capability = capabilities.build_cap_from_json_string(capabilitydefs.bypass.json)
+capabilitydefs.bypass.capability = capabilities[capabilitydefs.bypass.name]
 
 capabilitydefs.carbonMonoxideZone = {}
 capabilitydefs.carbonMonoxideZone.name = "platinummassive43262.carbonMonoxideZone"
-capabilitydefs.carbonMonoxideZone.json = [[
-{
-    "id": "platinummassive43262.carbonMonoxideZone",
-    "version": 1,
-    "status": "proposed",
-    "name": "Carbon Monoxide Zone",
-    "ephemeral": false,
-    "attributes": {
-        "carbonMonoxideZone": {
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "value": {
-                        "type": "string",
-                        "enum": [
-                            "clear",
-                            "detected",
-                            "bypassed"
-                        ]
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "value"
-                ]
-            },
-            "enumCommands": []
-        }
-    },
-    "commands": {}
-}
-]]
-capabilitydefs.carbonMonoxideZone.capability = capabilities.build_cap_from_json_string(capabilitydefs.carbonMonoxideZone.json)
+capabilitydefs.carbonMonoxideZone.capability = capabilities[capabilitydefs.carbonMonoxideZone.name]
 
 capabilitydefs.contactZone= {}
 capabilitydefs.contactZone.name = "platinummassive43262.contactZone"
-capabilitydefs.contactZone.json = [[
-{
-    "id": "platinummassive43262.contactZone",
-    "version": 1,
-    "status": "proposed",
-    "name": "Contact Zone",
-    "attributes": {
-        "contactZone": {
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "value": {
-                        "type": "string",
-                        "enum": [
-                            "closed",
-                            "open",
-                            "bypassed"
-                        ]
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "value"
-                ]
-            },
-            "enumCommands": []
-        }
-    },
-    "commands": {}
-}
-]]
-capabilitydefs.contactZone.capability = capabilities.build_cap_from_json_string(capabilitydefs.contactZone.json)
+capabilitydefs.contactZone.capability = capabilities[capabilitydefs.contactZone.name]
 
 capabilitydefs.glassBreakZone = {}
 capabilitydefs.glassBreakZone.name = "platinummassive43262.glassBreakZone"
-capabilitydefs.glassBreakZone.json = [[
-{
-    "id": "platinummassive43262.glassBreakZone",
-    "version": 1,
-    "status": "proposed",
-    "name": "Glass Break Zone",
-    "attributes": {
-        "glassBreakZone": {
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "value": {
-                        "type": "string",
-                        "enum": [
-                            "noSound",
-                            "glassBreaking",
-                            "bypassed"
-                        ]
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "value"
-                ]
-            },
-            "enumCommands": []
-        }
-    },
-    "commands": {}
-}
-]]
-capabilitydefs.glassBreakZone.capability = capabilities.build_cap_from_json_string(capabilitydefs.glassBreakZone.json)
+capabilitydefs.glassBreakZone.capability = capabilities[capabilitydefs.glassBreakZone.name]
 
 capabilitydefs.leakZone = {}
 capabilitydefs.leakZone.name = "platinummassive43262.leakZone"
-capabilitydefs.leakZone.json = [[
-{
-    "id": "platinummassive43262.leakZone",
-    "version": 1,
-    "status": "proposed",
-    "name": "Leak Zone",
-    "attributes": {
-        "leakZone": {
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "value": {
-                        "type": "string",
-                        "enum": [
-                            "dry",
-                            "wet",
-                            "bypassed"
-                        ]
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "value"
-                ]
-            },
-            "enumCommands": []
-        }
-    },
-    "commands": {}
-}
-]]
-capabilitydefs.leakZone.capability = capabilities.build_cap_from_json_string(capabilitydefs.leakZone.json)
+capabilitydefs.leakZone.capability = capabilities[capabilitydefs.leakZone.name]
 
 capabilitydefs.motionZone = {}
 capabilitydefs.motionZone.name = "platinummassive43262.motionZone"
-capabilitydefs.motionZone.json = [[
-{
-    "id": "platinummassive43262.motionZone",
-    "version": 1,
-    "status": "proposed",
-    "name": "Motion Zone",
-    "attributes": {
-        "motionZone": {
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "value": {
-                        "type": "string",
-                        "enum": [
-                            "active",
-                            "inactive",
-                            "bypassed"
-                        ]
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "value"
-                ]
-            },
-            "enumCommands": []
-        }
-    },
-    "commands": {}
-}
-]]
-capabilitydefs.motionZone.capability = capabilities.build_cap_from_json_string(capabilitydefs.motionZone.json)
+capabilitydefs.motionZone.capability = capabilities[capabilitydefs.motionZone.name]
 
 capabilitydefs.smokeZone = {}
 capabilitydefs.smokeZone.name = "platinummassive43262.smokeZone"
-capabilitydefs.smokeZone.json = [[
-{
-    "id": "platinummassive43262.smokeZone",
-    "version": 1,
-    "status": "proposed",
-    "name": "Smoke Zone",
-    "attributes": {
-        "smokeZone": {
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "value": {
-                        "type": "string",
-                        "enum": [
-                            "clear",
-                            "detected",
-                            "bypassed"
-                        ]
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "value"
-                ]
-            },
-            "enumCommands": []
-        }
-    },
-    "commands": {}
-}
-]]
-capabilitydefs.smokeZone.capability = capabilities.build_cap_from_json_string(capabilitydefs.smokeZone.json)
+capabilitydefs.smokeZone.capability = capabilities[capabilitydefs.smokeZone.name]
 
 return capabilitydefs
