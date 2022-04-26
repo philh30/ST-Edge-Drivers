@@ -19,6 +19,7 @@ local map = require "cap_ep_map"
 
 local active = {}
 
+--- @param device st.zwave.Device
 function active.mode(device,inputs)
     -- Determine current pool/spa mode
     local pool_spa_map = {[0]='pool',[1]='spa',on='spa',off='pool',pool='pool',spa='spa'} -- If config is set to Pool Only or Spa Only it will control
@@ -30,7 +31,7 @@ function active.mode(device,inputs)
     -- Determine current pump speed
     local pump_speed = 0
     local op_mode_2 = device:get_field('OP_MODE_2') or 0
-    local pump_config = get.CONFIG_INSTALLED_PUMP_TYPE[op_mode_2 - (op_mode_2 & 0x01)]
+    local pump_config = device:supports_capability(capdefs.pumpSpeed.capability,nil) and 'Variable Speed' or get.CONFIG_INSTALLED_PUMP_TYPE[op_mode_2 - (op_mode_2 & 0x01)]
     local on_off_map = {off=0,on=1}
     if pump_config == 'Two Speed' then
         local switch1_comp = map.GET_COMP(device,'switch1')
@@ -40,7 +41,7 @@ function active.mode(device,inputs)
         pump_speed = switch1 + switch2
     elseif pump_config == 'Variable Speed' then
         local vsp_comp = map.GET_COMP(device,'vspSpeed')
-        local pump_speed = inputs.vsp or (inputs.vsp1 and (inputs.vsp1 == 'off' and 0 or 1)) or (inputs.vsp2 and (inputs.vsp2 == 'off' and 0 or 2)) or (inputs.vsp3 and (inputs.vsp3 == 'off' and 0 or 3)) or (inputs.vsp4 and (inputs.vsp4 == 'off' and 0 or 4)) or device:get_latest_state(vsp_comp,capdefs.pumpSpeed.name,'vspSpeed') or 0
+        pump_speed = inputs.vsp or (inputs.vsp1 and (inputs.vsp1 == 'off' and 0 or 1)) or (inputs.vsp2 and (inputs.vsp2 == 'off' and 0 or 2)) or (inputs.vsp3 and (inputs.vsp3 == 'off' and 0 or 3)) or (inputs.vsp4 and (inputs.vsp4 == 'off' and 0 or 4)) or device:get_latest_state(vsp_comp,capdefs.pumpSpeed.name,'vspSpeed') or 0
     else --One speed or Unknown - use circuit 1
         local switch1_comp = map.GET_COMP(device,'switch1')
         local switch1 = on_off_map[(inputs.switch1 or device:get_latest_state(switch1_comp,'switch','switch') or 'off')]
