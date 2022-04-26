@@ -1,6 +1,6 @@
 local lux = require('luxure')
 local cosock = require('cosock.socket')
-local json = require('dkjson')
+local json = require('st.json')
 local log = require('log')
 local commands = require('commands')
 
@@ -32,7 +32,7 @@ function hub_server.start(driver, device)
     device:online()
 
     --disptable(req:get_headers(),'  ')
-    if req:get_headers().stnp_plugin == conf.stnp.plugin then
+    if req:get_headers()._inner.stnp_plugin == conf.stnp.plugin then
       log.debug (string.format('Received message from STNP plugin %s: %s',conf.stnp.plugin,req:get_body()))
       commands.notification_handler(driver,body)
     end
