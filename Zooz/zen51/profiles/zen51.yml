@@ -1,0 +1,149 @@
+name: zen51
+components:
+  - id: main
+    capabilities:
+      - id: switch
+        version: 1
+      - id: button
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: Switch
+metadata:
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch
+preferences:
+  - title: "Device Profile"
+    name: deviceProfile
+    description: "Select the profile to use for this device."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        zen51: "Switch"
+        zen51_smoke: "Smoke Detector"
+        zen51_co: "Carbon Monoxide Detector"
+        zen51_smoke_co: "Smoke/Carbon Monoxide Detector"
+      default: "zen51"
+  - title: "LED Indicator"
+    name: ledIndicator
+    description: "Enable or disable the LED indicator to reflect the current on/off status of the connected load."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "LED Indicator disabled"
+        1: "LED Indicator enabled"
+      default: 1
+  - title: "Auto Turn-Off Timer"
+    name: autoTurnOff
+    description: "Use this parameter to set the time after which you want the device connected to the relay to automatically turn off once it has been turned on. The number entered as value corresponds to the number of minutes or seconds."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 65535
+      default: 0
+  - title: "Auto Turn-On Timer"
+    name: autoTurnOn
+    description: "Use this parameter to set the time after which you want the device connected to the relay to automatically turn on once it has been turned off. The number entered as value corresponds to the number of minutes or seconds."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 65535
+      default: 0
+  - title: "On/Off Status After Power Failure"
+    name: powerFailure
+    description: "Set the on/off status for the relay after power failure."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Forced to OFF"
+        1: "Forced to ON"
+        2: "Remembers and restores on/off"
+      default: 2
+  - title: "Enable/Disable Scene Control"
+    name: sceneControl
+    description: "Enable or disable scene control functionality for quick multi-tap triggers (works best with momentary wall switches)."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Scene control disabled"
+        1: "Scene control enabled"
+      default: 0
+  - title: "Smart Bulb Mode"
+    name: smartBulbMode
+    description: "Enable or disable physical and/or Z-Wave on/off control. If disabled, you’ll only be able to control the connected light via Z-Wave. Scenes and other functionality will still be available through paddles."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Physical disabled, Z-Wave enabled"
+        1: "Physical/Z-Wave enabled"
+        2: "Physical/Z-Wave disabled"
+      default: 1
+  - title: "External Switch Type"
+    name: externalSwitchType
+    description: "Choose the type of wall switch connected to the relay and its on/off behavior."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Toggle switch"
+        1: "Momentary switch"
+        2: "Toggle switch with fixed action"
+        3: "3-way impulse control"
+        4: "Garage door mode"
+      default: 2
+  - title: "Association Reports"
+    name: associationReports
+    description: "Choose the type of reports the relay will send to the hub for Z-Wave and external switch control."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Binary - Z-Wave, Basic - Physical"
+        1: "Binary - Both"
+      default: 1
+  - title: "Relay Type Behavior"
+    name: relayTypeBehavior
+    description: "Choose if you'd like the relay to act as a normally open (on when the circuit is closed, off when the circuit it open), or a normally closed relay (off when the circuit is closed, on when the circuit it open)."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "NO (normally open)"
+        1: "NC (normally closed)"
+      default: 0
+  - title: "Timer Unit"
+    name: timerUnit
+    description: "Choose between seconds and minutes as the unit for the timers in parameters 2 and 3."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        1: "Minutes"
+        2: "Seconds"
+      default: 1
+  - title: "Impulse Duration for 3-Way Control"
+    name: impulseDuration
+    description: "Choose the duration of the impulse if you're using the relay with 3-way impulse control (parameter 7 set to value 3)."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 2
+      maximum: 200
+      default: 10
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs. 5 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

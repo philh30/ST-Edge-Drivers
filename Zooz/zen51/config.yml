@@ -1,0 +1,4 @@
+name: 'Zooz ZEN51 Dry Contact Relay'
+packageKey: 'zen51'
+permissions:
+  zwave: {}

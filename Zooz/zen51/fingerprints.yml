@@ -1,0 +1,7 @@
+zwaveManufacturer:
+  - id: "027A/0104/0201"
+    deviceLabel: Zooz ZEN51 Dry Contact Relay
+    manufacturerId: 0x027A
+    productType: 0x0104
+    productId: 0x0201
+    deviceProfileName: zen51
