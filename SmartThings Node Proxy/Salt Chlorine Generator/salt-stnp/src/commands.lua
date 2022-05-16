@@ -1,5 +1,6 @@
 local log = require('log')
-local http = require('socket.http')
+local cosock = require('cosock')
+local http = cosock.asyncify('socket.http')
 local ltn12 = require('ltn12')
 local capabilities = require('st.capabilities')
 
@@ -52,13 +53,13 @@ function command_handler.notification_handler(driver, body)
       device:emit_event(capabilities["platinummassive43262.currentMeter"].current({value = tonumber(body['amps']), unit = 'A'}))
       device:emit_event(capabilities.temperatureMeasurement.temperature({value = tonumber(body['f']), unit = 'F'}))
       if body['err_flow'] then
-        device:emit_event(capabilities["platinummassive43262.statusMessage"].statusMessage({value = 'No Flow'}))
+        --device:emit_event(capabilities["platinummassive43262.statusMessage"].statusMessage({value = 'No Flow'}))
       else
         device:emit_event(capabilities.pHMeasurement.pH({value = tonumber(body['ph']), unit = 'pH'}))
         device:emit_event(capabilities["platinummassive43262.orpMeasurement"].ORP({value = tonumber(body['orp']), unit = 'mV'}))
         device:emit_event(capabilities["platinummassive43262.phMeasurement"].pH({value = tonumber(body['ph']), unit = 'pH'}))
         device:emit_event(capabilities["platinummassive43262.saltMeasurement"].salt({value = tonumber(body['salt']), unit = 'ppm'}))
-        device:emit_event(capabilities["platinummassive43262.statusMessage"].statusMessage({value = string.format("%s\u{00B0}F  %smV  %spH",body['f'],body['orp'],body['ph'])}))
+        --device:emit_event(capabilities["platinummassive43262.statusMessage"].statusMessage({value = string.format("%s\u{00B0}F  %smV  %spH",body['f'],body['orp'],body['ph'])}))
       end
       
       if (tonumber(body['errorflags']) + tonumber(body['warningflags']))>0 then
