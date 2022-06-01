@@ -159,15 +159,30 @@ local function send_raw_command(driver,device,command)
   wait_for_response(driver,device)
 end
 
+local function keep_alive(driver,device)
+  local function poll()
+      log.trace(string.format('%s POLLING TO KEEP CONNECTION ALIVE',device.device_network_id))
+      client_functions.check_connection(driver,device)
+      refresh_handler(driver,device)
+  end
+  if not (DEVICE_MAP[device.device_network_id] or {}).alive then
+      if not DEVICE_MAP[device.device_network_id] then DEVICE_MAP[device.device_network_id] = {} end
+      DEVICE_MAP[device.device_network_id].alive = device.thread:call_on_schedule(30*60, poll) -- Query power every 30 minutes
+  end
+end
+
 --- @param driver Driver
 --- @param device st.Device
 local function init(driver,device,command)
   local sources = source_list(device)
-  device:emit_component_event(device.profile.components['main'],inputCapability.supportedInputSources({value=sources}))
+  local evt = inputCapability.supportedInputSources({value=sources})
+  evt.visibility = {displayed=false}
+  device:emit_component_event(device.profile.components['main'],evt)
   if device:component_exists('zone2') then
-    device:emit_component_event(device.profile.components['zone2'],inputCapability.supportedInputSources({value=sources}))
+    device:emit_component_event(device.profile.components['zone2'],evt)
   end
   client_functions.check_connection(driver,device)
+  keep_alive(driver,device)
 end
 
 --- @param driver Driver
@@ -175,6 +190,10 @@ end
 local function removed(driver,device)
   log.trace(string.format("%s REMOVED",device.device_network_id))
   if DEVICE_MAP[device.device_network_id] then
+    if DEVICE_MAP[device.device_network_id].alive then
+      device.thread:cancel_timer(DEVICE_MAP[device.device_network_id].alive)
+      DEVICE_MAP[device.device_network_id].alive = nil
+    end
     DEVICE_MAP[device.device_network_id].sock:close()
     DEVICE_MAP[device.device_network_id] = nil
   end

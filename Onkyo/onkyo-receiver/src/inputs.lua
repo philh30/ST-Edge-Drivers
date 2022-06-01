@@ -16,7 +16,7 @@ local function get_inputs(device)
     local inputs = {
         query = 'QSTN',
     }
-    if device.preferences.input00 then
+    if (device.preferences or {}).input00 then
         for key, label in pairs(device.preferences) do
             local hex = string.match(key,'input(..)')
             if hex and tonumber(hex,16) and label ~= 'NONE' then
