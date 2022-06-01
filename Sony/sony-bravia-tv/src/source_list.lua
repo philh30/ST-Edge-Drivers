@@ -33,7 +33,9 @@ local function emit_source_list(device)
     add_sources(device,supportedInputs,'MIRROR')
     add_sources(device,supportedInputs,'PC')
     add_sources(device,supportedInputs,'SCART')
-    device:emit_event(cap_defs.inputSource.supportedInputSources({value = supportedInputs}))
+    local event = cap_defs.inputSource.supportedInputSources({value = supportedInputs})
+    event.visibility = {displayed=false}
+    device:emit_event(event)
 end
 
 return emit_source_list

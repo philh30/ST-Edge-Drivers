@@ -25,7 +25,6 @@ local client_functions = {}
 ---
 --- @param device st.Device
 local function parse(device,rcv)
-    local cmd
     local map_decode = simple_ip_map()
 
     if DEVICE_MAP[device.device_network_id].response then
@@ -50,7 +49,7 @@ local function parse(device,rcv)
                 elseif msg_type == 'A' and msg_cmd == 'CHNN' and msg_param == 'FFFFFFFFFFFFFFFF' then
                     device:emit_component_event(device.profile.components[component],caps[capability][attribute]({value = ''}))
                 elseif msg_type == 'A' and msg_cmd == 'INPT' and msg_param == 'FFFFFFFFFFFFFFFF' then
-                    device:emit_component_event(device.profile.components[component],caps[capability][attribute]({value = 'APP'}))
+                    device:emit_component_event(device.profile.components[component],caps[capability][attribute]({value = ''}))
                 elseif msg_param == 'FFFFFFFFFFFFFFFF' then
                     log.trace(string.format('%s Failed to update attribute %s',device.device_network_id,attribute))
                 elseif device:component_exists(component) and msg_cmd ~= 'IRCC' then

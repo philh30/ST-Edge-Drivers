@@ -12,7 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-local socket = require('socket')
+local socket = require("cosock.socket")
 local log = require('log')
 local config = require('config')
 local upnpcommon = require('upnpcommon')

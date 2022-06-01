@@ -13,8 +13,9 @@
 -- limitations under the License.
 
 local log = require('log')
-local json = require('dkjson')
-local http = require('socket.http')
+local json = require('st.json')
+local cosock = require('cosock')
+local http = cosock.asyncify('socket.http')
 local ltn12 = require('ltn12')
 
 local api = {}
@@ -45,7 +46,7 @@ function api.send_lan_command(ip, method, path, body, passkey)
 end
 
 function api.get_interface_information(ip,passkey)
-  local success, response = api.send_lan_command(ip,'POST','sony/system',{method="getInterfaceInformation",id=1,params={},version="1.0"},passkey or '')
+  local success, response = api.send_lan_command(ip,'POST','sony/system',{method="getInterfaceInformation",id=1,params={{}},version="1.0"},passkey or '')
   if success then
     return json.decode(response[1],1,nil)
   else
@@ -61,7 +62,7 @@ function api.get_model_name(ip,passkey)
 end
 
 function api.get_apps(ip,passkey)
-  local success, response = api.send_lan_command(ip,'POST','sony/appControl',{method="getApplicationList",id=1,params={},version="1.0"},passkey or '')
+  local success, response = api.send_lan_command(ip,'POST','sony/appControl',{method="getApplicationList",id=1,params={{}},version="1.0"},passkey or '')
   if success then
     return response
   else

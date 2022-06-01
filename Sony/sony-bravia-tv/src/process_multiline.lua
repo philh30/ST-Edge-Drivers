@@ -12,7 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-local json = require('dkjson')
+local json = require('st.json')
 
 local function process_multiline(resp_array)
     local str = ''
