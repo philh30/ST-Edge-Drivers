@@ -23,8 +23,11 @@ local Battery = (require "st.zwave.CommandClass.Battery")({ version = 1 })
 local Notification = (require "st.zwave.CommandClass.Notification")({ version = 3 })
 --- @type st.zwave.CommandClass.SensorMultilevel
 local SensorMultilevel = (require "st.zwave.CommandClass.SensorMultilevel")({ version = 5 })
+--- @type st.zwave.CommandClass.WakeUp
+local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version = 1 })
 --- @type st.utils
 local utils = require "st.utils"
+local log = require "log"
 
 local ZOOZ_FINGERPRINTS = {
   { manufacturerId = 0x027A, productType = 0x2021, productId = 0x2101 }, -- Zooz 4-in-1 sensor
@@ -35,8 +38,8 @@ local ZOOZ_FINGERPRINTS = {
 
 --- Determine whether the passed device is zooz_4_in_1_sensor
 ---
---- @param driver Driver driver instance
---- @param device Device device isntance
+--- @param driver st.zwave.Driver
+--- @param device st.zwave.Device
 --- @return boolean true if the device proper, else false
 local function can_handle_zooz_sensor(opts, driver, device, ...)
   for _, fingerprint in ipairs(ZOOZ_FINGERPRINTS) do
@@ -116,8 +119,20 @@ local function sensor_multilevel_report_handler(self, device, cmd)
   end
 end
 
+--- Default handler polls on every wakeup - define a handler to save battery
+---
+--- @param self st.zwave.Driver
+--- @param device st.zwave.Device
+--- @param cmd st.zwave.CommandClass.SensorMultilevel.Report
+local function wakeup_notification(driver, device, cmd)
+  log.debug("WOKE UP")
+end
+
 local zooz_sensor = {
   zwave_handlers = {
+    [cc.WAKE_UP] = {
+        [WakeUp.NOTIFICATION] = wakeup_notification,
+    },
     [cc.NOTIFICATION] = {
       [Notification.REPORT] = notification_report_handler
     },
