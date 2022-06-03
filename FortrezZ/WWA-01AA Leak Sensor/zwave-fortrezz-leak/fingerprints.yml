@@ -1,0 +1,7 @@
+zwaveManufacturer:
+  - id: "FortrezZ"
+    deviceLabel: FortrezZ Temperature and Leak Sensor
+    manufacturerId: 0x0084
+    productType: 0x0053
+    productId: 0x0216
+    deviceProfileName: fortrezz-leak
