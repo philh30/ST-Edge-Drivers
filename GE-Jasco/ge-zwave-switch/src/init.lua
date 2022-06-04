@@ -191,6 +191,8 @@ local driver_template = {
     capabilities.refresh,
     capabilities.button,
     capabilities.motionSensor,
+    capabilities.energyMeter,
+    capabilities.powerMeter,
   },
   lifecycle_handlers = {
     infoChanged = info_changed,

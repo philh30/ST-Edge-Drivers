@@ -169,5 +169,10 @@ Fingerprint | Device | Profile
 0039/5044/3033 | Honeywell Smart Plug In Dimmer (39446 / ZW3107) | ge-plugdim-assoc
 0039/5044/3038 | Honeywell Smart Plug In Dimmer (39443 / ZW3104) | ge-plugdim-assoc
 
+### ***Direct-Wire Outdoor Switches***
+Fingerprint | Device | Profile
+--- | --- | ---
+0063/4F44/3032 | GE Direct-Wire Outdoor Switch (14285 / ZW4007) | ge-heavyswitch-scene
+
 ## Live Logging
 [Instructions](../LIVELOGGING.md)

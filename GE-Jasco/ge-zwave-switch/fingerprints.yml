@@ -257,6 +257,12 @@ zwaveManufacturer:
     productType: 0x4952
     productId: 0x3238
     deviceProfileName: ge-switch-scene
+  - id: "0063/4F44/3032"
+    deviceLabel: GE Direct-Wire Outdoor Switch 14285
+    manufacturerId: 0x0063
+    productType: 0x4F44
+    productId: 0x3032
+    deviceProfileName: ge-heavyswitch-scene
   - id: "0063/4F50/3031"
     deviceLabel: GE Plug In Switch 12720
     manufacturerId: 0x0063

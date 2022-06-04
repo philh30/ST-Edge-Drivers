@@ -33,6 +33,9 @@ local GE_BASIC = {
 
 local GE_SCENE = {
   PARAMETERS = {
+    powerReset      = {type = 'config', parameter_number = 1, size = 1},
+    energyMode      = {type = 'config', parameter_number = 2, size = 1},
+    energyFrequency = {type = 'config', parameter_number = 3, size = 1},
     ledIndicator    = {type = 'config', parameter_number = 3, size = 1},
     invertSwitch    = {type = 'config', parameter_number = 4, size = 1},
     dimRate         = {type = 'config', parameter_number = 6, size = 1},
@@ -194,6 +197,15 @@ local devices = {
     },
     PARAMETERS = GE_MOTION.PARAMETERS,
     BUTTONS = GE_MOTION.BUTTONS,
+  },
+  GE_HEAVYSWITCH_SCENE = {
+    MATCHING_MATRIX = {
+      mfrs = {0x0039, 0x0063},
+      product_types = {0x4F44},
+      product_ids = {0x3032},
+    },
+    PARAMETERS = GE_SCENE.PARAMETERS,
+    BUTTONS = GE_SCENE.BUTTONS,
   },
 }
 local preferences = {}

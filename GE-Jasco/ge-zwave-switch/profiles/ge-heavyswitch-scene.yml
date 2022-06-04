@@ -1,0 +1,78 @@
+name: ge-heavyswitch-scene
+components:
+- id: main
+  capabilities:
+  - id: switch
+    version: 1
+  - id: powerMeter
+    version: 1
+  - id: energyMeter
+    version: 1
+  - id: button
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: Switch
+metadata:
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch
+preferences:
+  - title: "Power Reset"
+    name: powerReset
+    description: "Product state after power reset"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Return to last state"
+        1: "Return to off"
+        2: "Return to on"
+      default: 0
+  - title: "Exclusion Sequence"
+    name: excludeProtect
+    description: "Never accidentally remove a device with alternate exclusion"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Press any button"
+        1: "Alternate (3 button presses)"
+      default: 0
+  - title: "Energy Report Mode"
+    name: energyMode
+    description: "Energy report mode"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Once monthly"
+        1: "Based on frequency setting"
+        2: "Once daily"
+      default: 0
+  - title: "Energy Report Frequency"
+    name: "energyFrequency"
+    description: "Frequency of energy reports in minutes (Energy Report Mode must be set to use the frequency setting)."
+    required: false
+    preferenceType: integer
+    definition:
+      minimum: 5
+      maximum: 60
+      default: 5
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with the switch load (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 3"
+    name: assocGroup3
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with switch double tap (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
