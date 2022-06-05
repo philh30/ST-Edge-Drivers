@@ -1,0 +1,81 @@
+name: zooz-zse41
+components:
+- id: main
+  capabilities:
+  - id: contactSensor
+    version: 1
+  - id: battery
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: ContactSensor
+  metadata:
+    deviceType: ContactSensor
+    ocfDeviceType: x.com.st.d.sensor.contact
+    deviceTypeId: ContactSensor
+preferences:
+  - name: "ledMode"
+    title: "LED Indicator"
+    description: "Turn the LED indicator for open/close status change on or off."
+    required: false
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Off"
+        1: "Blink"
+      default: 1
+  - name: "batteryReporting"
+    title: "Battery Reporting Threshold"
+    description: "Set the threshold for battery reporting (1-50%)."
+    required: false
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 50
+      default: 10
+  - name: "lowBatteryReporting"
+    title: "Low Battery Reporting Threshold"
+    description: "Decide when the sensor should report low battery to the hub (10-50%)."
+    required: false
+    preferenceType: integer
+    definition:
+      minimum: 10
+      maximum: 50
+      default: 20
+  - name: "statusReporting"
+    title: "Status Reporting"
+    description: "Decide which status the sensor should report to the hub when the magnet touches the sensor."
+    required: false
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Closed"
+        1: "Open"
+      default: 0
+  - name: "assocOnDelay"
+    title: "Group 2 Association - On Delay"
+    description: "Set the delay (in seconds) for the ON basic set command to be sent to the devices associated in Group 2 after the door is open."
+    required: false
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 3600
+      default: 0
+  - name: "assocOffDelay"
+    title: "Group 2 Association - Off Delay"
+    description: "Set the delay (in seconds) for the OFF basic set command to be sent to the devices associated in Group 2 after the door is closed."
+    required: false
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 3600
+      default: 0
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs. Sends On & Off commands to associated devices. 5 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

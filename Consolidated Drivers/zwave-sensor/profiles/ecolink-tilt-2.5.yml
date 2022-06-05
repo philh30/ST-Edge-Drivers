@@ -1,0 +1,47 @@
+name: ecolink-tilt-2.5
+components:
+- id: main
+  capabilities:
+  - id: contactSensor
+    version: 1
+  - id: battery
+    version: 1
+  - id: tamperAlert
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: ContactSensor
+  metadata:
+    deviceType: ContactSensor
+    ocfDeviceType: x.com.st.d.sensor.contact
+    deviceTypeId: ContactSensor
+preferences:
+  - name: "assocRestore"
+    title: "Basic Set - Close"
+    description: "Choose whether a Basic Set - Off should be sent to Assoc Group 2 when the sensor is closed."
+    required: false
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Do not send Basic Set when closed"
+        255: "Send Basic Set when closed"
+      default: 0
+  - name: "sensorBinary"
+    title: "Sensor Binary Reports"
+    description: "Choose whether Sensor Binary Reports should be sent to the controller."
+    required: false
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Send Sensor Binary and Notification"
+        255: "Send Notification Reports"
+      default: 0
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs. Sends On & Off commands to associated devices. 5 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

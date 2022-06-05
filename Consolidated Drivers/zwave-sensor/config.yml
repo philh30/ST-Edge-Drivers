@@ -1,0 +1,4 @@
+name: 'Z-Wave Sensor - philh30'
+packageKey: 'zwave-sensor-ph'
+permissions:
+  zwave: {}

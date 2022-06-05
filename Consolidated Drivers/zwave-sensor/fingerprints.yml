@@ -1,0 +1,96 @@
+zwaveManufacturer:
+#  - id: "Ecolink/0x0010"
+#    deviceLabel: Ecolink Water Leak Sensor
+#    manufacturerId: 0x014A
+#    productType: 0x0005
+#    productId: 0x0010
+#    deviceProfileName: water-battery-tempalarm
+#  - id: "zooz/4in1"
+#    deviceLabel: Zooz 4-in-1 sensor
+#    manufacturerId: 0x027A
+#    productType: 0x2021
+#    productId: 0x2101
+#    deviceProfileName: multi-functional-motion
+#  - id: 014A/0001/0002
+#    deviceLabel: Ecolink Open/Closed Sensor
+#    manufacturerId: 0x014A
+#    productType: 0x0001
+#    productId: 0x0002
+#    deviceProfileName: contact-battery-tamperalert
+#  - id: 014A/0001/0003
+#    deviceLabel: Ecolink Open/Closed Sensor
+#    manufacturerId: 0x014A
+#    productType: 0x0001
+#    productId: 0x0003
+#    deviceProfileName: contact-battery-tamperalert        
+  - id: 014A/0004/0003
+    deviceLabel: Ecolink Tilt Sensor v2.5
+    manufacturerId: 0x014A
+    productType: 0x0004
+    productId: 0x0003
+    deviceProfileName: ecolink-tilt-2.5
+#  - id: 014A/0004/0002
+#    deviceLabel: Ecolink Open/Closed Sensor
+#    manufacturerId: 0x014A
+#    productType: 0x0004
+#    productId: 0x0002
+#    deviceProfileName: contact-battery-tamperalert
+#  - id: 0084/0053/0216
+#    deviceLabel: FortrezZ Water Leak Sensor
+#    manufacturerId: 0x0084
+#    productType: 0x0053
+#    productId: 0x0216
+#    deviceProfileName: water-battery-temperature
+  - id: 027A/7000/E001
+    deviceLabel: Zooz ZSE41 XS Contact Sensor
+    manufacturerId: 0x027A
+    productType: 0x7000
+    productId: 0xE001
+    deviceProfileName: zooz-zse41
+  - id: "zooz/4in1"
+    deviceLabel: Zooz 4-in-1 sensor
+    manufacturerId: 0x027A
+    productType: 0x2021
+    productId: 0x2101
+    deviceProfileName: zooz-4-in-1-sensor
+  - id: "zooz/q-eu"
+    deviceLabel: Zooz Q sensor
+    manufacturerId: 0x027A
+    productType: 0x0200
+    productId: 0x0006
+    deviceProfileName: zooz-q-sensor
+  - id: "zooz/q-us"
+    deviceLabel: Zooz Q sensor
+    manufacturerId: 0x027A
+    productType: 0x0201
+    productId: 0x0006
+    deviceProfileName: zooz-q-sensor
+  - id: "zooz/q-au"
+    deviceLabel: Zooz Q sensor
+    manufacturerId: 0x027A
+    productType: 0x0202
+    productId: 0x0006
+    deviceProfileName: zooz-q-sensor
+  - id: "0084/0053/0216"
+    deviceLabel: FortrezZ Temperature and Leak Sensor
+    manufacturerId: 0x0084
+    productType: 0x0053
+    productId: 0x0216
+    deviceProfileName: fortrezz-leak
+zwaveGeneric:
+  - id: "GenericSensorAlarm"
+    deviceLabel: Z-Wave Sensor
+    genericType: 0xA1 # GENERIC_TYPE_SENSOR_ALARM
+    deviceProfileName: generic-sensor
+  - id: "GenericSensorMultilevel"
+    deviceLabel: Z-Wave Sensor
+    genericType: 0x21 # GENERIC_TYPE_SENSOR_MULTILEVEL
+    deviceProfileName: generic-sensor
+  - id: "GenericSensorBinary"
+    deviceLabel: Z-Wave Sensor
+    genericType: 0x20 # GENERIC_TYPE_SENSOR_BINARY
+    deviceProfileName: generic-sensor
+  - id: "GenericSensorNotification"
+    deviceLabel: Z-Wave Sensor
+    genericType: 0x07 # GENERIC_TYPE_SENSOR_NOTIFICATION
+    deviceProfileName: generic-sensor
