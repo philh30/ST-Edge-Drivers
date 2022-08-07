@@ -89,7 +89,6 @@ local devices = {
     PARAMETERS = GE_BASIC.PARAMETERS,
     BUTTONS = GE_BASIC.BUTTONS,
   },
-  
   GE_DIMMER_BASIC = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
@@ -166,7 +165,7 @@ local devices = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
       product_types = {0x4952},
-      product_ids = {0x3233,0x3235},
+      product_ids = {0x3233,0x3234,0x3235},
     },
     PARAMETERS = GE_SCENE.PARAMETERS,
     BUTTONS = GE_SCENE.BUTTONS,

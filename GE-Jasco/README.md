@@ -136,6 +136,7 @@ Fingerprint | Device | Profile
 0063/4952/3133 | GE Smart Outlet (14288 / ZW1002) | ge-outlet-assoc
 0063/4952/3134 | GE Smart Outlet (14288 / ZW1002) | ge-outlet-assoc
 0063/4952/3233 | GE Smart Outlet (???) | ge-outlet-scene
+0063/4952/3234 | GE Smart Outlet (55256 / ZW1002) | ge-outlet-scene
 0063/4952/3235 | GE Smart Outlet (55257 / ZW1002) | ge-outlet-scene
 0063/5252/3530 | GE Smart Outlet (45636 / ZW1001) | ge-outlet-legacy
 0039/4952/3133 | Honeywell Smart Outlet (39456 / ZW1002) | ge-outlet-assoc
