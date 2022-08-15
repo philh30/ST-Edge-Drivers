@@ -1,6 +1,4 @@
 # SmartThings Edge Drivers
-As of February 2022, the entire Edge platform is in Beta.
-
 Channel invitations are available in the linked SmartThings Community topics. Drivers that lack a SmartThings Community topic have not been shared to a publicly-available channel.
 
 ## FortrezZ
@@ -71,7 +69,7 @@ Driver to connect to a SmartThings Node Proxy server that monitors a chlorine ge
 
 ## Sony
 
-### Sonyy Bravia TVs
+### Sony Bravia TVs
 Connection to Sony Bravia TVs using Simple IP Control.
 - [SmartThings Community topic](https://community.smartthings.com/t/st-edge-sony-bravia-tvs/240685)
 - [Installation instructions](/Sony/README.md)
@@ -89,6 +87,10 @@ Zooz drivers developed for my own use and shared in case anyone finds them usefu
 ### ZEN32 Scene Controller
 Supports all button scenes except *released* (ST limitation), supports setting all configuration options and association groups, and exposes indicator light configuration to automations.
 - [Driver folder](/Zooz/zen32)
+
+### ZEN51 Dry Contact Relay
+Includes options to represent the relay as a switch, smoke detector, carbon monoxide detector, or both smoke and carbon monoxide detector.
+- [Driver folder](/Zooz/zen51)
 
 ### Zooz Sensors
 Supports the ZSE11 Q Sensor and ZSE40 4-in-1 Sensor.
