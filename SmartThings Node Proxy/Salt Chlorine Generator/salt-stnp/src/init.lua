@@ -39,7 +39,7 @@ local driver = Driver('salt', {
       lifecycle_handlers = lifecycles,
       capability_handlers = {
           [caps.refresh.ID] = {
-              [caps.refresh.commands.refresh.NAME] = lifecycles.init
+              [caps.refresh.commands.refresh.NAME] = lifecycles.do_refresh
           },
       },
     }

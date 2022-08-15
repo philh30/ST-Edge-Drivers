@@ -1,5 +1,5 @@
 local lux = require('luxure')
-local cosock = require('cosock.socket')
+local cosock = require('cosock')
 local json = require('st.json')
 local log = require('log')
 local commands = require('commands')
@@ -18,11 +18,13 @@ end
 
 function hub_server.start(driver, device)
   log.debug ('Starting server......')
-  local server = lux.Server.new_with(cosock.tcp(), {env='debug'})
+  local server = lux.Server.new_with(cosock.socket.tcp(), {env='debug'})
 
-  -- Register server
-  driver:register_channel_handler(server.sock, function ()
-    server:tick()
+  server:listen()
+  cosock.spawn(function()
+    while true do
+        server:tick(print)
+    end
   end)
 
   -- Endpoint
@@ -38,7 +40,7 @@ function hub_server.start(driver, device)
     end
     res:send('HTTP/1.1 200 OK')
   end)
-  server:listen()
+
   driver.server = server
 end
 

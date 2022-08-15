@@ -94,6 +94,22 @@ function lifecycle_handler.init(driver, device)
   TIMERS.OFFLINE = driver:call_with_delay(60, commands.set_offline, 'Offline timer')
 end
 
+function lifecycle_handler.do_refresh(driver, device)
+  local serverRunning = false
+  if driver.server then
+    if driver.server.sock then
+      serverRunning=true
+    end
+  end
+  if not serverRunning then server.start(driver, device) end
+  if initconfig(device) then commands.subscribe(driver,device) end
+  if TIMERS.OFFLINE then
+    driver:cancel_timer(TIMERS.OFFLINE)
+    TIMERS.OFFLINE = nil
+  end
+  TIMERS.OFFLINE = driver:call_with_delay(60, commands.set_offline, 'Offline timer')
+end
+
 function lifecycle_handler.added(driver, device)
   log.info(device.id .. ": " .. device.device_network_id .. " > ADDED")
   log.debug ('added lifecycle event')
