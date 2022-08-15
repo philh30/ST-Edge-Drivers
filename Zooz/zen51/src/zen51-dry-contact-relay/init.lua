@@ -71,14 +71,6 @@ end
 --- @param device st.zwave.Device
 local function switch_binary_report(driver,device,cmd)
     local event
-    if device:supports_capability_by_id('platinummassive43262.smokeZone') then
-        if cmd.args.value == SwitchBinary.value.OFF_DISABLE then
-            event = capabilities['platinummassive43262.smokeZone'].smokeZone.clear()
-        else
-            event = capabilities['platinummassive43262.smokeZone'].smokeZone.detected()
-        end
-        device:emit_event(event)
-    end
     if device:supports_capability_by_id('smokeDetector') then
         if cmd.args.value == SwitchBinary.value.OFF_DISABLE then
             event = capabilities.smokeDetector.smoke.clear()

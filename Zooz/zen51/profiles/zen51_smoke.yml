@@ -2,8 +2,6 @@ name: zen51_smoke
 components:
   - id: main
     capabilities:
-      - id: platinummassive43262.smokeZone
-        version: 1
       - id: smokeDetector
         version: 1
       - id: refresh
