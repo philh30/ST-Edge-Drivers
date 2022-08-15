@@ -8,12 +8,8 @@ To view live logging for Edge drivers, you must use the SmartThings Command Line
 ```
 smartthings devices
 ```
-4. After authenticating the CLI, find the Driver ID for this driver by running:
-```
-smartthings edge:drivers:installed
-```
-5. Start live logging by running the command below, entering the IP address of your ST Hub in place of \<HubIP>:
+4. After authenticating the CLI, start live logging by running the command below, entering the IP address of your ST Hub in place of \<HubIP>:
 ```
 smartthings edge:drivers:logcat --hub-address <HubIP>
 ```
-6. Choose the driver to log from the menu and hit Enter, or hit Enter with no selection to log all drivers.
+5. Choose the driver to log from the menu and hit Enter, or hit Enter with no selection to log all drivers.
