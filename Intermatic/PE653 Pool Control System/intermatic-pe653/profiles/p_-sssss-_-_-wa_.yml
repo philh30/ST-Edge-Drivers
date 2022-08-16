@@ -87,8 +87,8 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
-        p_sssss__was: "P_-SSSSS-_-_-WAS"
-      default: p_sssss__was
+        p_sssss__wa_: "P_-SSSSS-_-_-WA_"
+      default: p_sssss__wa_
   - title: "Time Zone (offset from UTC)"
     name: timezoneUTC
     description: "Enter the local time zone offset from UTC (-12 to +14 hours)"
