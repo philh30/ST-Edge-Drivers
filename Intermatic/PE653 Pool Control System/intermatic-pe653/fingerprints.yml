@@ -5,3 +5,17 @@ zwaveManufacturer:
     productType: 0x5045
     productId: 0x0653
     deviceProfileName: configuration-mode
+zwaveGeneric:
+  - id: "Intermatic PE653 - Generic"
+    deviceLabel: Intermatic PE653 Pool Control System
+    commandClasses:
+      supported:
+        - 0x31 # sensor multilevel
+        - 0x43 # thermostat setpoint
+        - 0x60 # multi channel cmd encap
+        - 0x70 # configuration
+        - 0x72 # manufacturer specific
+        - 0x85 # association
+        - 0x86 # version
+        - 0x91 # manufacturer proprietary
+    deviceProfileName: configuration-mode
