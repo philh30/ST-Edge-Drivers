@@ -1,0 +1,7 @@
+zwaveManufacturer:
+  - id: "031E/000E/0001"
+    deviceLabel: Inovelli LZW36 Fan + Light
+    manufacturerId: 0x031E
+    productType: 0x000E
+    productId: 0x0001
+    deviceProfileName: inovelli-lzw36

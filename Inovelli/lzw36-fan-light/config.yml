@@ -1,0 +1,4 @@
+name: 'Inovelli LZW36 Fan Light'
+packageKey: 'lzw36-fan-light'
+permissions:
+  zwave: {}

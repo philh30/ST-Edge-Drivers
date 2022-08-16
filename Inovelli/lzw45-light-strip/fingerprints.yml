@@ -1,0 +1,7 @@
+zwaveManufacturer:
+  - id: "031E/000A/0001"
+    deviceLabel: Inovelli LZW45 Light Strip
+    manufacturerId: 0x031E
+    productType: 0x000A
+    productId: 0x0001
+    deviceProfileName: inovelli-lzw45

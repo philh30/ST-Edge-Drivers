@@ -1,0 +1,209 @@
+name: inovelli-lzw45
+components:
+  - id: main
+    label: Main
+    capabilities:
+      - id: switch
+        version: 1
+      - id: switchLevel
+        version: 1
+      - id: colorControl
+        version: 1
+      - id: colorTemperature
+        version: 1
+      - id: powerMeter
+        version: 1
+      - id: energyMeter
+        version: 1
+      - id: button
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: Switch
+  - id: quickEffect
+    label: Quick Effect
+    capabilities:
+      - id: switch
+        version: 1
+      - id: platinummassive43262.inovelliQuickEffectTest
+        version: 1
+      - id: switchLevel
+        version: 1
+      - id: colorControl
+        version: 1
+      - id: colorTemperature
+        version: 1
+    categories:
+      - name: Switch
+  - id: pixelEffect
+    label: Pixel Effect
+    capabilities:
+      - id: switch
+        version: 1
+      - id: switchLevel
+        version: 1
+      - id: platinummassive43262.inovelliPixelEffectTest3
+        version: 1
+    categories:
+      - name: Switch
+metadata:
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch
+  #vid: 36202cb9-262e-3903-a48d-2f595e2b223c
+  #mnmn: SmartThingsCommunity
+preferences:
+  - title: "# of Pixels"
+    name: parameter001
+    description: "When individually addressable LEDs are used, this parameter tells the controller the number of pixels that are attached. \n·0 - Automatic recognition of pixels\n1..130 - Set the fixed value of the pixel bit."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 130
+      default: 0
+  - title: "Dimming Speed"
+    name: parameter002
+    description: "This changes the speed in which the light strip dims up or down. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed.\n\n0 - Instant\n1 - Fast\n..\n..\n98 - Slow"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 98
+      default: 3
+  - title: "Ramp Rate"
+    name: parameter003
+    description: "This changes the speed in which the light strip turns on or off.\n\n0 - Instant\n1 - Fast\n..\n98 - Slow\n99 - Keep in sync with parameter 2"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 99
+      default: 99
+  - title: "Minimum Level"
+    name: parameter004
+    description: "The minimum level that the strip can be dimmed to. Useful when the user has an LED strip that does not turn on or flickers at a lower level."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 45
+      default: 1
+  - title: "Maximum Level"
+    name: parameter005
+    description: "The maximum level that the strip can be dimmed to. Useful when the user has an LED strip that reaches its maximum level before the dimmer value of 99."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 55
+      maximum: 99
+      default: 99
+  - title: "Auto Off Timer"
+    name: parameter006
+    description: "Automatically turns the strip off after this many seconds. When the strip is turned on a timer is started that is the duration of this setting. When the timer expires, the strip is turned off.\n0 - Auto off is disabled"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 32767
+      default: 0
+  - title: "Default Level (Local)"
+    name: parameter007
+    description: "Default level for the strip when it is powered on from the local switch. A setting of 0 means that the switch will return to the level that it was on before it was turned off.\n0 - Previous"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 99
+      default: 0
+  - title: "Default Level (Z-Wave)"
+    name: parameter008
+    description: "Default level for the dimmer when it is powered on from a Z-Wave command (i.e. BasicSet(0xFF). A setting of 0 means that the switch will return to the level that it was on before it was turned off.\n0 - Previous"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 99
+      default: 0
+  - title: "Default Color"
+    name: parameter009
+    description: "Byte(3-2): Values between 2700-6500 represent a color temperature. Byte(1-0): Values between 0-361, represent the color on the Hue color wheel. The value of 361 represents a random color."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 6500
+      default: 2700
+  - title: "State After Power Restored"
+    name: parameter010
+    description: "The state the switch should return to once power is restored after power failure."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Off"
+        1: "Default Color / Level (Parameter 9)"
+        2: "Previous"
+      default: 2
+  - title: "Active Power Reports"
+    name: parameter017
+    description: "The power level change that will result in a new power report being sent. The value is a percentage of the previous report. \n0 = disabled."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 100
+      default: 10
+  - title: "Periodic Power & Energy Reports"
+    name: parameter018
+    description: "Time period between consecutive power & energy reports being sent (in seconds). The timer is reset after each report is sent."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 32767
+      default: 3600
+  - title: "Active Energy Reports"
+    name: parameter019
+    description: "Energy reports Energy level change which will result in sending a new energy report. Available settings: 0 - energy reports disabled | 1-127 (0.01-1.27 kWh) - report triggering threshold Default setting: 10 (0.1 kWh)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 100
+      default: 10
+  - title: "Disable Physical On/Off Delay"
+    name: parameter051
+    description: "The 700ms delay that occurs after pressing the physical button to turn the switch on/off is removed. Consequently this also removes the following scenes: 2x, 3x, 4x, 5x tap. Still working are the 1x tap, held, released, and the level up/down scenes. (firmware 1.36+)"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Yes"
+        1: "No (Default)"
+      default: 1
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs. Sends On & Off commands to associated devices. 5 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 3"
+    name: assocGroup3
+    description: "Enter a comma delimited list of hex IDs. Sends set level commands to associated devices when the up/down button is pressed. 5 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 4"
+    name: assocGroup4
+    description: "Enter a comma delimited list of hex IDs. Sends start / stop level change to associated devices. 5 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

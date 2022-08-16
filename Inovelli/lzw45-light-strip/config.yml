@@ -1,0 +1,4 @@
+name: 'Inovelli LZW45 Light Strip'
+packageKey: 'lzw-45-light-strip'
+permissions:
+  zwave: {}
