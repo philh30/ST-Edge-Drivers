@@ -1,4 +1,4 @@
-name: ps-sss__-_-h-was
+name: p_-ssss_-_-h-wa_
 components:
 - id: main
   label: Pool
@@ -14,15 +14,6 @@ components:
   - id: thermostatHeatingSetpoint
     version: 1
   - id: refresh
-    version: 1
-  categories:
-  - name: WaterValve
-- id: spa
-  label: Spa
-  capabilities:
-  - id: switch
-    version: 1
-  - id: thermostatHeatingSetpoint
     version: 1
   categories:
   - name: WaterValve
@@ -47,15 +38,15 @@ components:
     version: 1
   categories:
   - name: Switch
-- id: air
-  label: Air
+- id: circuit4
+  label: Circuit 4
   capabilities:
-  - id: temperatureMeasurement
+  - id: switch
     version: 1
   categories:
-  - name: Thermostat
-- id: solar
-  label: Solar
+  - name: Switch
+- id: air
+  label: Air
   capabilities:
   - id: temperatureMeasurement
     version: 1
@@ -76,7 +67,7 @@ metadata:
   deviceType: WaterValve
   ocfDeviceType: oic.d.watervalve
   deviceTypeId: WaterValve
-  vid: 6a6ce918-d914-3004-98a2-ac752433f9a5
+  vid: cbeca0bd-6767-34fb-9545-6282a2ed1d1a
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Mode"
@@ -96,8 +87,8 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
-        pssss___hwas: "PS-SSS__-_-H-WAS"
-      default: pssss___hwas
+        psssss__hwas: "P_-SSSS_-_-H-WAS"
+      default: psssss__hwas
   - title: "Time Zone (offset from UTC)"
     name: timezoneUTC
     description: "Enter the local time zone offset from UTC (-12 to +14 hours)"

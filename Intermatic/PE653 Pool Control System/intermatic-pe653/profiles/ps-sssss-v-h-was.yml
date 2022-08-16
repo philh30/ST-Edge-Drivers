@@ -94,7 +94,7 @@ metadata:
   deviceType: WaterValve
   ocfDeviceType: oic.d.watervalve
   deviceTypeId: WaterValve
-  vid: c1260c40-b29c-3b99-83db-5f233c07575b
+  vid: 8feadf1a-0131-3cf1-8899-f06ecb918d63
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Mode"

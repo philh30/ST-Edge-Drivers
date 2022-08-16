@@ -95,7 +95,9 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
+        p_ssss__hwa_: "P_-SSSS_-_-H-WA_"
         p_ssss__hwas: "P_-SSSS_-_-H-WAS"
+        p_sssss__wa_: "P_-SSSSS-_-_-WA_"
         p_sssss__was: "P_-SSSSS-_-_-WAS"
         pssss___hwas: "PS-SSS__-_-H-WAS"
         pssss__vhwas: "PS-SSS__-V-H-WAS"
