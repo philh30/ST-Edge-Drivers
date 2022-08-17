@@ -5,7 +5,7 @@ Channel invitations are available in the linked SmartThings Community topics. Dr
 
 ## Z-Wave Masquerade
 
-Allows simple z-wave devices, such as switches and binary sensors, to act as a different type of device. As an example, an Ecolink contact sensor that is set to use its external contacts to monitor a smoke detector relay could be reflected in the SmartThings app as a smoke detector.
+Allows simple z-wave devices, such as switches and binary sensors, to act as a different type of device. As an example, an z-wave contact sensor with external contacts that is set up to monitor a smoke detector relay could be reflected in the SmartThings app as a smoke detector.
 - [SmartThings Community topic]()
 - [Driver folder](/Consolidated%20Drivers/zwave-masquerade)
 

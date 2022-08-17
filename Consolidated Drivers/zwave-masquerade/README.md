@@ -2,7 +2,7 @@
 
 Allows simple z-wave devices, such as switches and binary sensors, to act as a different type of device. As an example, an z-wave contact sensor with external contacts that is set up to monitor a smoke detector relay could be reflected in the SmartThings app as a smoke detector.
 
-More complex z-wave devices that report multiple different 
+More complex z-wave devices that report multiple different attributes may give unexpected results with this driver.
 
 ## Settings
 - **Choose Profile** - Select the profile to be used (e.g. Contact Sensor, Smoke Detector). After changing this setting, you may need to do some combination of exiting back to the dashboard, closing the app, force closing the app, or clearing app cache in order for the profile change to be displayed in the app. The Battery capability will automatically be added if the device supports the Battery z-wave command class.
