@@ -1,6 +1,15 @@
 # SmartThings Edge Drivers
 Channel invitations are available in the linked SmartThings Community topics. Drivers that lack a SmartThings Community topic have not been shared to a publicly-available channel.
 
+# Consolidated Drivers
+
+## Z-Wave Masquerade
+
+Allows simple z-wave devices, such as switches and binary sensors, to act as a different type of device. As an example, an Ecolink contact sensor that is set to use its external contacts to monitor a smoke detector relay could be reflected in the SmartThings app as a smoke detector.
+- [SmartThings Community topic]()
+- [Driver folder](/Consolidated%20Drivers/zwave-masquerade)
+
+# Manufacturer-Specific Drivers
 ## FortrezZ
 
 ### Leak Sensor (WWA-01AA)
