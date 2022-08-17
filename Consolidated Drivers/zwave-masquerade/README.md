@@ -1,6 +1,6 @@
 # Z-Wave Masquerade
 
-Allows simple z-wave devices, such as switches and binary sensors, to act as a different type of device. As an example, an z-wave contact sensor with external contacts that is set up to monitor a smoke detector relay could be reflected in the SmartThings app as a smoke detector.
+Allows simple z-wave devices, such as switches and binary sensors, to act as a different type of device. As an example, a z-wave contact sensor with external contacts that is set up to monitor a smoke detector relay could be reflected in the SmartThings app as a smoke detector.
 
 More complex z-wave devices that report multiple different attributes may give unexpected results with this driver.
 
