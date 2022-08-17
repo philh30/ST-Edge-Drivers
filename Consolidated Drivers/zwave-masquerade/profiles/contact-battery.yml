@@ -1,0 +1,39 @@
+name: contact-battery
+components:
+- id: main
+  capabilities:
+  - id: contactSensor
+    version: 1
+  - id: battery
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: ContactSensor
+metadata:
+  deviceType: ContactSensor
+  ocfDeviceType: x.com.st.d.sensor.contact
+  deviceTypeId: ContactSensor
+preferences:
+  - name: "chooseProfile"
+    title: "Choose Profile"
+    description: "Choose profile"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options: {
+        "carbonmonoxide":"Carbon Monoxide",
+        "contact":"Contact",
+        "leak":"Leak",
+        "motion":"Motion",
+        "smoke":"Smoke",
+        "waterlevel":"Water Level",
+        }
+      default: "contact"
+  - name: "invertStatus"
+    title: "Invert Status"
+    description: "Invert status"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false

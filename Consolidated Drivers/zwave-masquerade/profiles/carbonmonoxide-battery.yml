@@ -1,0 +1,39 @@
+name: carbonmonoxide-battery
+components:
+- id: main
+  capabilities:
+  - id: carbonMonoxideDetector
+    version: 1
+  - id: battery
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+    - name: SmokeDetector
+metadata:
+  deviceType: SmokeDetector
+  ocfDeviceType: x.com.st.d.sensor.smoke
+  deviceTypeId: SmokeDetector
+preferences:
+  - name: "chooseProfile"
+    title: "Choose Profile"
+    description: "Choose profile"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options: {
+        "carbonmonoxide":"Carbon Monoxide",
+        "contact":"Contact",
+        "leak":"Leak",
+        "motion":"Motion",
+        "smoke":"Smoke",
+        "waterlevel":"Water Level",
+        }
+      default: "carbonmonoxide"
+  - name: "invertStatus"
+    title: "Invert Status"
+    description: "Invert status"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false

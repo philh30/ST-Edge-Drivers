@@ -1,0 +1,43 @@
+zwaveGeneric:
+  - id: "Battery"
+    deviceLabel: Z-wave Maquerade
+    commandClasses:
+      supported:
+        - 0x80 # basic
+    deviceProfileName: contact-battery
+  - id: "Basic"
+    deviceLabel: Z-wave Maquerade
+    commandClasses:
+      supported:
+        - 0x20 # basic
+    deviceProfileName: contact
+  - id: "SwitchBinary"
+    deviceLabel: Z-wave Maquerade
+    commandClasses:
+      supported:
+        - 0x25 # switch binary
+    deviceProfileName: contact
+  - id: "SensorBinary"
+    deviceLabel: Z-wave Maquerade
+    commandClasses:
+      supported:
+        - 0x30 # sensor binary
+    deviceProfileName: contact
+  - id: "SwitchMultilevel"
+    deviceLabel: Z-wave Maquerade
+    commandClasses:
+      supported:
+        - 0x26 # switch multilevel
+    deviceProfileName: contact
+  - id: "SensorAlarm"
+    deviceLabel: Z-wave Maquerade
+    commandClasses:
+      supported:
+        - 0x9C # sensor alarm
+    deviceProfileName: contact
+  - id: "Notification"
+    deviceLabel: Z-wave Maquerade
+    commandClasses:
+      supported:
+        - 0x71 # notification
+    deviceProfileName: contact

@@ -1,0 +1,63 @@
+name: waterlevel-battery
+components:
+- id: main
+  capabilities:
+  - id: platinummassive43262.waterLevel
+    version: 1
+  - id: battery
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+    - name: LeakSensor
+metadata:
+  deviceType: LeakSensor
+  ocfDeviceType: x.com.st.d.sensor.moisture
+  deviceTypeId: LeakSensor
+preferences:
+  - name: "chooseProfile"
+    title: "Choose Profile"
+    description: "Choose profile"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options: {
+        "carbonmonoxide":"Carbon Monoxide",
+        "contact":"Contact",
+        "leak":"Leak",
+        "motion":"Motion",
+        "smoke":"Smoke",
+        "waterlevel":"Water Level",
+        }
+      default: "waterlevel"
+  - name: "invertStatus"
+    title: "Invert Status"
+    description: "Invert status"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
+  - name: "waterLevel1"
+    title: "State 1"
+    description: "Choose first state"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options: {
+        "low":"Low",
+        "normal":"Normal",
+        "high":"High",
+        }
+      default: "normal"
+  - name: "waterLevel2"
+    title: "State 2"
+    description: "Choose second state"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options: {
+        "low":"Low",
+        "normal":"Normal",
+        "high":"High",
+        }
+      default: "high"

@@ -1,0 +1,4 @@
+name: 'Z-Wave Masquerade'
+packageKey: 'zwave-masquerade'
+permissions:
+  zwave: {}
