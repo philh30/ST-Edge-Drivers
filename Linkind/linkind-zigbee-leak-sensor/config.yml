@@ -1,0 +1,4 @@
+name: 'Linkind Zigbee Leak Sensor'
+packageKey: 'linkind-zigbee-leak-sensor'
+permissions:
+  zigbee: {}

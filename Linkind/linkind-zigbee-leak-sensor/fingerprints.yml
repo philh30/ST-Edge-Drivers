@@ -1,0 +1,6 @@
+zigbeeManufacturer:
+  - id: "Linkind/Water/1"
+    deviceLabel: Linkind Water Leak Sensor
+    manufacturer: LK
+    model: A001082
+    deviceProfileName: water-battery-voltage
