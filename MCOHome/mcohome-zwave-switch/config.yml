@@ -1,0 +1,5 @@
+name: 'MCOHome Z-Wave Switch'
+packageKey: 'mcohome-zwave-switch'
+description: 'Supports MH-S312 and MH-S314'
+permissions:
+  zwave: {}

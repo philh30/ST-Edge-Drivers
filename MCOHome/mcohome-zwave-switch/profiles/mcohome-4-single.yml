@@ -1,0 +1,111 @@
+name: mcohome_4_single
+components:
+  - id: main
+    capabilities:
+      - id: switch
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: Switch
+  - id: switch1
+    label: Switch 1
+    capabilities:
+      - id: switch
+        version: 1
+    categories:
+      - name: Switch
+  - id: switch2
+    label: Switch 2
+    capabilities:
+      - id: switch
+        version: 1
+    categories:
+      - name: Switch
+  - id: switch3
+    label: Switch 3
+    capabilities:
+      - id: switch
+        version: 1
+    categories:
+      - name: Switch
+  - id: switch4
+    label: Switch 4
+    capabilities:
+      - id: switch
+        version: 1
+    categories:
+      - name: Switch
+  - id: deviceInfo
+    label: Device Details
+    capabilities:
+      - id: platinummassive43262.deviceInformation
+        version: 1
+    categories:
+      - name: Switch
+metadata:
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch
+preferences:
+  - title: "Choose Profile"
+    name: chooseProfile
+    description: "Choose profile to use for this device"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        mcohome_4_single: "Single tile on dashboard"
+        mcohome_4_multi: "Multiple tiles on dashboard"
+      default: mcohome_4_single
+  - title: "Main Switch Behavior"
+    name: mainSwitch
+    description: "Choose how many switches must be turned on for main switch to show as on"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "ON when one switch is on"
+        1: "ON when all switches are on"
+      default: 0
+  - title: "Polling Interval"
+    name: pollingInterval
+    description: "Set the interval in minutes to poll the device (not necessary unless device repeatedly shows as disconnected); 0 = disable polling."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 1440
+      default: 0
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with switch 1 (5 node max). Use 'Node:Endpoint' format to specify an endpoint."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 5"
+    name: assocGroup5
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with switch 2 (5 node max). Use 'Node:Endpoint' format to specify an endpoint."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 8"
+    name: assocGroup8
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with switch 3 (5 node max). Use 'Node:Endpoint' format to specify an endpoint."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 11"
+    name: assocGroup11
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with switch 4 (5 node max). Use 'Node:Endpoint' format to specify an endpoint."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

@@ -1,0 +1,19 @@
+zwaveManufacturer:
+  - id: 015F/3141/1302
+    deviceLabel: MCOHome MH-S314
+    manufacturerId: 0x015F
+    productType: 0x3141
+    productId: 0x1302
+    deviceProfileName: mcohome_4_legacy_multi
+  - id: 015F/3121/1302
+    deviceLabel: MCOHome MH-S312
+    manufacturerId: 0x015F
+    productType: 0x3121
+    productId: 0x1302
+    deviceProfileName: mcohome_2_legacy_multi
+  - id: 015F/3141/5102
+    deviceLabel: MCOHome MH-S314
+    manufacturerId: 0x015F
+    productType: 0x3141
+    productId: 0x5102
+    deviceProfileName: mcohome_4_multi
