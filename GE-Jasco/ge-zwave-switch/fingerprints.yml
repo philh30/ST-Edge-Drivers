@@ -450,7 +450,7 @@ zwaveManufacturer:
     productId: 0x3033
     deviceProfileName: ge-plugin-assoc
   - id: "0039/5052/3038"
-    deviceLabel: HoneywellGE Plug In Switch 39444
+    deviceLabel: Honeywell Plug In Switch 39444
     manufacturerId: 0x0039
     productType: 0x5052
     productId: 0x3038
