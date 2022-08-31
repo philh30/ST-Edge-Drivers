@@ -113,7 +113,7 @@ local set_up_polling = function(self, device)
   local timer
   local do_poll = function()
     log.trace(string.format('POLLING %s every %s minutes',device.device_network_id,poll_interval))
-    device:send(SwitchBinary:Get({}))
+    device:send_to_component(SwitchBinary:Get({}),'switch1')
   end
   if IS_POLLING[device.device_network_id] then
     if poll_interval ~= IS_POLLING[device.device_network_id].interval then
@@ -216,7 +216,7 @@ local function main_switch_status(driver,device)
             end
         end
     end
-    if device.preferences.mainSwitch == 0 then
+    if device.preferences.mainSwitch == '0' then
         if switch_state.on > 0 then
             device:emit_event(capabilities.switch.switch.on())
         else
@@ -270,17 +270,17 @@ end
 --- @param value number st.zwave.CommandClass.SwitchBinary.value.OFF_DISABLE or st.zwave.CommandClass.SwitchBinary.value.ON_ENABLE
 --- @param command table The capability command table
 local function switch_set_helper(driver, device, value, command)
-    local set
-    local get
-    local delay = constants.DEFAULT_GET_STATUS_DELAY
+  local set
+  local get
+  local delay = constants.DEFAULT_GET_STATUS_DELAY
 
-    set = SwitchBinary:Set({ target_value = value, duration = 0 })
-    get = SwitchBinary:Get({})
-    device:send_to_component(set, command.component)
-    local query_device = function()
-        device:send_to_component(get, command.component)
-    end
-    device.thread:call_with_delay(delay, query_device)
+  set = SwitchBinary:Set({ target_value = value, duration = 0 })
+  get = SwitchBinary:Get({})
+  device:send_to_component(set, command.component)
+  local query_device = function()
+    device:send_to_component(get, command.component)
+  end
+  device.thread:call_with_delay(delay, query_device)
 end
 
 --- Issue a switch-on command to the specified device.
@@ -289,23 +289,33 @@ end
 --- @param device st.zwave.Device
 --- @param command table The capability command table
 local function on_handler(driver, device, command)
-    if command.component == 'main' then
-        local bitmask = 3
-        local switchall_cmd = 2
-        for _, fingerprint in ipairs(MCOHOME_FINGERPRINT) do
-            if device:id_match(fingerprint.mfr, fingerprint.prod, fingerprint.model) then
-                switchall_cmd = fingerprint.switchall
-            end
-        end
-        if device.profile.components.switch4 ~= nil then bitmask = 15 end
-        if switchall_cmd == 1 then
-            device:send(MultiChannel:CmdEncap({ source_end_point=0, res=false, destination_end_point=bitmask, bit_address=true, command_class=cc.SWITCH_BINARY, command=SwitchBinary.SET, parameter='\xFF'}))
-        else
-            device:send(SwitchAll:On({}))
-        end
-    else
-        switch_set_helper(driver, device, SwitchBinary.value.ON_ENABLE, command)
+  local delay = constants.DEFAULT_GET_STATUS_DELAY
+  if command.component == 'main' then
+    local bitmask = 3
+    local switchall_cmd = 2
+    for _, fingerprint in ipairs(MCOHOME_FINGERPRINT) do
+      if device:id_match(fingerprint.mfr, fingerprint.prod, fingerprint.model) then
+        switchall_cmd = fingerprint.switchall
+      end
     end
+    if device.profile.components.switch4 ~= nil then bitmask = 15 end
+    if switchall_cmd == 1 then
+      device:send(MultiChannel:CmdEncap({ source_end_point=0, res=false, destination_end_point=bitmask, bit_address=true, command_class=cc.SWITCH_BINARY, command=SwitchBinary.SET, parameter='\xFF'}))
+    else
+      device:send(SwitchAll:On({}))
+    end
+    local query_device = function()
+      local get = SwitchBinary:Get({})
+      for _, comp in pairs(device.profile.components) do
+        if comp.id:match("switch(%d)") then
+          device:send_to_component(get, comp.id)
+        end
+      end
+    end
+    device.thread:call_with_delay(delay, query_device)
+  else
+    switch_set_helper(driver, device, SwitchBinary.value.ON_ENABLE, command)
+  end
 end
 
 --- Issue a switch-off command to the specified device.
@@ -314,23 +324,33 @@ end
 --- @param device st.zwave.Device
 --- @param command table The capability command table
 local function off_handler(driver, device, command)
-    if command.component == 'main' then
-        local bitmask = 3
-        local switchall_cmd = 2
-        for _, fingerprint in ipairs(MCOHOME_FINGERPRINT) do
-            if device:id_match(fingerprint.mfr, fingerprint.prod, fingerprint.model) then
-                switchall_cmd = fingerprint.switchall
-            end
-        end
-        if device.profile.components.switch4 ~= nil then bitmask = 15 end
-        if switchall_cmd == 1 then
-            device:send(MultiChannel:CmdEncap({ source_end_point=0, res=false, destination_end_point=bitmask, bit_address=true, command_class=cc.SWITCH_BINARY, command=SwitchBinary.SET, parameter='\x00'}))
-        else
-            device:send(SwitchAll:Off({}))
-        end
-    else
-        switch_set_helper(driver, device, SwitchBinary.value.OFF_DISABLE, command)
+  local delay = constants.DEFAULT_GET_STATUS_DELAY
+  if command.component == 'main' then
+    local bitmask = 3
+    local switchall_cmd = 2
+    for _, fingerprint in ipairs(MCOHOME_FINGERPRINT) do
+      if device:id_match(fingerprint.mfr, fingerprint.prod, fingerprint.model) then
+        switchall_cmd = fingerprint.switchall
+      end
     end
+    if device.profile.components.switch4 ~= nil then bitmask = 15 end
+    if switchall_cmd == 1 then
+      device:send(MultiChannel:CmdEncap({ source_end_point=0, res=false, destination_end_point=bitmask, bit_address=true, command_class=cc.SWITCH_BINARY, command=SwitchBinary.SET, parameter='\x00'}))
+    else
+      device:send(SwitchAll:Off({}))
+    end
+    local query_device = function()
+      local get = SwitchBinary:Get({})
+      for _, comp in pairs(device.profile.components) do
+        if comp.id:match("switch(%d)") then
+          device:send_to_component(get, comp.id)
+        end
+      end
+    end
+    device.thread:call_with_delay(delay, query_device)
+  else
+    switch_set_helper(driver, device, SwitchBinary.value.OFF_DISABLE, command)
+  end
 end
 
 --- Refresh the device.
@@ -349,12 +369,12 @@ local function refresh_handler(driver, device, command)
 end
 
 local function table_contains(t,v)
-    for _, value in ipairs(t) do
-        if value == v then
-            return true
-        end
+  for _, value in ipairs(t) do
+    if value == v then
+      return true
     end
-    return false
+  end
+  return false
 end
 
 --- Association:Report handler
