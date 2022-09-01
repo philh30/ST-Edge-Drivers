@@ -132,7 +132,6 @@ local driver_template = {
   },
   lifecycle_handlers = {
     added = added_handler,
-    init = device_init,
     infoChanged = info_changed,
     doConfigure = do_configure
   },

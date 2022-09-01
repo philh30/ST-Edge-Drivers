@@ -27,6 +27,7 @@ preferences:
         "leak":"Leak",
         "motion":"Motion",
         "smoke":"Smoke",
+        "switch": "Switch",
         "waterlevel":"Water Level",
         }
       default: "contact"

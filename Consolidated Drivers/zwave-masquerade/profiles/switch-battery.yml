@@ -1,19 +1,19 @@
-name: carbonmonoxide-battery
+name: switch-battery
 components:
 - id: main
   capabilities:
-  - id: carbonMonoxideDetector
+  - id: switch
     version: 1
   - id: battery
     version: 1
   - id: refresh
     version: 1
   categories:
-    - name: SmokeDetector
+  - name: Switch
 metadata:
-  deviceType: SmokeDetector
-  ocfDeviceType: x.com.st.d.sensor.smoke
-  deviceTypeId: SmokeDetector
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch
 preferences:
   - name: "chooseProfile"
     title: "Choose Profile"
@@ -30,7 +30,7 @@ preferences:
         "switch": "Switch",
         "waterlevel":"Water Level",
         }
-      default: "carbonmonoxide"
+      default: "contact"
   - name: "invertStatus"
     title: "Invert Status"
     description: "Invert status"

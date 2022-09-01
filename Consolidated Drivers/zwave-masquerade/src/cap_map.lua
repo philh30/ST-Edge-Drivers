@@ -35,6 +35,10 @@ local function cap_map(device)
             [0] = capabilities.smokeDetector.smoke.clear(),
             [1] = capabilities.smokeDetector.smoke.detected(),
         },
+        [capabilities.switch.ID] = {
+            [0] = capabilities.switch.switch.off(),
+            [1] = capabilities.switch.switch.on(),
+        },
         [capabilities.waterSensor.ID] = {
             [0] = capabilities.waterSensor.water.dry(),
             [1] = capabilities.waterSensor.water.wet(),

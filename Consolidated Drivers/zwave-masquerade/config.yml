@@ -1,4 +1,5 @@
 name: 'Z-Wave Masquerade'
 packageKey: 'zwave-masquerade'
+description: 'Make a binary state z-wave device appear as a different type of device.'
 permissions:
   zwave: {}

@@ -3,7 +3,7 @@ zwaveGeneric:
     deviceLabel: Z-wave Maquerade
     commandClasses:
       supported:
-        - 0x80 # basic
+        - 0x80 # battery
     deviceProfileName: contact-battery
   - id: "Basic"
     deviceLabel: Z-wave Maquerade
