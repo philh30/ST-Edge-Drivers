@@ -1,0 +1,5 @@
+name: 'Z-Wave Devices'
+packageKey: 'zwave-switch-ph'
+description: 'Driver for multiple types of z-wave devices'
+permissions:
+  zwave: {}

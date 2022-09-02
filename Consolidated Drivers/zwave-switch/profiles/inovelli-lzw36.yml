@@ -1,0 +1,317 @@
+name: inovelli-lzw36
+components:
+  - id: light
+    label: Light
+    capabilities:
+      - id: switch
+        version: 1
+      - id: switchLevel
+        version: 1
+      - id: button
+        version: 1
+    categories:
+      - name: Switch
+  - id: fan
+    label: Fan
+    capabilities:
+      - id: switch
+        version: 1
+      - id: fanSpeed
+        version: 1
+      - id: switchLevel
+        version: 1
+      - id: button
+        version: 1
+    categories:
+      - name: Fan
+  - id: main
+    label: Main
+    capabilities:
+      - id: energyMeter
+        version: 1
+      - id: powerMeter
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: Switch
+  - id: lightIndicator
+    label: Light LED Indicator
+    capabilities:
+      - id: colorControl
+        version: 1
+      - id: switchLevel
+        version: 1
+    categories:
+      - name: Light
+  - id: fanIndicator
+    label: Fan LED Indicator
+    capabilities:
+      - id: colorControl
+        version: 1
+      - id: switchLevel
+        version: 1
+    categories:
+      - name: Light
+metadata:
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch
+  #vid: 36202cb9-262e-3903-a48d-2f595e2b223c
+  #mnmn: SmartThingsCommunity
+preferences:
+  - title: "Dimming Speed"
+    name: dimmingSpeed
+    description: "This changes the speed in which the attached light dims up or down. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 100
+      default: 3
+  - title: "Dimming Speed (From Switch)"
+    name: dimmingSpeedSwitch
+    description: "This changes the speed in which the attached light dims up or down from the physical switch. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 keeps this in sync with parameter 1."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 99
+      default: 99
+  - title: "Ramp Rate"
+    name: rampRate
+    description: "This changes the speed in which the attached light turns on or off. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 should keep this in sync with parameter 1."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 99
+      default: 99
+  - title: "Ramp Rate (From Switch)"
+    name: rampRateSwitch
+    description: "This changes the speed in which the attached light turns on or off from the physical switch. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 keeps this in sync with parameter 1."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 99
+      default: 99
+  - title: "Minimum Level - Light"
+    name: lightMinLevel
+    description: "The minimum level that the dimmer allows the bulb to be dimmed to. Useful when the user has a bulb that does not turn on at a lower level."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 45
+      default: 1
+  - title: "Maximum Level - Light"
+    name: lightMaxLevel
+    description: "The maximum level that the dimmer allows the bulb to be dimmed to. Useful when the user has an LED bulb that reaches its maximum level before the dimmer value of 99."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 55
+      maximum: 99
+      default: 99
+  - title: "Minimum Level - Fan"
+    name: fanMinLevel
+    description: "The minimum level that the dimmer allows the fan to be dimmed to. Useful when the user has a fan that does not turn on at a lower level."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 45
+      default: 1
+  - title: "Maximum Level - Fan"
+    name: fanMaxLevel
+    description: "The maximum level that the dimmer allows the fan to be dimmed to."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 55
+      maximum: 99
+      default: 99
+  - title: "Auto Off Timer - Light"
+    name: lightAutoOffTimer
+    description: "Automatically turns the light off after this many seconds. When the switch is turned on a timer is started that is the duration of this setting. When the timer expires, the switch is turned off."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 32767
+      default: 0
+  - title: "Auto Off Timer - Fan"
+    name: fanAutoOffTimer
+    description: "Automatically turns the fan off after this many seconds. When the fan is turned on a timer is started that is the duration of this setting. When the timer expires, the fan is turned off."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 32767
+      default: 0
+  - title: "Default Level (Local) - Light"
+    name: lightDefaultLocal
+    description: "Default level for the dimmer when it is powered on from the local switch. A setting of 0 means that the switch will return to the level that it was on before it was turned off."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 99
+      default: 0
+  - title: "Default Level (ZWave) - Light"
+    name: lightDefaultZwave
+    description: "Default level for the dimmer when it is powered on from a Z-Wave command. A setting of 0 means that the switch will return to the level that it was on before it was turned off."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 99
+      default: 0
+  - title: "Default Level (Local) - Fan"
+    name: fanDefaultLocal
+    description: "Default level for the fan when it is powered on from the local switch. A setting of 0 means that the switch will return to the level that it was on before it was turned off."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 99
+      default: 0
+  - title: "Default Level (ZWave) - Fan"
+    name: fanDefaultZwave
+    description: "Default level for the fan when it is powered on from a Z-Wave command. A setting of 0 means that the switch will return to the level that it was on before it was turned off."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 99
+      default: 0
+  - title: "After Power Restored - Light"
+    name: lightPowerRestore
+    description: "The state the switch should return to once power is restored after power failure. 0 = off, 1-99 = level, 100=previous."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 100
+      default: 100
+  - title: "After Power Restored - Fan"
+    name: fanPowerRestore
+    description: "The state the switch should return to once power is restored after power failure. 0 = off, 1-99 = level, 100=previous."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 100
+      default: 0
+  - title: "LED Strip Intensity When Off - Light"
+    name: lightLEDIntensityOff
+    description: "This is the intensity of the Light LED strip when the switch is off. This is useful for users to see the light switch location when the lights are off."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 10
+      default: 1
+  - title: "LED Strip Intensity When Off - Fan"
+    name: fanLEDIntensityOff
+    description: "This is the intensity of the Fan LED strip when the switch is off. This is useful for users to see the light switch location when the lights are off."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 10
+      default: 1
+  - title: "LED Strip Timeout - Light"
+    name: lightLEDTimeout
+    description: "When the LED strip is disabled (Light LED Strip Intensity is set to 0), this setting allows the LED strip to turn on temporarily while being adjusted."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 10
+      default: 3
+  - title: "LED Strip Timeout - Fan"
+    name: fanLEDTimeout
+    description: "When the LED strip is disabled (Fan LED Strip Intensity is set to 0), this setting allows the LED strip to turn on temporarily while being adjusted."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 10
+      default: 3
+  - title: "Active Power Reports "
+    name: powerReports
+    description: "The power level change that will result in a new power report being sent. The value is a percentage of the previous report. 0 = disabled."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 100
+      default: 10
+  - title: "Periodic Power & Energy Reports"
+    name: periodicPowerEnergy
+    description: "Time period between consecutive power & energy reports being sent (in seconds). The timer is reset after each report is sent."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 32767
+      default: 3600
+  - title: "Energy Reports"
+    name: energyReports
+    description: "Energy level change which will result in sending a new energy report. Available settings: 1-127 (0.01-1.27 kWh) 0 = disabled."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 100
+      default: 10
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with the light switch load (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 3"
+    name: assocGroup3
+    description: "Enter a comma delimited list of hex IDs to receive a level set command with the light switch load (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 4"
+    name: assocGroup4
+    description: "Enter a comma delimited list of hex IDs to receive start/stop level change commands with the light switch load (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 5"
+    name: assocGroup5
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with the fan switch load (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 6"
+    name: assocGroup6
+    description: "Enter a comma delimited list of hex IDs to receive a level set command with the fan switch load (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 7"
+    name: assocGroup7
+    description: "Enter a comma delimited list of hex IDs to receive start/stop level change commands with the fan switch load (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

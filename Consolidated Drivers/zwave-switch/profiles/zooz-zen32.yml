@@ -1,0 +1,218 @@
+name: zooz-zen32
+components:
+  - id: main
+    label: Large Button
+    capabilities:
+      - id: switch
+        version: 1
+      - id: button
+        version: 1
+      - id: platinummassive43262.zoozLedColor
+        version: 1
+      - id: platinummassive43262.zoozLedBrightness
+        version: 1
+      - id: platinummassive43262.zoozLedMode
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: Switch
+  - id: topLeft
+    label: Top Left
+    capabilities:
+      - id: button
+        version: 1
+      - id: platinummassive43262.zoozLedColor
+        version: 1
+      - id: platinummassive43262.zoozLedBrightness
+        version: 1
+      - id: platinummassive43262.zoozLedMode
+        version: 1
+    categories:
+      - name: RemoteController
+  - id: topRight
+    label: Top Right
+    capabilities:
+      - id: button
+        version: 1
+      - id: platinummassive43262.zoozLedColor
+        version: 1
+      - id: platinummassive43262.zoozLedBrightness
+        version: 1
+      - id: platinummassive43262.zoozLedMode
+        version: 1
+    categories:
+      - name: RemoteController
+  - id: bottomLeft
+    label: Bottom Left
+    capabilities:
+      - id: button
+        version: 1
+      - id: platinummassive43262.zoozLedColor
+        version: 1
+      - id: platinummassive43262.zoozLedBrightness
+        version: 1
+      - id: platinummassive43262.zoozLedMode
+        version: 1
+    categories:
+      - name: RemoteController
+  - id: bottomRight
+    label: Bottom Right
+    capabilities:
+      - id: button
+        version: 1
+      - id: platinummassive43262.zoozLedColor
+        version: 1
+      - id: platinummassive43262.zoozLedBrightness
+        version: 1
+      - id: platinummassive43262.zoozLedMode
+        version: 1
+    categories:
+      - name: RemoteController
+metadata:
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch
+  vid: 36202cb9-262e-3903-a48d-2f595e2b223c
+  mnmn: SmartThingsCommunity
+preferences:
+  - title: "Disable/Enable Control on the Relay"
+    name: relayControl
+    description: "Enable or disable paddle on/off control (aka disable the relay). If disabled, you’ll only be able to control the connected light via Z-Wave. Scenes and other functionality will still be available through buttons."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Disable physical / Enable Z-Wave"
+        1: "Enable physical / Enable Z-Wave"
+        2: "Disable physical / Disable Z-Wave"
+      default: 1
+  - title: "Relay Behavior with Disabled Control"
+    name: disabledRelayReporting
+    description: "Set reporting behavior for disabled physical control."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Report status and change LED"
+        1: "Do not report status or change LED"
+      default: 1
+  - title: "State After Power Failure"
+    name: stateAfterPowerFailure
+    description: "Set the on off status for the switch after power failure."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Restore last state"
+        1: "Off after power failure"
+        2: "On after power failure"
+      default: 0
+  - title: "Auto Turn-Off Timer for Relay"
+    name: relayAutoTurnOff
+    description: "Use this parameter to enable or disable the auto turn-off timer function (the time after which you want the switch to automatically turn off once it has been turned on). Values: 0 – disabled (default); 1 – 65535 (minutes)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 65535
+      default: 0
+  - title: "Auto Turn-On Timer for Relay"
+    name: relayAutoTurnOn
+    description: "Use this parameter to enable or disable the auto turn-on timer function (the time after which you want the switch to automatically turn on once it has been turned off). Values: 0 – disabled (default); 1 – 65535 (minutes)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 65535
+      default: 0
+  - title: "3-Way Switch Type"
+    name: threeWaySwitchType
+    description: "Choose the type of 3-way switch you want to use with this switch in a 3-way set-up."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Regular mechanical 3-way"
+        1: "Momentary switch"
+      default: 0
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs. Main button basic set (pressed only). 10 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 3"
+    name: assocGroup3
+    description: "Enter a comma delimited list of hex IDs. Main button multilevel (held). 10 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 4"
+    name: assocGroup4
+    description: "Enter a comma delimited list of hex IDs. Small button #1 basic set (pressed). 10 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 5"
+    name: assocGroup5
+    description: "Enter a comma delimited list of hex IDs. Small button #1 multilevel (held). 10 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 6"
+    name: assocGroup6
+    description: "Enter a comma delimited list of hex IDs. Small button #2 basic set (pressed). 10 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 7"
+    name: assocGroup7
+    description: "Enter a comma delimited list of hex IDs. Small button #2 multilevel (held). 10 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 8"
+    name: assocGroup8
+    description: "Enter a comma delimited list of hex IDs. Small button #3 basic set (pressed). 10 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 9"
+    name: assocGroup9
+    description: "Enter a comma delimited list of hex IDs. Small button #3 multilevel (held). 10 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 10"
+    name: assocGroup10
+    description: "Enter a comma delimited list of hex IDs. Small button #4 basic set (pressed). 10 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 11"
+    name: assocGroup11
+    description: "Enter a comma delimited list of hex IDs. Small button #4 multilevel (held). 10 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

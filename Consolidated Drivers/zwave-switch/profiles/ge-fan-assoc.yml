@@ -1,0 +1,60 @@
+name: ge-fan-assoc
+components:
+- id: main
+  capabilities:
+  - id: switch
+    version: 1
+  - id: switchLevel
+    version: 1
+  - id: fanSpeed
+    version: 1
+  - id: button
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: Fan
+metadata:
+  deviceType: Fan
+  ocfDeviceType: oic.d.fan
+  deviceTypeId: Fan
+  vid: 12a872c0-6b74-3e99-ace1-2ff81e1f283b
+  mnmn: SmartThingsCommunity
+preferences:
+  - title: "LED Indicator"
+    name: ledIndicator
+    description: "Turn LED indicator on"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Turn on when switch is on"
+        1: "Turn on when switch is off"
+        2: "Always off"
+      default: 0
+  - title: "Invert Switch"
+    name: invertSwitch
+    description: "Invert switch"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "No"
+        1: "Yes"
+      default: 0
+  - title: "Association Group 2 - On/Off w/ Load"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with the switch load (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 3 - Double Tap"
+    name: assocGroup3
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with switch double tap (4 node max, not counting node 1). Node 1 will be added automatically."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

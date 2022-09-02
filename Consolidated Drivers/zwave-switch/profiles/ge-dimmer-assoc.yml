@@ -1,0 +1,110 @@
+name: ge-dimmer-assoc
+components:
+- id: main
+  capabilities:
+  - id: switch
+    version: 1
+  - id: switchLevel
+    version: 1
+  - id: button
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: Switch
+metadata:
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch
+preferences:
+  - title: "LED Indicator"
+    name: ledIndicator
+    description: "Turn LED indicator on"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Turn on when switch is off"
+        1: "Turn on when switch is on"
+        2: "Always off"
+      default: 0
+  - title: "Invert Switch"
+    name: invertSwitch
+    description: "Invert switch"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "No"
+        1: "Yes"
+      default: 0
+  - title: "Number of Dimming Steps (Z-Wave)"
+    name: dimStepsZwave
+    description: "Number of dimming steps when adjusted by z-wave"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 99
+      default: 1
+  - title: "Timing of Dimming Steps (Z-Wave)"
+    name: dimTimeZwave
+    description: "Timing of dimming steps in 10-millisecond intervals when adjusted by z-wave"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 255
+      default: 3
+  - title: "Number of Dimming Steps (Manual)"
+    name: dimStepsManual
+    description: "Number of dimming steps when adjusted by pressing the dimmer button"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 99
+      default: 1
+  - title: "Timing of Dimming Steps (Manual)"
+    name: dimTimeManual
+    description: "Timing of dimming steps in 10-millisecond intervals when adjusted by pressing the dimmer button"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 255
+      default: 3
+  - title: "Number of Dimming Steps (All-On/Off)"
+    name: dimStepsAll
+    description: "Number of dimming steps when adjusted by an All-On or All-Off command"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 99
+      default: 1
+  - title: "Timing of Dimming Steps (All-On/Off)"
+    name: dimTimeAll
+    description: "Timing of dimming steps in 10-millisecond intervals when adjusted by an All-On or All-Off command"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 255
+      default: 3
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with the switch load (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 3"
+    name: assocGroup3
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with switch double tap (4 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

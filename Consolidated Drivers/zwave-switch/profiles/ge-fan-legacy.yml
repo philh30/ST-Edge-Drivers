@@ -1,0 +1,42 @@
+name: ge-fan-legacy
+components:
+- id: main
+  capabilities:
+  - id: switch
+    version: 1
+  - id: switchLevel
+    version: 1
+  - id: fanSpeed
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: Fan
+metadata:
+  deviceType: Fan
+  ocfDeviceType: oic.d.fan
+  deviceTypeId: Fan
+  vid: 12a872c0-6b74-3e99-ace1-2ff81e1f283b
+  mnmn: SmartThingsCommunity
+preferences:
+  - title: "LED Indicator"
+    name: ledIndicator
+    description: "Turn LED indicator on"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Turn on when switch is on"
+        1: "Turn on when switch is off"
+        2: "Always off"
+      default: 0
+  - title: "Invert Switch"
+    name: invertSwitch
+    description: "Invert switch"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "No"
+        1: "Yes"
+      default: 0

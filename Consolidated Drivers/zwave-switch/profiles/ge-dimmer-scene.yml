@@ -1,0 +1,104 @@
+name: ge-dimmer-scene
+components:
+- id: main
+  capabilities:
+  - id: switch
+    version: 1
+  - id: switchLevel
+    version: 1
+  - id: button
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: Switch
+metadata:
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch
+preferences:
+  - title: "LED Indicator"
+    name: ledIndicator
+    description: "Turn LED indicator on"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Turn on when switch is off"
+        1: "Turn on when switch is on"
+        2: "Always off"
+        3: "Always on"
+      default: 0
+  - title: "Exclusion Sequence"
+    name: excludeProtect
+    description: "Never accidentally remove a device with alternate exclusion"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Press any button"
+        1: "Press ON twice and OFF twice"
+      default: 0
+  - title: "Switch Mode"
+    name: switchMode
+    description: "Turn dimmer into an on/off switch"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Dimmer Mode"
+        1: "Switch Mode"
+      default: 0
+  - title: "Minimum Dim Threshold"
+    name: minDim
+    description: "Set the minimum dimmer threshold"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 99
+      default: 1
+  - title: "Maximum Brightness Threshold"
+    name: maxBright
+    description: "Set the maximum brightness threshold"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 99
+      default: 99
+  - title: "Default Brightness Level"
+    name: defaultBright
+    description: "Set the default brightness level that the dimmer will turn on when being controlled manually (0 = Default, 1-99 = 1%-99%)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 99
+      default: 0
+  - title: "Dim Up/Down Rate"
+    name: dimRate
+    description: "Adjust the speed at which the ramps to a specific value other than 0 and FF"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Dim quickly"
+        1: "Dim slowly"
+      default: 0
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with the switch load (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 3"
+    name: assocGroup3
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with switch double tap (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

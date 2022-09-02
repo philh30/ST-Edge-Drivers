@@ -1,0 +1,43 @@
+name: ge-plugin-scene
+components:
+- id: main
+  capabilities:
+  - id: switch
+    version: 1
+  - id: button
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: SmartPlug
+metadata:
+  deviceType: SmartPlug
+  ocfDeviceType: oic.d.smartplug
+  deviceTypeId: SmartPlug
+preferences:
+  - title: "Exclusion Sequence"
+    name: excludeProtect
+    description: "Never accidentally remove a device with alternate exclusion"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Press any button"
+        1: "Press ON twice and OFF twice"
+      default: 0
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with the switch load (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 3"
+    name: assocGroup3
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with switch double tap (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
