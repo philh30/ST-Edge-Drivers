@@ -105,22 +105,23 @@ local driver_template = {
   },
   zwave_handlers = {
     [cc.BASIC] = {
-      [Basic.REPORT] = zwave_handlers.report
+      [Basic.REPORT] = zwave_handlers.report,
+      [Basic.SET] = zwave_handlers.basic_set_handler,
     },
     [cc.SWITCH_BINARY] = {
-      [SwitchBinary.REPORT] = zwave_handlers.report
+      [SwitchBinary.REPORT] = zwave_handlers.report,
     },
     [cc.SWITCH_MULTILEVEL] = {
-      [SwitchMultilevel.REPORT] = zwave_handlers.report
+      [SwitchMultilevel.REPORT] = zwave_handlers.report,
     },
     [cc.SENSOR_BINARY] = {
-      [SensorBinary.REPORT] = zwave_handlers.sensor_binary_report_handler
+      [SensorBinary.REPORT] = zwave_handlers.sensor_binary_report_handler,
     },
     [cc.SENSOR_ALARM] = {
-      [SensorAlarm.REPORT] = zwave_handlers.sensor_alarm_report_handler
+      [SensorAlarm.REPORT] = zwave_handlers.sensor_alarm_report_handler,
     },
     [cc.NOTIFICATION] = {
-      [Notification.REPORT] = zwave_handlers.notification_handler
+      [Notification.REPORT] = zwave_handlers.notification_handler,
     },
   },
   capability_handlers = {

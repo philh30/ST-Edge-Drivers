@@ -66,6 +66,21 @@ function zwave_handlers.report(driver, device, cmd)
   emit_event(device,event)
 end
 
+--- Handle basic set commands
+---
+--- @param self st.zwave.Driver
+--- @param device st.zwave.Device
+--- @param cmd st.zwave.CommandClass.Basic.Set
+function zwave_handlers.basic_set_handler(self, device, cmd)
+  local event
+  if cmd.args.value > 0 then
+    event = 1
+  else
+    event = 0
+  end
+  emit_event(device,event)
+end
+
 --- Default handler for binary sensor command class reports
 ---
 --- This converts binary sensor reports to correct contact open/closed events
@@ -122,14 +137,23 @@ function zwave_handlers.notification_handler(self, device, cmd)
     [Notification.event.home_security.MOTION_DETECTION_LOCATION_PROVIDED] = 1,
     [Notification.event.home_security.MOTION_DETECTION] = 1,
   }
-
-  if (cmd.args.notification_type == Notification.notification_type.HOME_SECURITY or
-      cmd.args.notification_type == Notification.notification_type.ACCESS_CONTROL)
-  then
-    local event
-    event = contact_notification_events_map[cmd.args.event]
-    if (event ~= nil) then emit_event(device,event) end
+  local event
+  if cmd.args.v1_alarm_type == 0 then
+    -- Notification command class
+    if (cmd.args.notification_type == Notification.notification_type.HOME_SECURITY or
+        cmd.args.notification_type == Notification.notification_type.ACCESS_CONTROL)
+    then
+      event = contact_notification_events_map[cmd.args.event]
+    end
+  else
+    -- Older implementation using alarm command class. Assume cmd.args.v1_alarm_level = 0 is off and >0 is on.
+    if cmd.args.v1_alarm_level == 0 then
+      event = 0
+    else
+      event = 1
+    end
   end
+  if event then emit_event(device,event) end
 end
 
 return zwave_handlers
