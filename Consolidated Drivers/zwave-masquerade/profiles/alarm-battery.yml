@@ -1,17 +1,19 @@
-name: leak
+name: alarm-battery
 components:
 - id: main
   capabilities:
-  - id: waterSensor
+  - id: alarm
+    version: 1
+  - id: battery
     version: 1
   - id: refresh
     version: 1
   categories:
-    - name: LeakSensor
+  - name: Siren
 metadata:
-  deviceType: LeakSensor
-  ocfDeviceType: x.com.st.d.sensor.moisture
-  deviceTypeId: LeakSensor
+  deviceType: Siren
+  ocfDeviceType: x.com.st.d.siren
+  deviceTypeId: Siren
 preferences:
   - name: "chooseProfile"
     title: "Choose Profile"
@@ -36,7 +38,7 @@ preferences:
         "valve":"Valve",
         "waterlevel":"Water Level",
         }
-      default: "leak"
+      default: "alarm"
   - name: "invertStatus"
     title: "Invert Status"
     description: "Invert status"
@@ -44,3 +46,29 @@ preferences:
     preferenceType: boolean
     definition:
       default: false
+  - name: "alarm1"
+    title: "State 1"
+    description: "Choose first state"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options: {
+        "off":"Off",
+        "siren":"Siren",
+        "strobe":"Strobe",
+        "both":"Both",
+        }
+      default: "off"
+  - name: "alarm2"
+    title: "State 2"
+    description: "Choose second state"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options: {
+        "off":"Off",
+        "siren":"Siren",
+        "strobe":"Strobe",
+        "both":"Both",
+        }
+      default: "siren"

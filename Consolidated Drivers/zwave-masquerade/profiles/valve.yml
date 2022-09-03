@@ -1,17 +1,17 @@
-name: leak
+name: valve
 components:
 - id: main
   capabilities:
-  - id: waterSensor
+  - id: valve
     version: 1
   - id: refresh
     version: 1
   categories:
-    - name: LeakSensor
+    - name: WaterValve
 metadata:
-  deviceType: LeakSensor
-  ocfDeviceType: x.com.st.d.sensor.moisture
-  deviceTypeId: LeakSensor
+  deviceType: WaterValve
+  ocfDeviceType: oic.d.watervalve
+  deviceTypeId: WaterValve
 preferences:
   - name: "chooseProfile"
     title: "Choose Profile"
@@ -36,7 +36,7 @@ preferences:
         "valve":"Valve",
         "waterlevel":"Water Level",
         }
-      default: "leak"
+      default: "valve"
   - name: "invertStatus"
     title: "Invert Status"
     description: "Invert status"

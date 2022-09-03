@@ -1,17 +1,21 @@
-name: leak
+name: shade-battery
 components:
 - id: main
   capabilities:
-  - id: waterSensor
+  - id: windowShade
+    version: 1
+  - id: windowShadeLevel
+    version: 1
+  - id: battery
     version: 1
   - id: refresh
     version: 1
   categories:
-    - name: LeakSensor
+    - name: Blind
 metadata:
-  deviceType: LeakSensor
-  ocfDeviceType: x.com.st.d.sensor.moisture
-  deviceTypeId: LeakSensor
+  deviceType: Blind
+  ocfDeviceType: oic.d.blind
+  deviceTypeId: Blind
 preferences:
   - name: "chooseProfile"
     title: "Choose Profile"
@@ -36,7 +40,7 @@ preferences:
         "valve":"Valve",
         "waterlevel":"Water Level",
         }
-      default: "leak"
+      default: "shade"
   - name: "invertStatus"
     title: "Invert Status"
     description: "Invert status"

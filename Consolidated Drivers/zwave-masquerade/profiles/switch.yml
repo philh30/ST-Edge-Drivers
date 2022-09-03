@@ -20,12 +20,20 @@ preferences:
     preferenceType: enumeration
     definition:
       options: {
+        "acceleration":"Acceleration",
+        "alarm":"Alarm",
         "carbonmonoxide":"Carbon Monoxide",
         "contact":"Contact",
         "leak":"Leak",
+        "lock":"Lock",
         "motion":"Motion",
+        "presence":"Presence",
+        "shade":"Shade",
         "smoke":"Smoke",
-        "switch": "Switch",
+        "switch":"Switch",
+        "tamper":"Tamper",
+        "tempalarm":"Temperature Alarm",
+        "valve":"Valve",
         "waterlevel":"Water Level",
         }
       default: "switch"

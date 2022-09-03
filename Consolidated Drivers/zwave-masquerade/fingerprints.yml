@@ -1,3 +1,11 @@
+zwaveManufacturer:
+# Delete these after ST completes the Edge migration
+  - id: 0109/2001/0102
+    deviceLabel: Z-wave Maquerade
+    manufacturerId: 0x0109
+    productType: 0x2001
+    productId: 0x0102
+    deviceProfileName: contact-battery
 zwaveGeneric:
   - id: "Battery"
     deviceLabel: Z-wave Maquerade

@@ -36,6 +36,7 @@ local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version = 2 })
 local log = require "log"
 local cap_map = require "cap_map"
 local zwave_handlers = require "zw_handlers"
+local commands = require "commands"
 
 --- Refresh command
 ---
@@ -73,6 +74,7 @@ local function info_changed(driver, device, event, args)
         if device:supports_capability_by_id(id) then
           device:emit_event(event[0])
         end
+        if event.init then device:emit_event(event.init) end
       end
     end
     device.thread:call_with_delay(5,init_delay,'reset_caps')
@@ -92,18 +94,14 @@ local function added_handler(driver, device)
   for id, event in pairs(initial_events_map) do
     if device:supports_capability_by_id(id) then
       device:emit_event(event[0])
+      if event.init then device:emit_event(event.init) end
     end
   end
 end
 
 local driver_template = {
   supported_capabilities = {
-    capabilities.waterSensor,
-    capabilities.contactSensor,
-    capabilities.motionSensor,
     capabilities.battery,
-    capabilities.switch,
-    capabilities.smokeDetector
   },
   zwave_handlers = {
     [cc.BASIC] = {
@@ -126,8 +124,33 @@ local driver_template = {
     },
   },
   capability_handlers = {
+    [capabilities.alarm.ID] = {
+      [capabilities.alarm.commands.off.NAME] = commands.alarm,
+      [capabilities.alarm.commands.siren.NAME] = commands.alarm,
+      [capabilities.alarm.commands.strobe.NAME] = commands.alarm,
+      [capabilities.alarm.commands.both.NAME] = commands.alarm,
+    },
+    [capabilities.lock.ID] = {
+      [capabilities.lock.commands.unlock.NAME] = commands.on,
+      [capabilities.lock.commands.lock.NAME] = commands.off,
+    },
     [capabilities.refresh.ID] = {
       [capabilities.refresh.commands.refresh.NAME] = refresh_handler,
+    },
+    [capabilities.switch.ID] = {
+      [capabilities.switch.commands.on.NAME] = commands.on,
+      [capabilities.switch.commands.off.NAME] = commands.off,
+    },
+    [capabilities.windowShade.ID] = {
+      [capabilities.windowShade.commands.open.NAME] = commands.on,
+      [capabilities.windowShade.commands.close.NAME] = commands.off,
+    },
+    [capabilities.windowShadeLevel.ID] = {
+      [capabilities.windowShadeLevel.commands.setShadeLevel.NAME] = commands.shadeLevel,
+    },
+    [capabilities.valve.ID] = {
+      [capabilities.valve.commands.open.NAME] = commands.on,
+      [capabilities.valve.commands.close.NAME] = commands.off,
     },
   },
   lifecycle_handlers = {

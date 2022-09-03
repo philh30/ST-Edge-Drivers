@@ -1,17 +1,19 @@
-name: leak
+name: tempalarm-battery
 components:
 - id: main
   capabilities:
-  - id: waterSensor
+  - id: temperatureAlarm
+    version: 1
+  - id: battery
     version: 1
   - id: refresh
     version: 1
   categories:
-    - name: LeakSensor
+    - name: Thermostat
 metadata:
-  deviceType: LeakSensor
-  ocfDeviceType: x.com.st.d.sensor.moisture
-  deviceTypeId: LeakSensor
+  deviceType: Thermostat
+  ocfDeviceType: oic.d.thermostat
+  deviceTypeId: Thermostat
 preferences:
   - name: "chooseProfile"
     title: "Choose Profile"
@@ -36,7 +38,7 @@ preferences:
         "valve":"Valve",
         "waterlevel":"Water Level",
         }
-      default: "leak"
+      default: "tamper"
   - name: "invertStatus"
     title: "Invert Status"
     description: "Invert status"
@@ -44,3 +46,29 @@ preferences:
     preferenceType: boolean
     definition:
       default: false
+  - name: "tempAlarm1"
+    title: "State 1"
+    description: "Choose first state"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options: {
+        "cleared":"Cleared",
+        "freeze":"Freeze",
+        "heat":"Heat",
+        "rateOfRise":"Rate of Rise",
+        }
+      default: "cleared"
+  - name: "tempAlarm2"
+    title: "State 2"
+    description: "Choose second state"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options: {
+        "cleared":"Cleared",
+        "freeze":"Freeze",
+        "heat":"Heat",
+        "rateOfRise":"Rate of Rise",
+        }
+      default: "heat"
