@@ -77,6 +77,12 @@ zwaveManufacturer:
     productType: 0x0053
     productId: 0x0216
     deviceProfileName: fortrezz-leak
+  - id: "000C/0201/000A"
+    deviceLabel: HomeSeer HS-LS100+ Leak Sensor
+    manufacturerId: 0x000C
+    productType: 0x0201
+    productId: 0x000A
+    deviceProfileName: homeseer-leak    # by default, no temperature
 zwaveGeneric:
   - id: "GenericSensorAlarm"
     deviceLabel: Z-Wave Sensor
