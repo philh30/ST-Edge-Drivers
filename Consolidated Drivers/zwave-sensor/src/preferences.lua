@@ -16,7 +16,20 @@
 local Configuration = (require "st.zwave.CommandClass.Configuration")({ version=4 })
 --- @type st.zwave.CommandClass.Association
 local Association = (require "st.zwave.CommandClass.Association")({ version=2 })
+--- @type st.zwave.CommandClass.WakeUp
+local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version=2 })
 local splitAssocString = require "split_assoc_string"
+
+local preferences = {}
+
+preferences.hours_to_seconds = function(hours)
+  local seconds = tonumber(hours) * 60 * 60
+  return seconds
+end
+
+preferences.temp_multiplier = function(temp)
+  return tonumber(temp) * 10
+end
 
 local devices = {
   ZOOZ_4_IN_1_SENSOR = {
@@ -67,18 +80,55 @@ local devices = {
       assocGroup2 = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
     }
   },
+  HOMESEER_LS100PLUS = {
+    MATCHING_MATRIX = {
+      mfrs = 0x000C,
+      product_types = 0x0201,
+      product_ids = 0x000A
+    },
+    PARAMETERS = {
+      basicSetCommand      = { type = 'config', parameter_number = 14, size = 1 },  -- P14: BasicSet enabled/disabled
+      leakReportInterval   = { type = 'config', parameter_number = 17, size = 1 },  -- P17: Leak reporting interval
+      shockSensor          = { type = 'config', parameter_number = 18, size = 1 },  -- P18: Enable Shock Sensor
+      tempReportInterval   = { type = 'config', parameter_number = 19, size = 1 },  -- P19: Temperature reporting interval
+      tempTriggerHighValue = { type = 'config', parameter_number = 20, size = 2, conversion = preferences.temp_multiplier },  -- P20:
+      tempTriggerLowValue  = { type = 'config', parameter_number = 22, size = 2, conversion = preferences.temp_multiplier },  -- P22:
+      blinkLEDAlarm        = { type = 'config', parameter_number = 24, size = 1 },  -- P24: Blink LED with alarm
+
+      wakeUpInterval       = { type = 'wakeup', conversion = preferences.hours_to_seconds }, -- Wake up interval, is in hours (0-744)
+
+      assocGroup2          = { type = 'assoc', group = 2, maxnodes = 5, addhub = false }
+    }
+  },
 }
-local preferences = {}
 
 preferences.update_preferences = function(driver, device, args)
+  local get_params = {}
   local prefs = preferences.get_device_parameters(device)
   if prefs ~= nil then
     for id, value in pairs(device.preferences) do
-      if not (args and args.old_st_store) or (args.old_st_store.preferences[id] ~= value and prefs and prefs[id]) then
+      -- If the device.preferences id is in our preferences table
+      --  AND 
+      --     we have no previous preferences to compare to
+      --     OR the previous preference value is different than the current preference value
+      -- THEN update the device 
+      if prefs[id] and (not (args and args.old_st_store) or (args.old_st_store.preferences[id] ~= value)) then
+        device.log.trace("update_preferences(): updating id: ".. id)
         if prefs[id].type == 'config' then
-          local new_parameter_value = preferencesMap.to_numeric_value(device.preferences[id])
+          local new_parameter_value = preferences.to_numeric_value(device.preferences[id])
+          if type(prefs[id].conversion) == "function" then
+            new_parameter_value = prefs[id].conversion(new_parameter_value)
+          end
           device:send(Configuration:Set({parameter_number = prefs[id].parameter_number, size = prefs[id].size, configuration_value = new_parameter_value}))
-          device:send(Configuration:Get({parameter_number = prefs[id].parameter_number}))
+          -- device:send(Configuration:Get({parameter_number = prefs[id].parameter_number}))
+          table.insert(get_params, prefs[id].parameter_number)
+        elseif prefs[id].type == 'wakeup' then
+          local wakeUpInterval = preferences.to_numeric_value(device.preferences[id])
+          if type(prefs[id].conversion) == "function" then
+            wakeUpInterval = prefs[id].conversion(wakeUpInterval)
+          end
+          device:send(WakeUp:IntervalSet({node_id = driver.environment_info.hub_zwave_id, seconds = wakeUpInterval}))
+          device:send(WakeUp:IntervalGet({}))
         elseif prefs[id].type == 'assoc' then
           local group = prefs[id].group
           local maxnodes = prefs[id].maxnodes
@@ -94,6 +144,10 @@ preferences.update_preferences = function(driver, device, args)
         end
       end
     end
+  end
+  -- Get any parameters we set
+  for _, param_number in pairs(get_params) do
+    device:send(Configuration:Get({parameter_number = param_number }))
   end
 end
 

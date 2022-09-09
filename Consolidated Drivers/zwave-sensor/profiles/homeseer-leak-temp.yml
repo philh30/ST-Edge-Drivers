@@ -1,0 +1,113 @@
+name: homeseer-leak-temp
+components:
+- id: main
+  capabilities:
+  - id: waterSensor
+    version: 1
+  - id: temperatureMeasurement
+    version: 1
+  - id: temperatureAlarm
+    version: 1
+  - id: tamperAlert
+    version: 1
+  - id: platemusic11009.deviceNetworkId
+    version: 1
+  - id: battery
+    version: 1
+  categories:
+    - name: LeakSensor
+metadata:
+  deviceType: LeakSensor
+  ocfDeviceType: x.com.st.d.sensor.moisture
+  deviceTypeId: LeakSensor
+preferences:
+  - name: "driverVersion"
+    title: "Driver Version"
+    description: "<table style=\"font-size:100%;width:100%\"><tr><td>V0.90 2022-09-02.</td></tr><tr><td>Supports the HomeSeer HS-LS100+ Leak Sensor.</td></tr><tr><td>Temperature reporting enabled.</td></tr></table>"
+    required: false
+    preferenceType: string
+    definition:
+      stringType: paragraph
+  - name: "wakeUpInterval"
+    title: "Wake Up / Battery Interval Hours"
+    description: "Wake up interval in hours (0-744).<br>The sensor reports battery status during wakeup and can receive Settings updates.  Default = 1 hour."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 744
+      default: 1
+  - name: "basicSetCommand"
+    title: "Basic Set Command"
+    description: "Enable Basic Set Command for reporting leak in addition to Notification Report.  Disabled by default."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Disabled"
+        1: "Basic Set for leak notifications"
+      default: 0
+  - name: "leakReportInterval"
+    title: "Leak Report Interval Minutes"
+    description: "Frequency of leak alarms once detected. In minutes between leak alarms.  Default = 5 minutes."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 5
+      maximum: 255
+      default: 5
+  - name: "shockSensor"
+    title: "Shock Sensor"
+    description: "Enable Shock Sensor reporting.  Shock will trigger a tamper alert.  Disabled by default to conserve battery life."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Disabled"
+        1: "Enabled"
+      default: 0
+  - name: "tempReportInterval"
+    title: "Temperature Report Interval"
+    description: "multiply by 10 for minutes: (3 = 30 minutes, 6 = 1 hour, 12 = 2 hours, 36 = 6 hours, 144 = 24 hours) 0 = disable.  3-240 valid range.   Disabled by default."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 240
+      default: 0
+  - name: "tempTriggerHighValue"
+    title: "High Temperature Alert Value"
+    description: "If temperature reporting is enabled, trigger a high temperature alert at this temperature.  -67°F to 257°F, default = 104°F"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: -67
+      maximum: 257
+      default: 104
+  - name: "tempTriggerLowValue"
+    title: "Low Temperature Alert Value"
+    description: "If temperature reporting is enabled, trigger a low temperature alert at this temperature.  -67°F to 257°F, default = 32°F"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: -67
+      maximum: 257
+      default: 32   
+  - name: "blinkLEDAlarm"
+    title: "Blink LED with Alarm"
+    description: "Blinking LED When Alarm Triggers"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Disabled"
+        1: "Enabled"
+      default: 1
+  - title: "Association Group 2 (Basic Set)"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs. Flood Sensor will send Basic Set to associated nodes when Water leak detected. 5 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

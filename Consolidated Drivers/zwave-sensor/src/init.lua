@@ -19,19 +19,29 @@ local cc = require "st.zwave.CommandClass"
 local ZwaveDriver = require "st.zwave.driver"
 --- @type st.zwave.defaults
 local defaults = require "st.zwave.defaults"
---- @type st.zwave.CommandClass.Configuration
-local Configuration = (require "st.zwave.CommandClass.Configuration")({ version=4 })
 --- @type st.zwave.CommandClass.Association
 local Association = (require "st.zwave.CommandClass.Association")({ version=2 })
---- @type st.zwave.CommandClass.Notification
-local Notification = (require "st.zwave.CommandClass.Notification")({ version=3 })
---- @type st.zwave.CommandClass.WakeUp
-local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version = 2 })
+
 local preferences = require "preferences"
 local configurations = require "configurations"
 
---- Handle preference changes
+local customCap = {}
+customCap.deviceNetworkId = {}
+customCap.deviceNetworkId.name = "platemusic11009.deviceNetworkId"
+customCap.deviceNetworkId.capability = capabilities[customCap.deviceNetworkId.name]
+
 ---
+--- @param self st.zwave.Driver
+--- @param device st.zwave.Device
+local function updateNetworkId(self, device, deviceId)
+  -- Set our zwave deviceNetworkID 
+  if device:supports_capability_by_id(customCap.deviceNetworkId.name) then
+    local fmtDeviceId = "[" .. deviceId .. "]"
+    device:emit_event(capabilities[customCap.deviceNetworkId.name].deviceNetworkId({value = fmtDeviceId }))
+  end
+end
+
+--- Handle preference changes
 --- @param self st.zwave.Driver
 --- @param device st.zwave.Device
 --- @param event table
@@ -42,15 +52,30 @@ local function info_changed(self, device, event, args)
   end
 end
 
+--- @param self st.zwave.Driver
+--- @param device st.zwave.Device
 local function device_init(self, device)
   device:set_update_preferences_fn(preferences.update_preferences)
 end
 
+--- @param self st.zwave.Driver
+--- @param device st.zwave.Device
 local function do_configure(driver, device)
+  device.log.trace("do_configure()")
   configurations.initial_configuration(driver, device)
   device:refresh()
-  if not device:is_cc_supported(cc.WAKE_UP) then
-    preferences.update_preferences(driver, device)
+
+  -- Setup the initial preferences
+  device.log.debug("setting up initial preferences")
+  preferences.update_preferences(driver, device)
+
+  -- Handle zwave plus lifeline associations
+  if device:is_cc_supported(cc.ZwaveplusInfo) and
+      device:is_cc_supported(cc.Association)  then
+      -- Add us to lifeline
+    device.log.debug("Adding to lifeline")
+    device:send(Association:Set({grouping_identifier = 1, node_ids ={driver.environment_info.hub_zwave_id}}))
+    device:send(Association:Get({grouping_identifier = 1}))
   end
 end
 
@@ -60,15 +85,19 @@ local initial_events_map = {
   [capabilities.moldHealthConcern.ID] = capabilities.moldHealthConcern.moldHealthConcern.good(),
   [capabilities.contactSensor.ID] = capabilities.contactSensor.contact.closed(),
   [capabilities.smokeDetector.ID] = capabilities.smokeDetector.smoke.clear(),
-  [capabilities.motionSensor.ID] = capabilities.motionSensor.motion.inactive()
+  [capabilities.motionSensor.ID] = capabilities.motionSensor.motion.inactive(),
+  [capabilities.temperatureAlarm.ID] = capabilities.temperatureAlarm.temperatureAlarm.cleared()
 }
 
+--- @param self st.zwave.Driver
+--- @param device st.zwave.Device
 local function added_handler(self, device)
   for id, event in pairs(initial_events_map) do
     if device:supports_capability_by_id(id) then
       device:emit_event(event)
     end
   end
+  updateNetworkId(self, device, device.device_network_id)
 end
 
 local driver_template = {
@@ -100,10 +129,11 @@ local driver_template = {
     require("ecolink-tilt"),
     require("zooz-motion-sensor"),
     require("fortrezz-leak"),
+    require("homeseer-leak")
   },
   lifecycle_handlers = {
-    added = added_handler,
-    init = device_init,
+    added       = added_handler,
+    init        = device_init,
     infoChanged = info_changed,
     doConfigure = do_configure
   },
