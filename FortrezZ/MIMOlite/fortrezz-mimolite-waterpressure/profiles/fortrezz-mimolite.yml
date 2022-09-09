@@ -1,0 +1,74 @@
+name: fortrezz-mimolite
+components:
+- id: main
+  capabilities:
+  - id: switch
+    version: 1
+  - id: contactSensor
+    version: 1
+  - id: platinummassive43262.waterPressure
+    version: 1
+  - id: relativeHumidityMeasurement
+    version: 1
+  - id: voltageMeasurement
+    version: 1
+  - id: powerSource
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: Switch
+metadata:
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch
+preferences:
+  - title: "Relay Switch Delay"
+    name: impulseDuration
+    description: "Delay between relay switch on and off in 100ms increments. 0 will allow relay to function as a standard switch"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 255
+      default: 0
+  - title: "Association Group 1"
+    name: assocGroup1
+    description: "Enter a comma delimited list of hex IDs to receive a Basic Set command when the input is triggered (1 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs to periodically receive a Multilevel Sensor Report of the ADC analog voltage to the input (1 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 3"
+    name: assocGroup3
+    description: "Enter a comma delimited list of hex IDs to receive an Alarm Report if a power dropout occurs (1 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 4"
+    name: assocGroup4
+    description: "Enter a comma delimited list of hex IDs to receive a Binary Sensor Report when the input is digitally triggered or untriggered (1 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 5"
+    name: assocGroup5
+    description: "Enter a comma delimited list of hex IDs to periodically receive (if a change has occured) a Multilevel Sensor Report of the ADC analog voltage to the input (2 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
