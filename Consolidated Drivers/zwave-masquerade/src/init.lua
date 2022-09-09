@@ -53,6 +53,9 @@ local function refresh_handler(driver, device)
   if device:is_cc_supported(cc.SENSOR_BINARY) then
     device:send(SensorBinary:Get({}))
   end
+  if device:is_cc_supported(cc.BATTERY) then
+    device:send(Battery:Get({}))
+  end
 end
 
 --- Handle preference changes

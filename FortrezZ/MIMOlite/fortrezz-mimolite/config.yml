@@ -1,0 +1,5 @@
+name: 'FortrezZ MIMOlite'
+packageKey: 'fortrezz-mimolite'
+description: 'Supports the FortrezZ MIMOlite device.'
+permissions:
+  zwave: {}

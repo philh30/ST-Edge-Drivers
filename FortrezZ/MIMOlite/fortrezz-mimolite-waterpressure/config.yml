@@ -1,0 +1,5 @@
+name: 'FortrezZ MIMOlite - Water Pressure'
+packageKey: 'fortrezz-mimolite-waterpressure'
+description: 'Uses the FortrezZ MIMOlite device to monitor water pressure.'
+permissions:
+  zwave: {}

@@ -1,0 +1,7 @@
+zwaveManufacturer:
+  - id: "0084/0453/0111"
+    deviceLabel: FortrezZ MIMOlite
+    manufacturerId: 0x0084
+    productType: 0x0453
+    productId: 0x0111
+    deviceProfileName: fortrezz-mimolite
