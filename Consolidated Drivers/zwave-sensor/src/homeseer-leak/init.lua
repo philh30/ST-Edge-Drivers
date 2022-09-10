@@ -14,7 +14,6 @@ local CC = require "st.zwave.CommandClass"
 local Battery = (require "st.zwave.CommandClass.Battery")({ version = 1 })
 local Basic = (require "st.zwave.CommandClass.Basic")({ version = 1 })
 local SensorBinary = (require "st.zwave.CommandClass.SensorBinary")({ version = 1 })
-local SensorMultilevel = (require "st.zwave.CommandClass.SensorMultilevel")({ version = 5 })
 local capabilities = require "st.capabilities"
 
 local ZWAVE_TEMP_LEAK_SENSOR_FINGERPRINTS = {
@@ -80,16 +79,6 @@ local function sensor_binary_report(driver, device, cmd)
   -- Ignore binary reports, as leak/temperature/tamper alerts all come via Notification Reports.
 end
 
-local function temperature_report(self, device, cmd)
-  if (cmd.args.sensor_type == SensorMultilevel.sensor_type.TEMPERATURE) then
-    local scale = 'C'
-    if (cmd.args.scale == SensorMultilevel.scale.temperature.FAHRENHEIT) then scale = 'F' end
-    local evt = capabilities.temperatureMeasurement.temperature({value = cmd.args.sensor_value, unit = scale})
-    evt.state_change = true
-    device:emit_event_for_endpoint(cmd.src_channel, evt)
-  end
-end
-
 --- @param self st.zwave.Driver
 --- @param device st.zwave.Device
 --- @param event table
@@ -121,9 +110,6 @@ local homeseer_leak = {
     },
     [CC.SENSOR_BINARY] = {
       [SensorBinary.REPORT] = sensor_binary_report,
-    },
-    [CC.SENSOR_MULTILEVEL] = {
-      [SensorMultilevel.REPORT] = temperature_report,
     },
   },
   lifecycle_handlers = {
