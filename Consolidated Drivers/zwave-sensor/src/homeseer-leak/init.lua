@@ -75,10 +75,6 @@ local function basic_set(driver, device, cmd)
   device.log.trace("basic_set() ignored")
 end
 
-local function sensor_binary_report(driver, device, cmd)
-  -- Ignore binary reports, as leak/temperature/tamper alerts all come via Notification Reports.
-end
-
 --- @param self st.zwave.Driver
 --- @param device st.zwave.Device
 --- @param event table
@@ -107,9 +103,6 @@ local homeseer_leak = {
   zwave_handlers = {
     [CC.BASIC] = {
       [Basic.SET] = basic_set,
-    },
-    [CC.SENSOR_BINARY] = {
-      [SensorBinary.REPORT] = sensor_binary_report,
     },
   },
   lifecycle_handlers = {
