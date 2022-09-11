@@ -13,7 +13,6 @@
 local CC = require "st.zwave.CommandClass"
 local Battery = (require "st.zwave.CommandClass.Battery")({ version = 1 })
 local Basic = (require "st.zwave.CommandClass.Basic")({ version = 1 })
-local SensorBinary = (require "st.zwave.CommandClass.SensorBinary")({ version = 1 })
 local capabilities = require "st.capabilities"
 
 local ZWAVE_TEMP_LEAK_SENSOR_FINGERPRINTS = {
