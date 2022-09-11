@@ -2,10 +2,6 @@ name: fortrezz-mimolite
 components:
 - id: main
   capabilities:
-  - id: switch
-    version: 1
-  - id: contactSensor
-    version: 1
   - id: platinummassive43262.waterPressure
     version: 1
   - id: relativeHumidityMeasurement
@@ -14,14 +10,20 @@ components:
     version: 1
   - id: powerSource
     version: 1
+  - id: contactSensor
+    version: 1
+  - id: switch
+    version: 1
   - id: refresh
     version: 1
   categories:
-  - name: Switch
+  - name: WaterValve
 metadata:
-  deviceType: Switch
-  ocfDeviceType: oic.d.switch
-  deviceTypeId: Switch
+  deviceType: WaterValve
+  ocfDeviceType: oic.d.watervalve
+  deviceTypeId: WaterValve
+  vid: 2ba63876-65a0-302c-9d06-ad49333ac146
+  mnmn: SmartThingsCommunity
 preferences:
   - title: "Relay Switch Delay"
     name: impulseDuration

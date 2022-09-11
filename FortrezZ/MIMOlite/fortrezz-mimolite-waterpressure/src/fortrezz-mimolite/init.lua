@@ -98,8 +98,8 @@ end
 --- @param device st.zwave.Device
 local function sensor_multilevel_report(driver, device, cmd)
   local volt = calc_voltage(cmd.args.sensor_value)
-  local water_pressure = volt*28.1-28.1
-  local humidity = utils.clamp_value(utils.round(water_pressure),0,100)
+  local water_pressure = utils.round(volt*28.1-28.1)
+  local humidity = utils.clamp_value(water_pressure,0,100)
   local evt = capabilities.voltageMeasurement.voltage({value=volt,unit="V"})
   device:emit_event(evt)
   device:emit_event(capabilities['platinummassive43262.waterPressure'].waterPressure({value=water_pressure,unit="PSI"}))
