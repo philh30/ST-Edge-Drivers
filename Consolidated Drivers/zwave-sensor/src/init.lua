@@ -35,9 +35,11 @@ customCap.deviceNetworkId.capability = capabilities[customCap.deviceNetworkId.na
 --- @param device st.zwave.Device
 local function updateNetworkId(self, device, deviceId)
   -- Set our zwave deviceNetworkID 
-  if device:supports_capability_by_id(customCap.deviceNetworkId.name) then
-    local fmtDeviceId = "[" .. deviceId .. "]"
-    device:emit_event(capabilities[customCap.deviceNetworkId.name].deviceNetworkId({value = fmtDeviceId }))
+  for _, component in pairs(device.profile.components) do
+    if device:supports_capability_by_id(customCap.deviceNetworkId.name,component.id) then
+      local fmtDeviceId = "[" .. deviceId .. "]"
+      device:emit_component_event(component,capabilities[customCap.deviceNetworkId.name].deviceNetworkId({value = fmtDeviceId }))
+    end
   end
 end
 
