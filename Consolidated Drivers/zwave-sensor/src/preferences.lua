@@ -39,13 +39,13 @@ local devices = {
       product_ids = 0x2101
     },
     PARAMETERS = {
-      temperatureScale = {type = 'config', parameter_number = 1, size = 1},
-      temperatureChange = {type = 'config', parameter_number = 2, size = 1},
-      humidityChange = {type = 'config', parameter_number = 3, size = 1},
-      illuminanceChange = {type = 'config', parameter_number = 4, size = 1},
-      motionInterval = {type = 'config', parameter_number = 5, size = 1},
-      motionSensitivity = {type = 'config', parameter_number = 6, size = 1},
-      ledMode = {type = 'config', parameter_number = 7, size = 1}
+      temperatureScale     = {type = 'config', parameter_number = 1, size = 1},
+      temperatureChange    = {type = 'config', parameter_number = 2, size = 1},
+      humidityChange       = {type = 'config', parameter_number = 3, size = 1},
+      illuminanceChange    = {type = 'config', parameter_number = 4, size = 1},
+      motionInterval       = {type = 'config', parameter_number = 5, size = 1},
+      motionSensitivity    = {type = 'config', parameter_number = 6, size = 1},
+      ledMode              = {type = 'config', parameter_number = 7, size = 1}
     }
   },
   ZOOZ_Q_SENSOR = {
@@ -55,13 +55,13 @@ local devices = {
       product_ids = 0x0006
     },
     PARAMETERS = {
-      motionSensitivity = {type = 'config', parameter_number = 12, size = 1},
-      motionInterval = {type = 'config', parameter_number = 13, size = 2},
-      ledMode = {type = 'config', parameter_number = 19, size = 1},
-      reportFrequency = {type = 'config', oarameter_number = 172, size = 2},
-      temperatureChange = {type = 'config', parameter_number = 183, size = 2},
-      humidityChange = {type = 'config', parameter_number = 184, size = 1},
-      illuminanceChange = {type = 'config', parameter_number = 185, size = 2},
+      motionSensitivity    = {type = 'config', parameter_number = 12, size = 1},
+      motionInterval       = {type = 'config', parameter_number = 13, size = 2},
+      ledMode              = {type = 'config', parameter_number = 19, size = 1},
+      reportFrequency      = {type = 'config', oarameter_number = 172, size = 2},
+      temperatureChange    = {type = 'config', parameter_number = 183, size = 2},
+      humidityChange       = {type = 'config', parameter_number = 184, size = 1},
+      illuminanceChange    = {type = 'config', parameter_number = 185, size = 2},
     }
   },
   ZOOZ_ZSE41 = {
@@ -71,13 +71,14 @@ local devices = {
       product_ids = 0xE001
     },
     PARAMETERS = {
-      ledMode = {type = 'config',parameter_number = 1, size = 1},
-      batteryReporting = {type = 'config',parameter_number = 3, size = 1},
-      lowBatteryReporting = {type = 'config',parameter_number = 4, size = 1},
-      statusReporting = {type = 'config',parameter_number = 5, size = 1},
-      assocOnDelay = {type = 'config',parameter_number = 6, size = 4},
-      assocOffDelay = {type = 'config',parameter_number = 7, size = 4},
-      assocGroup2 = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
+      ledMode              = {type = 'config',parameter_number = 1, size = 1},
+      batteryReporting     = {type = 'config',parameter_number = 3, size = 1},
+      lowBatteryReporting  = {type = 'config',parameter_number = 4, size = 1},
+      statusReporting      = {type = 'config',parameter_number = 5, size = 1},
+      assocOnDelay         = {type = 'config',parameter_number = 6, size = 4},
+      assocOffDelay        = {type = 'config',parameter_number = 7, size = 4},
+      
+      assocGroup2          = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
     }
   },
   HOMESEER_LS100PLUS = {
@@ -134,8 +135,10 @@ preferences.update_preferences = function(driver, device, args)
           if type(prefs[id].conversion) == "function" then
             new_parameter_value = prefs[id].conversion(new_parameter_value)
           end
-          device:send(Configuration:Set({parameter_number = prefs[id].parameter_number, size = prefs[id].size, configuration_value = new_parameter_value}))
-          -- device:send(Configuration:Get({parameter_number = prefs[id].parameter_number}))
+          local size = prefs[id].size
+          -- Handle unsigned int
+          new_parameter_value = ((new_parameter_value >= (256^size)/2) and (new_parameter_value < 256^size)) and (new_parameter_value-256^size) or new_parameter_value
+          device:send(Configuration:Set({parameter_number = prefs[id].parameter_number, size = size, configuration_value = new_parameter_value}))
           table.insert(get_params, prefs[id].parameter_number)
         elseif prefs[id].type == 'wakeup' then
           local wakeUpInterval = preferences.to_numeric_value(device.preferences[id])
