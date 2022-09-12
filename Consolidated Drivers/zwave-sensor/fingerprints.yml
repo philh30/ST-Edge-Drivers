@@ -23,8 +23,8 @@ zwaveManufacturer:
 #    productType: 0x0001
 #    productId: 0x0003
 #    deviceProfileName: contact-battery-tamperalert        
-  - id: 014A/0004/0003
-    deviceLabel: Ecolink Tilt Sensor v2.5
+  - id: 014A/0004/0003   # TILT-ZWAVE2.5-ECO
+    deviceLabel: Ecolink Tilt Sensor 2.5-ECO
     manufacturerId: 0x014A
     productType: 0x0004
     productId: 0x0003

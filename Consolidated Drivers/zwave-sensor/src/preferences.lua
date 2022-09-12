@@ -100,6 +100,21 @@ local devices = {
       assocGroup2          = { type = 'assoc', group = 2, maxnodes = 5, addhub = false }
     }
   },
+  ECOLINK_TILT25 = {  -- Ecolink Tilt Sensor TILT-ZWAVE2.5-ECO
+    MATCHING_MATRIX = {
+      mfrs          = 0x014A,
+      product_types = 0x0004,
+      product_ids   = 0x0003
+    }, 
+    PARAMETERS = {
+      basicSetCommand      = { type = 'config', parameter_number = 1, size = 1 }, -- P1: BasicSet enabled/disabled for association group 2
+      sensorBinary         = { type = 'config', parameter_number = 2, size = 1 }, -- P2: Disable Binary Reports
+
+      wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
+
+      assocGroup2          = { type = 'assoc', group = 2, maxnodes = 5, addhub = false }
+    }
+  },
 }
 
 preferences.update_preferences = function(driver, device, args)
