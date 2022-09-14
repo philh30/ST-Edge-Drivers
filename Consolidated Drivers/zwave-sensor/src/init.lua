@@ -72,8 +72,8 @@ local function do_configure(driver, device)
   preferences.update_preferences(driver, device)
 
   -- Handle zwave plus lifeline associations
-  if device:is_cc_supported(cc.ZwaveplusInfo) and
-      device:is_cc_supported(cc.Association)  then
+  if device:is_cc_supported(cc.ZWAVEPLUS_INFO) and
+      device:is_cc_supported(cc.ASSOCIATION)  then
       -- Add us to lifeline
     device.log.debug("Adding to lifeline")
     device:send(Association:Set({grouping_identifier = 1, node_ids ={driver.environment_info.hub_zwave_id}}))
