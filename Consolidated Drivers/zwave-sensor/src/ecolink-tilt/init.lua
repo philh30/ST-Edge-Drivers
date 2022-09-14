@@ -175,13 +175,6 @@ local function eco_doConfigure(self, device, event, args)
     -- Call the topmost 'doConfigure' lifecycle hander to do the default work first
     call_parent_handler(self.lifecycle_handlers.doConfigure, self, device, event, args)
 
-    -- On the zwave plus version (2.5ECO), make sure some defaults are set on the device.
-    if device:is_cc_supported(cc.ZWAVEPLUS_INFO) then
-        -- Configure notifications.  These are enabled by default but just to be sure.
-        device:send(Notification:Set({ notification_type = Notification.notification_type.ACCESS_CONTROL, notification_status = Notification.notification_status.ON }))  -- Enable notifications for tilt sensor
-        device:send(Notification:Set({ notification_type = Notification.notification_type.HOME_SECURITY, notification_status = Notification.notification_status.ON  }))  -- Enable notifications for tamper switch
-        device:send(Notification:Set({ notification_type = Notification.notification_type.POWER_MANAGEMENT, notification_status = Notification.notification_status.ON }))  -- Enable notifications for below 2.6V battery alerts
-        end
     -- Force a battery update now
     getBatteryUpdate(device, true)
 end

@@ -345,7 +345,20 @@ local devices = {
     ASSOCIATION = {
       {grouping_identifier = 1}
     }
-  }
+  },
+  ECOLINK_TILT_SENSOR_2_5 = {
+    MATCHING_MATRIX = {
+      mfrs = 0x014A,
+      product_types = 0x0004,
+      product_ids = 0x0003
+    },
+    NOTIFICATION = {
+      -- Set the notification parameters for the device
+      { notification_type = Notification.notification_type.ACCESS_CONTROL, notification_status = Notification.notification_status.ON },    -- Enable notifications for tilt sensor
+      { notification_type = Notification.notification_type.HOME_SECURITY, notification_status = Notification.notification_status.ON  },    -- Enable notifications for tamper switch
+      { notification_type = Notification.notification_type.POWER_MANAGEMENT, notification_status = Notification.notification_status.ON },  -- Enable notifications for below 2.6V battery alerts
+    }
+  },
 }
 local configurations = {}
 
