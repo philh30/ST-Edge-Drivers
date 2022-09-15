@@ -1,0 +1,56 @@
+name: schlage-be469
+components:
+- id: main
+  label: Main
+  capabilities:
+  - id: lock
+    version: 1
+  - id: lockCodes
+    version: 1
+  - id: tamperAlert
+    version: 1
+  - id: battery
+    version: 1
+  - id: refresh
+    version: 1
+- id: settings
+  label: Settings
+  capabilities:
+  - id: platinummassive43262.schlageLockAlarm
+    version: 1
+  - id: platinummassive43262.autoLock
+    version: 1
+  - id: platinummassive43262.schlageInteriorButton
+    version: 1
+  - id: platinummassive43262.keypadBeep
+    version: 1
+  - id: platinummassive43262.lockAndLeave
+    version: 1
+  - id: platinummassive43262.vacationMode
+    version: 1
+  - id: platemusic11009.deviceNetworkId
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: SmartLock
+metadata:
+  deviceType: SmartLock
+  ocfDeviceType: oic.d.smartlock
+  deviceTypeId: SmartLock
+preferences:
+  - title: "Query lock codes on refresh"
+    name: refreshCodes
+    description: "Choose whether the refresh command should retrieve all lock codes."
+    required: true
+    preferenceType: boolean
+    definition:
+      default: true
+  - title: "Length of user code"
+    name: codeLength
+    description: "User codes may be between 4 and 8 digits. Changing this setting will erase all existing codes."
+    required: false
+    preferenceType: integer
+    definition:
+      minimum: 4
+      maximum: 8

@@ -1,0 +1,5 @@
+name: 'Z-Wave Lock PH v1.00'
+packageKey: 'zwave-lock-v1.00'
+description: 'Enhanced functionality for the Schlage BE469'
+permissions:
+  zwave: {}
