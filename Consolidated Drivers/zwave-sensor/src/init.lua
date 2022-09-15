@@ -15,12 +15,16 @@
 local capabilities = require "st.capabilities"
 --- @type st.zwave.CommandClass
 local cc = require "st.zwave.CommandClass"
+---  @type st.Driver
+local Driver = require("st.driver")
 --- @type st.zwave.Driver
 local ZwaveDriver = require "st.zwave.driver"
 --- @type st.zwave.defaults
 local defaults = require "st.zwave.defaults"
 --- @type st.zwave.CommandClass.Association
 local Association = (require "st.zwave.CommandClass.Association")({ version=2 })
+--- @type st.zwave.CommandClass.WakeUp
+local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version=1 })
 
 local preferences = require "preferences"
 local configurations = require "configurations"
@@ -72,13 +76,16 @@ local function do_configure(driver, device)
   preferences.update_preferences(driver, device)
 
   -- Handle zwave plus lifeline associations
-  if device:is_cc_supported(cc.ZwaveplusInfo) and
-      device:is_cc_supported(cc.Association)  then
+  if device:is_cc_supported(cc.ZWAVEPLUS_INFO) and
+      device:is_cc_supported(cc.ASSOCIATION)  then
       -- Add us to lifeline
     device.log.debug("Adding to lifeline")
     device:send(Association:Set({grouping_identifier = 1, node_ids ={driver.environment_info.hub_zwave_id}}))
     device:send(Association:Get({grouping_identifier = 1}))
   end
+
+  -- Mark this device as configured.  
+  device:set_field("device_configured", true, {persist = true} )
 end
 
 local initial_events_map = {
@@ -100,6 +107,21 @@ local function added_handler(self, device)
     end
   end
   updateNetworkId(self, device, device.device_network_id)
+end
+
+--- @param self st.zwave.Driver
+--- @param device st.zwave.Device
+local function driver_switched(self, device, event, args)
+  device.log.trace("driver_switched()")
+  -- Call the default handler 
+  Driver.default_capability_match_driverSwitched_handler(self, device, event, args)
+
+  if not device:is_cc_supported(cc.WAKE_UP) then
+    -- We're not a sleepy device, so run a doConfigure lifecycle event to configure the device now.
+    device.thread:queue_event(self.lifecycle_dispatcher.dispatch, self.lifecycle_dispatcher, self, device, "doConfigure")
+  else
+    device.log.info("Device is sleepy.  Will configure on next wakeup.")
+  end
 end
 
 local driver_template = {
@@ -125,19 +147,22 @@ local driver_template = {
     capabilities.voltageMeasurement,
     capabilities.energyMeter,
     capabilities.powerMeter,
-    capabilities.smokeDetector
+    capabilities.smokeDetector,
+    capabilities.refresh,
   },
   sub_drivers = {
+    require("sleepy-device"),  -- General support for any sleepy zwave devices
     require("ecolink-tilt"),
     require("zooz-motion-sensor"),
     require("fortrezz-leak"),
     require("homeseer-leak")
   },
   lifecycle_handlers = {
-    added       = added_handler,
-    init        = device_init,
-    infoChanged = info_changed,
-    doConfigure = do_configure
+    added          = added_handler,
+    init           = device_init,
+    infoChanged    = info_changed,
+    doConfigure    = do_configure,
+    driverSwitched = driver_switched,
   },
 }
 

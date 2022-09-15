@@ -12,8 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- Ecolink garage door tilt sensor
-
+-- Ecolink garage door tilt sensor TLT-ZWAVE2.5ECO (Zwave Plus)
 -- Wake up Interval
 -- Device defaults to 12 hour wake up interval.  This value is adjustable from 3600 seconds (1 hour) to 604800 seconds (1 week) in 200 second increments.
 -- It rounds down to the nearest 3600 + 200 second interval (entering 3605 == 3600, 3799 = 3600, 3805 = 3800, etc)
@@ -63,7 +62,8 @@ local cc = require "st.zwave.CommandClass"
 local LAST_BATTERY_REPORT_TIME = "lastBatteryReportTime"
 
 local ECOLINK_TILT_FINGERPRINTS = {
-    { mfr = 0x014A, prod = 0x0004, model = 0x0003 } -- Ecolink Tilt Sensor 2.5 (zwave plus)
+    { mfr = 0x014A, prod = 0x0001, model = 0x0003 }, -- Ecolink Tilt Sensor 2 (zwave)
+    { mfr = 0x014A, prod = 0x0004, model = 0x0003 }, -- Ecolink Tilt Sensor 2.5 (zwave plus)
 }
 
 local function can_handle_ecolink_tilt(opts, driver, device, ...)
@@ -82,7 +82,7 @@ local function call_parent_handler(handlers, self, device, event, args)
     for _, func in ipairs( handlers or {} ) do
         func(self, device, event, args)
     end
-  end
+end
 
 -- Request a battery update from the device.
 -- This should only be called when the radio is known to be listening
@@ -128,7 +128,10 @@ end
 --- @param device st.zwave.Device
 --- @param cmd st.zwave.CommandClass.WakeUp.Notification
 local function wakeup_notification(self, device, cmd)
-    device.log.trace("wakeup_notification()")
+    device.log.trace("wakeup_notification(ecolink-tilt)")
+
+    call_parent_handler(self.zwave_handlers[cc.WAKE_UP][WakeUp.NOTIFICATION], self, device, cmd)
+
     -- When the cover is restored (tamper switch closed), the device wakes up.  Assume tamper is clear.
     device:emit_event(capabilities.tamperAlert.tamper.clear())
 
@@ -157,7 +160,9 @@ end
 --- @param device st.zwave.Device
 --- @param cmd st.zwave.CommandClass.SensorBinary.Report
 local function sensor_binary_report_handler(self, device, cmd)
-  if (cmd.args.sensor_type == SensorBinary.sensor_type.FIRST) then   -- Sends sensor type of 0xFF
+  -- The WAVE2 version sends a BINARY REPORT V1, which does not contain the sensor type.
+  -- The WAVE2.5 version sends a BINARY REPORT V2 which contains the sensor type "FIRST"
+  if (cmd.args.sensor_type == nil) or (cmd.args.sensor_type == SensorBinary.sensor_type.FIRST) then   -- Sends sensor type of 0xFF
     -- Change to a door/window sensor and call default handers
     cmd.args.sensor_type = SensorBinary.sensor_type.DOOR_WINDOW
     call_parent_handler(self.zwave_handlers[cc.SENSOR_BINARY][SensorBinary.REPORT], self, device, cmd)
@@ -172,11 +177,6 @@ local function eco_doConfigure(self, device, event, args)
     device.log.trace("eco_doConfigure()")
     -- Call the topmost 'doConfigure' lifecycle hander to do the default work first
     call_parent_handler(self.lifecycle_handlers.doConfigure, self, device, event, args)
-
-    -- Configure notifications.  These are enabled by default but just to be sure.
-    device:send(Notification:Set({ notification_type = Notification.notification_type.ACCESS_CONTROL, notification_status = Notification.notification_status.ON }))  -- Enable notifications for tilt sensor
-    device:send(Notification:Set({ notification_type = Notification.notification_type.HOME_SECURITY, notification_status = Notification.notification_status.ON  }))  -- Enable notifications for tamper switch
-    device:send(Notification:Set({ notification_type = Notification.notification_type.POWER_MANAGEMENT, notification_status = Notification.notification_status.ON }))  -- Enable notifications for below 2.6V battery alerts
 
     -- Force a battery update now
     getBatteryUpdate(device, true)

@@ -101,7 +101,17 @@ local devices = {
       assocGroup2          = { type = 'assoc', group = 2, maxnodes = 5, addhub = false }
     }
   },
-  ECOLINK_TILT25 = {  -- Ecolink Tilt Sensor TILT-ZWAVE2.5-ECO
+  ECOLINK_TILT2 = {  -- Ecolink Tilt Sensor TILT-ZWAVE2 (zwave)
+    MATCHING_MATRIX = {
+      mfrs          = 0x014A,
+      product_types = 0x0001,
+      product_ids   = 0x0003
+    }, 
+    PARAMETERS = {
+      wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
+    }
+  },
+  ECOLINK_TILT25 = {  -- Ecolink Tilt Sensor TILT-ZWAVE2.5-ECO (zwave plus)
     MATCHING_MATRIX = {
       mfrs          = 0x014A,
       product_types = 0x0004,
