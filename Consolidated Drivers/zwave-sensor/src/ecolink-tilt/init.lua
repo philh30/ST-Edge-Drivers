@@ -128,7 +128,10 @@ end
 --- @param device st.zwave.Device
 --- @param cmd st.zwave.CommandClass.WakeUp.Notification
 local function wakeup_notification(self, device, cmd)
-    device.log.trace("wakeup_notification()")
+    device.log.trace("wakeup_notification(ecolink-tilt)")
+
+    call_parent_handler(self.zwave_handlers[cc.WAKE_UP][WakeUp.NOTIFICATION], self, device, cmd)
+
     -- When the cover is restored (tamper switch closed), the device wakes up.  Assume tamper is clear.
     device:emit_event(capabilities.tamperAlert.tamper.clear())
 
