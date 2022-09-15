@@ -33,16 +33,6 @@ preferences:
       minimum: 0
       maximum: 744
       default: 1
-  - name: "basicSetCommand"
-    title: "Basic Set Command"
-    description: "Enable Basic Set Command for reporting leak in addition to Notification Report.  Disabled by default."
-    required: true
-    preferenceType: enumeration
-    definition:
-      options:
-        0: "Disabled"
-        1: "Basic Set for leak notifications"
-      default: 0
   - name: "leakReportInterval"
     title: "Leak Report Interval Minutes"
     description: "Frequency of leak alarms once detected. In minutes between leak alarms.  Default = 5 minutes."
@@ -99,6 +89,13 @@ preferences:
         0: "Disabled"
         1: "Enabled"
       default: 1
+  - name: "basicSetCommand"
+    title: "Basic Set Command"
+    description: "Enable Basic Set Command for reporting leaks to association group 2.  Disabled by default."
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false      
   - title: "Association Group 2 (Basic Set)"
     name: assocGroup2
     description: "Enter a comma delimited list of hex IDs. Flood Sensor will send Basic Set to associated nodes when Water leak detected. 5 node max."
