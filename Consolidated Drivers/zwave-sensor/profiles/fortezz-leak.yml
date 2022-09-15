@@ -10,6 +10,8 @@ components:
     version: 1
   - id: temperatureAlarm
     version: 1
+  - id: platemusic11009.deviceNetworkId
+    version: 1
   categories:
     - name: LeakSensor
 metadata:
@@ -19,26 +21,38 @@ metadata:
 preferences:
   - name: "wakeUpInterval"
     title: "Wake Up Interval"
-    description: "Wake up interval in minutes (1-480). The WWA-01AA only reports temperature and battery status if they are requested during wakeup."
+    description: "Default = <b>Every 4 hours</b>.<br>During wakeup the sensor can send battery updates and receive parameter changes."
     required: true
-    preferenceType: integer
+    preferenceType: enumeration
     definition:
-      minimum: 1
-      maximum: 480
-      default: 240
+      options:
+        3600:   "Every hour"
+        7200:   "Every 2 hours"
+        10800:  "Every 3 hours"
+        14400:  "Every 4 hours"   # default
+        21600:  "Every 6 hours"
+        28800:  "Every 8 hours"
+        43200:  "Every 12 hours"
+        86400:  "Every 24 hours"
+      default: 14400
+  - name: "batteryInterval"
+    title: "Battery Update Interval"
+    description: "Battery updates are requested during the wake up interval.<br>Default = <b>every wakeup</b>.<br>If disabled, the device will still send an alert when battery reaches critical."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0:      "Disabled"
+        1:      "Every wakeup"   # default
+        2:      "Every other wakeup"
+        3:      "Every 3rd wakeup"
+        4:      "Every 4th wakeup"
+        101:    "Once per day maximum"
+      default: 1
   - name: "requestTemperature"
     title: "Request Temperature"
     description: "Request temperature when device wakes up?"
     required: true
-    preferenceType: enumeration
+    preferenceType: boolean
     definition:
-      options: {"on":"on", "off":"off"}
-      default: "on"
-  - name: "requestBattery"
-    title: "Request Battery"
-    description: "Request battery status when device wakes up?"
-    required: true
-    preferenceType: enumeration
-    definition:
-      options: {"on":"on", "off":"off"}
-      default: "on"
+      default: true

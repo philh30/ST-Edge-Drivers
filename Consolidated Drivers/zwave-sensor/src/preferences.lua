@@ -32,6 +32,16 @@ preferences.temp_multiplier = function(temp)
 end
 
 local devices = {
+  WAKEUP_ONLY = {
+    MATCHING_MATRIX = {
+      mfrs = 0x0084,
+      product_types = 0x0053,
+      product_ids = 0x0216
+    },
+    PARAMETERS = {
+      wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
+    }
+  },
   ZOOZ_4_IN_1_SENSOR = {
     MATCHING_MATRIX = {
       mfrs = 0x027A,
@@ -45,7 +55,9 @@ local devices = {
       illuminanceChange    = {type = 'config', parameter_number = 4, size = 1},
       motionInterval       = {type = 'config', parameter_number = 5, size = 1},
       motionSensitivity    = {type = 'config', parameter_number = 6, size = 1},
-      ledMode              = {type = 'config', parameter_number = 7, size = 1}
+      ledMode              = {type = 'config', parameter_number = 7, size = 1},
+      
+      wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
     }
   },
   ZOOZ_Q_SENSOR = {
@@ -62,6 +74,8 @@ local devices = {
       temperatureChange    = {type = 'config', parameter_number = 183, size = 2},
       humidityChange       = {type = 'config', parameter_number = 184, size = 1},
       illuminanceChange    = {type = 'config', parameter_number = 185, size = 2},
+
+      wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
     }
   },
   ZOOZ_ZSE41 = {
@@ -77,6 +91,8 @@ local devices = {
       statusReporting      = {type = 'config',parameter_number = 5, size = 1},
       assocOnDelay         = {type = 'config',parameter_number = 6, size = 4},
       assocOffDelay        = {type = 'config',parameter_number = 7, size = 4},
+      
+      wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
       
       assocGroup2          = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
     }

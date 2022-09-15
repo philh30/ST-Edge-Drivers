@@ -359,6 +359,16 @@ local devices = {
       { notification_type = Notification.notification_type.POWER_MANAGEMENT, notification_status = Notification.notification_status.ON },  -- Enable notifications for below 2.6V battery alerts
     }
   },
+  FORTEZZ_LEAK = {
+    MATCHING_MATRIX = {
+      mfrs = 0x0084,
+      product_types = {0x0053},
+      product_ids = 0x0216
+    },
+    ASSOCIATION = {
+      {grouping_identifier = 1}
+    }
+  }
 }
 local configurations = {}
 

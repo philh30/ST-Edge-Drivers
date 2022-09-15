@@ -32,6 +32,8 @@ components:
   - id: powerMeter
     version: 1
   # Other
+  - id: platemusic11009.deviceNetworkId
+    version: 1
   - id: battery
     version: 1
   - id: refresh

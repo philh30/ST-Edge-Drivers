@@ -30,6 +30,8 @@ local utils = require "st.utils"
 local preferences = require "preferences"
 local log = require "log"
 
+local LAST_BATTERY_REPORT_TIME = "lastBatteryReportTime"
+
 local ZOOZ_FINGERPRINTS = {
   { manufacturerId = 0x027A, productType = 0x2021, productId = 0x2101 }, -- Zooz 4-in-1 sensor
   { manufacturerId = 0x027A, productType = 0x0200, productId = 0x0006 }, -- Zooz Q Sensor - EU Version
@@ -51,7 +53,14 @@ local function can_handle_zooz_sensor(opts, driver, device, ...)
   return false
 end
 
-local zwave_handlers = {}
+local function call_parent_handler(handlers, self, device, event, args)
+  if type(handlers) == "function" then
+    handlers = { handlers }  -- wrap as table
+  end
+  for _, func in ipairs( handlers or {} ) do
+      func(self, device, event, args)
+  end
+end
 
 --- Handler for notification report command class
 ---
@@ -111,7 +120,8 @@ end
 --- @param cmd st.zwave.CommandClass.SensorMultilevel.Report
 local function sensor_multilevel_report_handler(self, device, cmd)
   if cmd.args.sensor_type == SensorMultilevel.sensor_type.LUMINANCE then
-    device:emit_event(capabilities.illuminanceMeasurement.illuminance({value = get_lux_from_percentage(cmd.args.sensor_value), unit = "lux"}))
+    local value = cmd.args.scale == SensorMultilevel.scale.luminance.PERCENTAGE and get_lux_from_percentage(cmd.args.sensor_value) or cmd.args.sensor_value
+    device:emit_event(capabilities.illuminanceMeasurement.illuminance({value = value, unit = "lux"}))
   elseif cmd.args.sensor_type == SensorMultilevel.sensor_type.RELATIVE_HUMIDITY then
     device:emit_event(capabilities.relativeHumidityMeasurement.humidity({value = utils.round(cmd.args.sensor_value)}))
   elseif cmd.args.sensor_type == SensorMultilevel.sensor_type.TEMPERATURE then
@@ -120,31 +130,103 @@ local function sensor_multilevel_report_handler(self, device, cmd)
   end
 end
 
---- Default handler polls on every wakeup - define a handler to save battery
----
+-- Request a battery update from the device.
+-- This should only be called when the radio is known to be listening
+-- (during initial inclusion/configuration and during Wakeup)
+local function getBatteryUpdate(device, force)
+  device.log.trace("getBatteryUpdate()")
+  if not force then
+      -- Calculate if its time
+      local last = device:get_field(LAST_BATTERY_REPORT_TIME)
+      if last then
+          local now = os.time()
+          local diffsec = os.difftime(now, last)
+          device.log.debug("Last battery update: " .. os.date("%c", last) .. "(" .. diffsec .. " seconds ago)" )
+          local wakeup_offset = 60 * 60 * 24  -- Assume 1 day preference
+
+          if tonumber(device.preferences.batteryInterval) < 100 then
+              -- interval is a multiple of our wakeup time (in seconds)
+              wakeup_offset = tonumber(device.preferences.wakeUpInterval) * tonumber(device.preferences.batteryInterval)
+          end
+
+          if wakeup_offset > 0 then
+              -- Adjust for about 5 minutes to cover waking up "early"
+              wakeup_offset = wakeup_offset - (60 * 5)
+              
+              -- Has it been longer than our interval?
+              force = diffsec >= wakeup_offset
+          end
+      else
+          force = true -- No last battery report, get one now
+      end
+  end
+
+  if not force then device.log.debug("No battery update needed") end
+
+  if force then
+      -- Request a battery update now
+      device:send(Battery:Get({}))
+  end
+
+end
+
 --- @param self st.zwave.Driver
 --- @param device st.zwave.Device
---- @param cmd st.zwave.CommandClass.SensorMultilevel.Report
-local function wakeup_notification(driver, device, cmd)
-  log.debug("WOKE UP")
+--- @param cmd st.zwave.CommandClass.WakeUp.Notification
+local function wakeup_notification(self, device, cmd)
+  device.log.trace("wakeup_notification()")
+
+  -- We may need to request a battery update while we're woken up
+  getBatteryUpdate(device)
+  -- Request a temperature report
+  if device.preferences.requestTemperature then
+    device:send(SensorMultilevel:Get({sensor_type = SensorMultilevel.sensor_type.TEMPERATURE}))
+  end
+  -- Request a humidity report
+  if device.preferences.requestHumidity then
+    device:send(SensorMultilevel:Get({sensor_type = SensorMultilevel.sensor_type.RELATIVE_HUMIDITY, scale = SensorMultilevel.scale.relative_humidity.PERCENTAGE}))
+  end
+  -- Request an illuminance report
+  if device.preferences.requestIlluminance then
+    device:send(SensorMultilevel:Get({sensor_type = SensorMultilevel.sensor_type.LUMINANCE, scale = SensorMultilevel.scale.luminance.LUX}))
+  end
+end
+
+--- @param self st.zwave.Driver
+--- @param device st.zwave.Device
+--- @param cmd st.zwave.CommandClass.Battery.Report
+local function battery_report(self, device, cmd)
+  -- Save the timestamp of the last battery report received.
+  device:set_field(LAST_BATTERY_REPORT_TIME, os.time(), { persist = true } )
+  if cmd.args.battery_level == 99 then cmd.args.battery_level = 100 end
+  if cmd.args.battery_level == 0xFF then cmd.args.battery_level = 1 end
+  -- Forward on to the default battery report handlers from the top level
+  call_parent_handler(self.zwave_handlers[cc.BATTERY][Battery.REPORT], self, device, cmd)
 end
 
 --- @param driver st.zwave.Driver
 --- @param device st.zwave.Device
-local function device_init(driver, device)
-  device:set_update_preferences_fn(preferences.update_preferences)
+local function device_added(self, device, event, args)
   if device:is_cc_supported(cc.BATTERY) then
-    device:emit_event(capabilities.powerSource.powerSource.battery())
+    if device:supports_capability(capabilities.powerSource) then
+      device:emit_event(capabilities.powerSource.powerSource.battery())
+    end
   else
-    device:emit_event(capabilities.powerSource.powerSource.dc())
+    if device:supports_capability(capabilities.powerSource) then
+      device:emit_event(capabilities.powerSource.powerSource.dc())
+    end
     device:emit_event(capabilities.battery.battery({value=100,unit="%"}))
   end
+  call_parent_handler(self.lifecycle_handlers.added, self, device, event, args)
 end
 
 local zooz_sensor = {
   zwave_handlers = {
     [cc.WAKE_UP] = {
         [WakeUp.NOTIFICATION] = wakeup_notification,
+    },
+    [cc.BATTERY] = {
+        [Battery.REPORT] = battery_report,
     },
     [cc.NOTIFICATION] = {
       [Notification.REPORT] = notification_report_handler
@@ -154,7 +236,7 @@ local zooz_sensor = {
     }
   },
   lifecycle_handlers = {
-    init = device_init,
+    added = device_added,
   },
   NAME = "zooz sensor",
   can_handle = can_handle_zooz_sensor

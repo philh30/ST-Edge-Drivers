@@ -8,6 +8,8 @@ components:
     version: 1
   - id: tamperAlert
     version: 1
+  - id: platemusic11009.deviceNetworkId
+    version: 1
   - id: refresh
     version: 1
   categories:
