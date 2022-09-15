@@ -16,18 +16,14 @@ components:
     version: 1
   categories:
     - name: LeakSensor
-metadata:
-  deviceType: LeakSensor
-  ocfDeviceType: x.com.st.d.sensor.moisture
-  deviceTypeId: LeakSensor
 preferences:
   - name: "driverVersion"
     title: "Driver Version"
-    description: "<table style=\"font-size:100%;width:100%\"><tr><td>V0.90 2022-09-02.</td></tr><tr><td>Supports the HomeSeer HS-LS100+ Leak Sensor.</td></tr><tr><td>Temperature reporting enabled.</td></tr></table>"
+    description: "<table style=\"font-size:100%;width:100%\"><tr><td>V0.91 2022-09-02.</td></tr><tr><td>Supports the HomeSeer HS-LS100+ Leak Sensor.</td></tr><tr><td>Temperature reporting enabled.</td></tr></table>"
     required: false
-    preferenceType: string
+    preferenceType: boolean
     definition:
-      stringType: paragraph
+      default: false
   - name: "wakeUpInterval"
     title: "Wake Up / Battery Interval Hours"
     description: "Wake up interval in hours (0-744).<br>The sensor reports battery status during wakeup and can receive Settings updates.  Default = 1 hour."
