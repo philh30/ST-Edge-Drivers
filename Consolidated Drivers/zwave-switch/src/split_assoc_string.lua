@@ -31,7 +31,6 @@ local function splitAssocString (inputstr, sep, maxnodes, addhub, supports_multi
   end
   local t={}
   local m={}
-  local multi=false
   for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
     if (#m + #t) < maxnodes then
       local u = splitString(str,":")
@@ -40,12 +39,11 @@ local function splitAssocString (inputstr, sep, maxnodes, addhub, supports_multi
           table.insert(t, tonumber(u[1],16))
         elseif supports_multi and tonumber(u[2],16) then
           table.insert(m, {multi_channel_node_id=tonumber(u[1],16),end_point=tonumber(u[2],16),bit_address=false})
-          multi=true
         end
       end
     end
   end
-  return t,m,multi
+  return t,m
 end
 
 return splitAssocString

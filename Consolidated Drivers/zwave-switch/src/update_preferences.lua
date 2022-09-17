@@ -41,7 +41,7 @@ local function update_preferences(driver, device, args)
         local group = preferences[id].group
         local maxnodes = preferences[id].maxnodes
         local addhub = preferences[id].addhub
-        local nodes,multi_nodes,multi = splitAssocString(value,',',maxnodes,addhub,supports_multi)
+        local nodes,multi_nodes = splitAssocString(value,',',maxnodes,addhub,supports_multi)
         local hubnode = device.driver.environment_info.hub_zwave_id
         if supports_multi then
           device:send(MultiChannelAssociation:Remove({grouping_identifier = group, node_ids = {}, multi_channel_nodes = {}}))
@@ -50,13 +50,13 @@ local function update_preferences(driver, device, args)
         end
         if addhub then device:send(Association:Set({grouping_identifier = group, node_ids = {hubnode}})) end
         if (#multi_nodes + #nodes) > 0 then
-          if multi then
+          if #multi_nodes > 0 then
             device:send(MultiChannelAssociation:Set({grouping_identifier = group, node_ids = nodes, multi_channel_nodes = multi_nodes}))
           else
             device:send(Association:Set({grouping_identifier = group, node_ids = nodes}))
           end
         end
-        if multi then
+        if supports_multi then
           device:send(MultiChannelAssociation:Get({grouping_identifier = group}))
         else
           device:send(Association:Get({grouping_identifier = group}))
