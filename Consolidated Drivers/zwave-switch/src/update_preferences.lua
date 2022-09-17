@@ -13,10 +13,13 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
---- @type st.capabilities
 local capabilities = require "st.capabilities"
+--- @type st.zwave.CommandClass
+local cc = require "st.zwave.CommandClass"
 --- @type st.zwave.CommandClass.Association
 local Association = (require "st.zwave.CommandClass.Association")({ version=2 })
+--- @type st.zwave.CommandClass.MultiChannelAssociation
+local MultiChannelAssociation = (require "st.zwave.CommandClass.MultiChannelAssociation")({ version=4 })
 --- @type st.zwave.CommandClass.Configuration
 local Configuration = (require "st.zwave.CommandClass.Configuration")({ version=4 })
 local preferencesMap = require "preferences"
@@ -27,6 +30,7 @@ local splitAssocString = require "split_assoc_string"
 --- @param device st.zwave.Device
 local function update_preferences(driver, device, args)
   local preferences = preferencesMap.get_device_parameters(device)
+  local supports_multi = device:is_cc_supported(cc.MULTI_CHANNEL_ASSOCIATION)
   for id, value in pairs(device.preferences) do
     if not (args and args.old_st_store) or (args.old_st_store.preferences[id] ~= value and preferences and preferences[id]) then
       if preferences[id].type == 'config' then
@@ -37,14 +41,26 @@ local function update_preferences(driver, device, args)
         local group = preferences[id].group
         local maxnodes = preferences[id].maxnodes
         local addhub = preferences[id].addhub
+        local nodes,multi_nodes,multi = splitAssocString(value,',',maxnodes,addhub,supports_multi)
         local hubnode = device.driver.environment_info.hub_zwave_id
-        local nodes = splitAssocString(value,',',maxnodes,addhub,hubnode)
-        device:send(Association:Remove({grouping_identifier = group, node_ids = {}}))
-        if addhub then device:send(Association:Set({grouping_identifier = group, node_ids = {hubnode}})) end --add hub to group 3 for double click reporting
-        if #nodes > 0 then
-          device:send(Association:Set({grouping_identifier = group, node_ids = nodes}))
+        if supports_multi then
+          device:send(MultiChannelAssociation:Remove({grouping_identifier = group, node_ids = {}, multi_channel_nodes = {}}))
+        else
+          device:send(Association:Remove({grouping_identifier = group, node_ids = {}}))
         end
-        device:send(Association:Get({grouping_identifier = group}))
+        if addhub then device:send(Association:Set({grouping_identifier = group, node_ids = {hubnode}})) end
+        if (#multi_nodes + #nodes) > 0 then
+          if multi then
+            device:send(MultiChannelAssociation:Set({grouping_identifier = group, node_ids = nodes, multi_channel_nodes = multi_nodes}))
+          else
+            device:send(Association:Set({grouping_identifier = group, node_ids = nodes}))
+          end
+        end
+        if multi then
+          device:send(MultiChannelAssociation:Get({grouping_identifier = group}))
+        else
+          device:send(Association:Get({grouping_identifier = group}))
+        end
       end
     end
   end

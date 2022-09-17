@@ -14,23 +14,38 @@
 
 local log = require "log"
 
-local function splitAssocString (inputstr, sep, maxnodes, addhub, hubnode)
+local function splitString(inputstr, sep)
   if sep == nil then
     sep = "%s"
   end
   local t={}
   for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-    if tonumber(str,16) and ((tonumber(str,16) ~= hubnode) or not addhub) then table.insert(t, tonumber(str,16)) end
-  end
-  if #t > maxnodes then
-    local temp = {}
-    for x = 1, maxnodes, 1 do
-      temp[x] = t[x]
-    end
-    t = temp
-    log.warn(string.format('Too many node IDs - ignoring any beyond limit of %s',maxnodes))
+    table.insert(t, str)
   end
   return t
+end
+
+local function splitAssocString (inputstr, sep, maxnodes, addhub, supports_multi)
+  if sep == nil then
+    sep = "%s"
+  end
+  local t={}
+  local m={}
+  local multi=false
+  for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+    if (#m + #t) < maxnodes then
+      local u = splitString(str,":")
+      if tonumber(u[1],16) and ((tonumber(u[1],16) ~= 1) or not addhub) then
+        if #u == 1 then
+          table.insert(t, tonumber(u[1],16))
+        elseif supports_multi and tonumber(u[2],16) then
+          table.insert(m, {multi_channel_node_id=tonumber(u[1],16),end_point=tonumber(u[2],16),bit_address=false})
+          multi=true
+        end
+      end
+    end
+  end
+  return t,m,multi
 end
 
 return splitAssocString
