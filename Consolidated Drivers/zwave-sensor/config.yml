@@ -1,5 +1,5 @@
-name: 'Z-Wave Sensor - philh30'
+name: 'Z-Wave Sensor PH'
 packageKey: 'zwave-sensor-ph'
-description: "Supports HomeSeer HS-LS100+ leak sensor, Ecolink tilt sensor 2 and 2.5, and generic Zwave sensors."
+description: "Supports HomeSeer HS-LS100+ leak sensor; Ecolink tilt sensor 2 and 2.5; FortrezZ leak sensor; Zooz ZSE11, ZSE40 and ZSE41; and generic Zwave sensors."
 permissions:
   zwave: {}

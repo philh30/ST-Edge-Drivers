@@ -21,12 +21,12 @@ components:
   - id: refresh
     version: 1
   categories:
-  - name: MultiFunctionalSensor
+  - name: MotionSensor
 metadata:
-  deviceType: MultiFunctionalSensor
-  ocfDeviceType: x.com.st.d.sensor.multifunction
-  deviceTypeId: MultiFunctionalSensor
-  vid: 1cdfa696-2755-3e13-b535-d126caa60b29
+  deviceType: MotionSensor
+  ocfDeviceType: x.com.st.d.sensor.motion
+  deviceTypeId: MotionSensor
+  vid: f4bc6649-ac90-397b-b8a1-a4d0f8a01f52
   mnmn: SmartThingsCommunity
 preferences:
   - name: "wakeUpInterval"
@@ -59,27 +59,6 @@ preferences:
         4:      "Every 4th wakeup"
         101:    "Once per day maximum"
       default: 1
-  - name: "requestTemperature"
-    title: "Request Temperature"
-    description: "Request temperature when device wakes up?"
-    required: true
-    preferenceType: boolean
-    definition:
-      default: true
-  - name: "requestHumidity"
-    title: "Request Humidity"
-    description: "Request humidity when device wakes up?"
-    required: true
-    preferenceType: boolean
-    definition:
-      default: true
-  - name: "requestIlluminance"
-    title: "Request Illuminance"
-    description: "Request illuminance when device wakes up?"
-    required: true
-    preferenceType: boolean
-    definition:
-      default: true
   - name: "temperatureChange"
     title: "Temperature Sensor Change"
     description: "Set temperature change to be reported by the sensor (1 - 144 degrees F)."
@@ -144,3 +123,11 @@ preferences:
       minimum: 1
       maximum: 744
       default: 4
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs. Sends On & Off commands to associated devices. 5 node max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

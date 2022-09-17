@@ -178,18 +178,6 @@ local function wakeup_notification(self, device, cmd)
 
   -- We may need to request a battery update while we're woken up
   getBatteryUpdate(device)
-  -- Request a temperature report
-  if device.preferences.requestTemperature then
-    device:send(SensorMultilevel:Get({sensor_type = SensorMultilevel.sensor_type.TEMPERATURE}))
-  end
-  -- Request a humidity report
-  if device.preferences.requestHumidity then
-    device:send(SensorMultilevel:Get({sensor_type = SensorMultilevel.sensor_type.RELATIVE_HUMIDITY, scale = SensorMultilevel.scale.relative_humidity.PERCENTAGE}))
-  end
-  -- Request an illuminance report
-  if device.preferences.requestIlluminance then
-    device:send(SensorMultilevel:Get({sensor_type = SensorMultilevel.sensor_type.LUMINANCE, scale = SensorMultilevel.scale.luminance.LUX}))
-  end
 end
 
 --- @param self st.zwave.Driver

@@ -58,6 +58,8 @@ local devices = {
       ledMode              = {type = 'config', parameter_number = 7, size = 1},
       
       wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
+      
+      assocGroup2          = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
     }
   },
   ZOOZ_Q_SENSOR = {
@@ -76,6 +78,8 @@ local devices = {
       illuminanceChange    = {type = 'config', parameter_number = 185, size = 2},
 
       wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
+      
+      assocGroup2          = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
     }
   },
   ZOOZ_ZSE41 = {
