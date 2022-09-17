@@ -1,6 +1,6 @@
 name: inovelli-lzw36
 components:
-  - id: light
+  - id: main
     label: Light
     capabilities:
       - id: switch
@@ -8,6 +8,8 @@ components:
       - id: switchLevel
         version: 1
       - id: button
+        version: 1
+      - id: refresh
         version: 1
     categories:
       - name: Switch
@@ -22,10 +24,12 @@ components:
         version: 1
       - id: button
         version: 1
+      - id: refresh
+        version: 1
     categories:
       - name: Fan
-  - id: main
-    label: Main
+  - id: energy
+    label: Energy monitoring
     capabilities:
       - id: energyMeter
         version: 1
@@ -42,6 +46,8 @@ components:
         version: 1
       - id: switchLevel
         version: 1
+      - id: refresh
+        version: 1
     categories:
       - name: Light
   - id: fanIndicator
@@ -50,6 +56,8 @@ components:
       - id: colorControl
         version: 1
       - id: switchLevel
+        version: 1
+      - id: refresh
         version: 1
     categories:
       - name: Light

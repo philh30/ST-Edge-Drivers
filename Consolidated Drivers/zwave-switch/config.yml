@@ -1,5 +1,5 @@
-name: 'Z-Wave Devices'
+name: 'Z-Wave Switch PH'
 packageKey: 'zwave-switch-ph'
-description: 'Driver for multiple types of z-wave devices'
+description: 'GE, Honeywell, Jasco, Inovelli, and Zooz Z-wave switches'
 permissions:
   zwave: {}

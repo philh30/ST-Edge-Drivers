@@ -38,6 +38,7 @@ local SwitchMultilevel = (require "st.zwave.CommandClass.SwitchMultilevel")({ver
 local Version = (require "st.zwave.CommandClass.Version")({ version=3 })
 local config_handlers = require "inovelli-lzw36.config_handlers"
 local fan_handlers = require "inovelli-lzw36.fan"
+local call_parent_handler = require "call_parent"
 local log = require "log"
 
 local LZW36_FINGERPRINT = {
@@ -45,8 +46,8 @@ local LZW36_FINGERPRINT = {
 }
 
 local map_ep_component = {
-    [0] = 'main',
-    [1] = 'light',
+    [0] = 'energy',
+    [1] = 'main',
     [2] = 'fan',
 }
 
@@ -61,9 +62,9 @@ local paramMap = {
 
 local map_scene = {
     [1] = { comp = 'fan',   type = 'pushed' },
-    [2] = { comp = 'light', type = 'pushed' },
-    [3] = { comp = 'light', type = 'up'     },
-    [4] = { comp = 'light', type = 'down'   },
+    [2] = { comp = 'main', type = 'pushed' },
+    [3] = { comp = 'main', type = 'up'     },
+    [4] = { comp = 'main', type = 'down'   },
     [5] = { comp = 'fan',   type = 'up'     },
     [6] = { comp = 'fan',   type = 'down'   },
 }
@@ -151,8 +152,19 @@ end
 
 --- @param driver st.zwave.Driver
 --- @param device st.zwave.Device
+--- @param command st.zwave.CommandClass.SwitchMultilevel.Report | st.zwave.CommandClass.Basic.Report
+local function level_report(driver,device,command)
+    if map_ep_component[command.src_channel] == 'fan' then
+        fan_handlers.fan_multilevel_report(driver,device,command)
+    elseif map_ep_component[command.src_channel] == 'main' then
+        call_parent_handler(driver.zwave_handlers[cc.SWITCH_MULTILEVEL][SwitchMultilevel.REPORT], driver, device, command)
+    end
+end
+
+--- @param driver st.zwave.Driver
+--- @param device st.zwave.Device
 local function set_level(driver, device, command)
-    local comp_type = { light = 'SwitchMultiLevel', fan = 'SwitchMultiLevel', lightIndicator = 'Configuration', fanIndicator = 'Configuration', main = 'None'}
+    local comp_type = { main = 'SwitchMultiLevel', energy = 'None', fan = 'SwitchMultiLevel', lightIndicator = 'Configuration', fanIndicator = 'Configuration'}
     local comp_map = { lightIndicator = 19, fanIndicator = 21 }
     local set
     local get
@@ -167,9 +179,6 @@ local function set_level(driver, device, command)
         delay = math.max(dimmingDuration + constants.DEFAULT_POST_DIMMING_DELAY, delay) -- delay in seconds
         get = SwitchMultilevel:Get({})
         set = SwitchMultilevel:Set({ value=level, duration=dimmingDuration })
-        if command.component == 'fan' then
-            fan_handlers.fan_speed_set(driver,device,command)
-        end
     elseif comp_type[command.component] == 'Configuration' then
         local param = comp_map[command.component]
         local level = utils.round(command.args.level/10)
@@ -184,12 +193,6 @@ local function set_level(driver, device, command)
         device:send_to_component(get, command.component)
     end
     device.thread:call_with_delay(delay, query_level)
-end
-
---- @param driver st.zwave.Driver
---- @param device st.zwave.Device
-local function switch_zwave_report(driver,device,command)
-    
 end
 
 --- Added device
@@ -226,7 +229,7 @@ local function endpoint_to_component(device, ep)
     if device.profile.components[switch_comp] ~= nil then
         return switch_comp
     else
-        return "main"
+        return "energy"
     end
 end
 
@@ -248,6 +251,12 @@ local lzw36_fan_light = {
         [cc.CONFIGURATION] = {
             [Configuration.REPORT] = configuration_report,
         },
+        [cc.SWITCH_MULTILEVEL] = {
+          [SwitchMultilevel.REPORT] = level_report
+        },
+        [cc.BASIC] = {
+          [Basic.REPORT] = level_report
+        }
     },
     capability_handlers = {
         [capabilities.refresh.ID] = {

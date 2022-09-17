@@ -36,9 +36,9 @@ function capability_handlers.fan_speed_set(driver, device, command, map_fan_spee
   local level = map_fan_speed_to_switch_level(command.args.speed)
   local duration = constants.DEFAULT_DIMMING_DURATION
   local set = SwitchMultilevel:Set({ value=level, duration=duration })
-  device:send(set)
+  device:send_to_component(set, command.component)
   local query_level = function()
-    device:send(SwitchMultilevel:Get({}))
+    device:send_to_component(SwitchMultilevel:Get({}), command.component)
   end
   device.thread:call_with_delay(constants.DEFAULT_GET_STATUS_DELAY + duration, query_level)
 end
@@ -64,7 +64,7 @@ function zwave_handlers.fan_multilevel_report(driver, device, cmd, map_switch_le
   end
 
   if event ~= nil then
-    device:emit_event(event)
+    device:emit_event_for_endpoint(cmd.src_channel, event)
   end
 
   -- emit events SwitchLevel capabilities
