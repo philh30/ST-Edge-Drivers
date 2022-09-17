@@ -1,4 +1,4 @@
--- Author: philh30
+-- Copyright 2022 philh30
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
 local capabilities = require('st.capabilities')
 local log = require('log')
 local commands = require('commands')
-local capabilitydefs = require('capabilitydefs')
 
 local models_supported = {
   'Honeywell Switch',
 }
 
-local function can_handle_sensors(opts, driver, device, ...)
+local function can_handle_switch(opts, driver, device, ...)
   for _, model in ipairs(models_supported) do
     if device.model == model then
       return true
@@ -31,15 +30,13 @@ local function can_handle_sensors(opts, driver, device, ...)
 end
 
 local function added_handler(driver, device)
-  log.info(device.id .. ": " .. device.device_network_id .. " > ADDED ZONE")
+  log.info(device.id .. ": " .. device.device_network_id .. " > ADDED SWITCH")
   device:emit_event(capabilities.switch.switch.off())
   device:online()
 end
 
 local function init_handler(driver,device)
-  log.debug(device.id .. ": " .. device.device_network_id .. " : " .. device.model .. " > INITIALIZING")
-  local dev_id = device.device_network_id:match('envisalink|s|(.+)|%d+')
-  local partition = device.device_network_id:match('envisalink|s|.+|(%d+)')
+  log.debug(device.id .. ": " .. device.device_network_id .. " : " .. device.model .. " > INITIALIZING SWITCH")
 end
 
 ---------------------------------------
@@ -56,7 +53,7 @@ local switch_driver = {
           [capabilities.switch.commands.off.NAME] = commands.on_off,
         },
   },
-  can_handle = can_handle_sensors,
+  can_handle = can_handle_switch,
 }
 
 return switch_driver

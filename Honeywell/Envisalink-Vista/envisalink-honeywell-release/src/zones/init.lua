@@ -1,4 +1,4 @@
--- Author: philh30
+-- Copyright 2022 philh30
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -25,13 +25,13 @@ local models_supported = {
   'Honeywell Carbon Monoxide Sensor Wireless',
   'Honeywell Smoke Sensor Wireless',
   'Honeywell Leak Sensor Wireless',
-  'Honeywell Glass Break Sensor Wireless',
+  'Honeywell Glass Sensor Wireless',
   'Honeywell Contact Sensor Wired',
   'Honeywell Motion Sensor Wired',
   'Honeywell Carbon Monoxide Sensor Wired',
   'Honeywell Smoke Sensor Wired',
   'Honeywell Leak Sensor Wired',
-  'Honeywell Glass Break Sensor Wired',
+  'Honeywell Glass Sensor Wired',
 }
 
 local capabilityInits = {
@@ -65,7 +65,7 @@ local capabilityInits = {
     capabilities[capabilitydefs.leakZone.name].leakZone.dry(),
     capabilities.waterSensor.water.dry()
   },
-  ['Glass Break'] = {
+  ['Glass'] = {
     capabilities[capabilitydefs.glassBreakZone.name].glassBreakZone.noSound(),
     capabilities.soundDetection.soundDetected.noSound(),
     capabilities.contactSensor.contact.closed(),
@@ -73,7 +73,7 @@ local capabilityInits = {
 }
 
 local function can_handle_sensors(opts, driver, device, ...)
-  for _, model in ipairs(models_supported) do
+  for _, model in pairs(models_supported) do
     if device.model == model then
       return true
     end
@@ -95,9 +95,7 @@ local function added_handler(driver, device)
 end
 
 local function init_handler(driver,device)
-  log.debug(device.id .. ": " .. device.device_network_id .. " : " .. device.model .. " > INITIALIZING")
-  local partition = device.preferences.partition
-  local zone = device.device_network_id:match('envisalink|z|(%d+)')
+  log.debug(device.id .. ": " .. device.device_network_id .. " : " .. device.model .. " > INITIALIZING ZONE")
 end
 
 local function refresh_handler(driver, device, command)
@@ -117,7 +115,7 @@ local function bypass_handler(driver, device, cmd)
 end
 
 local function infoChanged_handler(driver, device)
-  log.info(device.id .. ": " .. device.device_network_id .. " > INFO CHANGED CONTACT SENSOR")
+  log.info(device.id .. ": " .. device.device_network_id .. " > INFO CHANGED ZONE")
   local new_model = evt.device_types[device.preferences.zoneType][device.preferences.wiredWireless].model
   if device.model ~= new_model then
     log.warn (string.format('Changing %s device type from %s to %s',device.device_network_id,device.model,new_model))

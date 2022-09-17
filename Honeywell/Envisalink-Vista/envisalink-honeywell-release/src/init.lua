@@ -13,9 +13,7 @@
 -- limitations under the License.
 
 local Driver = require('st.driver')
-local caps = require('st.capabilities')
 local log = require('log')
-local capdefs = require('capabilitydefs')
 local events = require "evthandler"
 
 ---------------------------------------

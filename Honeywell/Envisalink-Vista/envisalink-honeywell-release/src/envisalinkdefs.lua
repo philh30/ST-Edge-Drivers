@@ -38,9 +38,9 @@ evlDefs.Commands = {
 
 evlDefs.ResponseTypes = {
 	['Login:'] = {
-		['name'] 		= 'Login Prompt',
-		['description']	= 'Sent During Session Login Only.',
-		['handler'] 	= 'handle_login',
+		name 		= 'Login Prompt',
+		description	= 'Sent During Session Login Only.',
+		handler 	= 'handle_login',
 	},
 	['OK'] = {
 		name		= 'Login Success',

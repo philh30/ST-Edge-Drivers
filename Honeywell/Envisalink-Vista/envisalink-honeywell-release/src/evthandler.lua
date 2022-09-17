@@ -15,32 +15,8 @@
 local log             = require('log')
 local capabilities    = require('st.capabilities')
 local capabilitydefs  = require('capabilitydefs')
-local utilities       = require('utilities')
 
 local event_handler = {}
-
-local alarm_modes = {
-  ready         = 'Ready',
-  notready      = 'Not Ready',
-  arming        = 'Arming',
-  armedstay     = 'Armed Stay',
-  armedaway     = 'Armed Away',
-  armedinstant  = 'Armed Instant',
-  armedmax      = 'Armed Max',
-  armednight    = 'Armed Night',
-  alarmcleared  = 'Alarm Cleared',
-  alarm         = 'Alarm',
-  armAway       = 'Sending Arm Away',
-  armStay       = 'Sending Arm Stay',
-  armInstant    = 'Sending Arm Instant',
-  disarm        = 'Sending Disarm',
-  armMax        = 'Sending Arm Max',
-  armNight      = 'Sending Arm Night',
-  chime         = 'Sending Chime',
-  bypass        = 'Sending Bypass',
-  triggerOne    = 'Sending Trigger 1',
-  triggerTwo    = 'Sending Trigger 2',
-}
 
 local switch_modes = {
   ready         = 'disarm',
@@ -120,40 +96,40 @@ local translate_state = {
 
 local function update_zone_contact(driver,device,body)
   device:emit_event(capabilities[capabilitydefs.contactZone.name].contactZone({value = translate_state.contact_bypass[body.state]}))
-  device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]}))
-  device:emit_event(capabilities.contactSensor.contact({value = translate_state.contact[body.state]}))
+  device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]},{visibility = {displayed = false}}))
+  device:emit_event(capabilities.contactSensor.contact({value = translate_state.contact[body.state]},{visibility = {displayed = false}}))
 end
 
 local function update_zone_motion(driver,device,body)
   device:emit_event(capabilities[capabilitydefs.motionZone.name].motionZone({value = translate_state.motion_bypass[body.state]}))
-  device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]}))
-  device:emit_event(capabilities.motionSensor.motion({value = translate_state.motion[body.state]}))
+  device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]},{visibility = {displayed = false}}))
+  device:emit_event(capabilities.motionSensor.motion({value = translate_state.motion[body.state]},{visibility = {displayed = false}}))
 end
 
 local function update_zone_carbonmonoxide(driver,device,body)
   device:emit_event(capabilities[capabilitydefs.carbonMonoxideZone.name].carbonMonoxideZone({value = translate_state.carbonmonoxide_bypass[body.state]}))
-  device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]}))
-  device:emit_event(capabilities.carbonMonoxideDetector.carbonMonoxide({value = translate_state.carbonmonoxide[body.state]}))
-  device:emit_event(capabilities.smokeDetector.smoke({value = translate_state.smoke[body.state]}))
+  device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]},{visibility = {displayed = false}}))
+  device:emit_event(capabilities.carbonMonoxideDetector.carbonMonoxide({value = translate_state.carbonmonoxide[body.state]},{visibility = {displayed = false}}))
+  device:emit_event(capabilities.smokeDetector.smoke({value = translate_state.smoke[body.state]},{visibility = {displayed = false}}))
 end
 
 local function update_zone_smoke(driver,device,body)
   device:emit_event(capabilities[capabilitydefs.smokeZone.name].smokeZone({value = translate_state.smoke_bypass[body.state]}))
-  device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]}))
-  device:emit_event(capabilities.smokeDetector.smoke({value = translate_state.smoke[body.state]}))
+  device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]},{visibility = {displayed = false}}))
+  device:emit_event(capabilities.smokeDetector.smoke({value = translate_state.smoke[body.state]},{visibility = {displayed = false}}))
 end
 
 local function update_zone_leak(driver,device,body)
   device:emit_event(capabilities[capabilitydefs.leakZone.name].leakZone({value = translate_state.leak_bypass[body.state]}))
-  device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]}))
-  device:emit_event(capabilities.waterSensor.water({value = translate_state.leak[body.state]}))
+  device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]},{visibility = {displayed = false}}))
+  device:emit_event(capabilities.waterSensor.water({value = translate_state.leak[body.state]},{visibility = {displayed = false}}))
 end
   
 local function update_zone_glass(driver,device,body)
   device:emit_event(capabilities[capabilitydefs.glassBreakZone.name].glassBreakZone({value = translate_state.glass_bypass[body.state]}))
-  device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]}))
-  device:emit_event(capabilities.contactSensor.contact({value = translate_state.contact[body.state]}))
-  device:emit_event(capabilities.soundDetection.soundDetected({value = translate_state.glass[body.state]}))
+  device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.state]},{visibility = {displayed = false}}))
+  device:emit_event(capabilities.contactSensor.contact({value = translate_state.contact[body.state]},{visibility = {displayed = false}}))
+  device:emit_event(capabilities.soundDetection.soundDetected({value = translate_state.glass[body.state]},{visibility = {displayed = false}}))
 end
 
 local function update_tamper(driver,device,body)
@@ -191,18 +167,17 @@ event_handler.zone_handler = {
 }
 
 local function update_partition(driver,device,body)
-  local evt
   local partition = device.device_network_id:match('envisalink|p|(.+)')
   device:emit_event(capabilities[capabilitydefs.statusMessage.name].statusMessage({value = body.alpha}))
   if translate_state.security_system[body.state] then
-    device:emit_event(capabilities.securitySystem.securitySystemStatus({value = translate_state.security_system[body.state]}))
+    device:emit_event(capabilities.securitySystem.securitySystemStatus({value = translate_state.security_system[body.state]},{visibility = {displayed = false}}))
   end
   device:emit_event(capabilities[capabilitydefs.alarmMode.name].alarmMode({value = body.state}))
   device:emit_event(capabilities.chime.chime({value = body.chime}))
   device:emit_event(capabilities.powerSource.powerSource({value = body.power}))
   if body.battery then device:emit_event(capabilities.battery.battery({value = body.battery})) end
   if (body.bypass ~= 'bypassed') and (device.state_cache.main.bypassable.bypassStatus.value == "bypassed") then
-    device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.bypass]}))
+    device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.bypass]},{visibility = {displayed = false}}))
     local zone_body = {state = 'closed'}
     local device_list = driver:get_devices()
     for _, dev in ipairs(device_list) do

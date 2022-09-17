@@ -16,7 +16,6 @@ local capabilities = require('st.capabilities')
 local log = require('log')
 local commands = require('commands')
 local capdefs = require('capabilitydefs')
-local utilities = require('utilities')
 local events = require "evthandler"
 
 local models_supported = {

@@ -12,7 +12,6 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-local cosock = require "cosock"
 local socket = require "cosock.socket"
 local commands = require('commands')
 local log = require('log')

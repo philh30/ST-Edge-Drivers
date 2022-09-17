@@ -19,28 +19,28 @@ local log = require('log')
 local lifecycle_handler = {}
 
 function lifecycle_handler.init(driver, device)
-  log.debug(device.id .. ": " .. device.device_network_id .. " : " .. device.model .. " > INITIALIZING")
+  log.debug(device.id .. ": " .. device.device_network_id .. " : " .. device.model .. " > INITIALIZING GENERIC")
 end
 
 function lifecycle_handler.added(driver, device)
-  log.info(device.id .. ": " .. device.device_network_id .. " > ADDED")
+  log.info(device.id .. ": " .. device.device_network_id .. " > ADDED GENERIC")
   device:online()
 end
 
 function lifecycle_handler.driverSwitched(driver,device)
-  log.info(device.id .. ": " .. device.device_network_id .. " > DRIVER SWITCHED")
+  log.info(device.id .. ": " .. device.device_network_id .. " > DRIVER SWITCHED GENERIC")
 end
 
 function lifecycle_handler.infoChanged(driver,device)
-  log.info(device.id .. ": " .. device.device_network_id .. " > INFO CHANGED")
+  log.info(device.id .. ": " .. device.device_network_id .. " > INFO CHANGED GENERIC")
 end
 
 function lifecycle_handler.doConfigure(driver,device)
-  log.info(device.id .. ": " .. device.device_network_id .. " > DO CONFIGURE")
+  log.info(device.id .. ": " .. device.device_network_id .. " > DO CONFIGURE GENERIC")
 end
 
 function lifecycle_handler.removed(_, device)
-  log.info(device.id .. ": " .. device.device_network_id .. " > REMOVED")
+  log.info(device.id .. ": " .. device.device_network_id .. " > REMOVED GENERIC")
 end
 
 return lifecycle_handler
