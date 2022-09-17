@@ -39,8 +39,10 @@ local interiorButton  = 'platinummassive43262.schlageInteriorButton'
 local LockCodesDefaults = require "st.zwave.defaults.lockCodes"
 
 local FINGERPRINTS = {
-  {mfr = 0x003B, prod = 0x0001, model = 0x0469},
-  {mfr = 0x003B, prod = 0x6341, model = 0x5044},
+  {mfr = 0x003B, prod = 0x0001, model = 0x0469},  -- BE469ZP
+  {mfr = 0x003B, prod = 0x6341, model = 0x5044},  -- BE469
+  {mfr = 0x003B, prod = 0x0001, model = 0x0468},  -- BE468ZP
+  {mfr = 0x003B, prod = 0x6349, model = 0x5044},  -- BE468
 }
 
 local SCHLAGE_LOCK_CODE_LENGTH_PARAM = {number = 16, size = 1}
@@ -147,8 +149,10 @@ local function refresh_handler(self, device, args)
   if device.preferences.refreshCodes then
     LockCodesDefaults.get_refresh_commands(self,device,'main',0)
   end
-  for param,_ in pairs(paramMap) do
-    device:send(Configuration:Get({parameter_number = param}))
+  for param, map in pairs(paramMap) do
+    if device:supports_capability_by_id(map.cap,map.comp) then
+      device:send(Configuration:Get({parameter_number = param}))
+    end
   end
 end
 
@@ -183,6 +187,12 @@ local function notification_report(self, device, cmd)
   else
     call_parent_handler(self.zwave_handlers[cc.NOTIFICATION][Notification.REPORT], self, device, cmd)
   end
+end
+
+local function added_handler(self, device, event, args)
+  device:emit_event(capabilities.lockCodes.minCodeLength({value = 4}))
+  device:emit_event(capabilities.lockCodes.minCodeLength({value = 8}))
+  call_parent_handler(self.lifecycle_handlers.added, self, device, event, args)
 end
 
 local schlage_lock = {
@@ -231,6 +241,7 @@ local schlage_lock = {
   },
   lifecycle_handlers = {
     infoChanged = info_changed,
+    added = added_handler,
   },
   NAME = "Schlage BE469",
   can_handle = can_handle_schlage_be469,

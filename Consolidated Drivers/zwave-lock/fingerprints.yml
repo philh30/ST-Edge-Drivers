@@ -67,7 +67,7 @@ zwaveManufacturer:
     manufacturerId: 0x003B
     productType: 0x6349
     productId: 0x5044
-    deviceProfileName: base-lock
+    deviceProfileName: schlage-be468
   - id: "Schlage/Touchscreen/2"
     deviceLabel: Schlage Door Lock
     manufacturerId: 0x003B
@@ -85,7 +85,7 @@ zwaveManufacturer:
     manufacturerId: 0x003B
     productType: 0x0001
     productId: 0x0468
-    deviceProfileName: base-lock
+    deviceProfileName: schlage-be468
   - id: "Schlage/BE469ZP"
     deviceLabel: Schlage BE469ZP Door Lock
     manufacturerId: 0x003B
