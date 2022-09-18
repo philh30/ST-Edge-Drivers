@@ -1,0 +1,5 @@
+name: 'Z-Wave Associator'
+packageKey: 'zwave-associator'
+description: 'View and manage z-wave associations.'
+permissions:
+  zwave: {}

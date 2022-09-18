@@ -1,0 +1,8 @@
+zwaveGeneric:
+  - id: "Associate Me"
+    deviceLabel: Z-Wave Utility Belt - Associator
+    commandClasses:
+      supported:
+        - 0x85 # association
+    deviceProfileName: associate-me
+    isJoinable: false

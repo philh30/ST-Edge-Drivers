@@ -1,0 +1,24 @@
+name: associate-me
+components:
+- id: main
+  label: Device Capabilities and Association Groups
+  capabilities:
+  - id: platinummassive43262.deviceInformation
+    version: 1
+  - id: platinummassive43262.zwubAssociationGroups
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: Switch
+- id: setAssociationGroup
+  label: Set Association Group
+  capabilities:
+  - id: platinummassive43262.zwubAssociationGroup
+    version: 1
+  - id: platinummassive43262.zwubAssociationSet
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: Switch
