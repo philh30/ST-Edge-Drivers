@@ -15,4 +15,10 @@ capabilitydefs.associationSet = {}
 capabilitydefs.associationSet.name = "platinummassive43262.zwubAssociationSet"
 capabilitydefs.associationSet.capability = capabilities[capabilitydefs.associationSet.name]
 
+capabilitydefs.commandClasses = capabilities["platinummassive43262.zwubCommandClasses"]
+
+capabilitydefs.messageQueue = capabilities["platinummassive43262.zwubMessageQueue"]
+
+capabilitydefs.reset = capabilities["platinummassive43262.reset"]
+
 return capabilitydefs

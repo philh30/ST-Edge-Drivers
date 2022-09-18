@@ -1,4 +1,12 @@
 zwaveGeneric:
+  - id: "Associate Me - Sleepy"
+    deviceLabel: Z-Wave Utility Belt - Associator
+    commandClasses:
+      supported:
+        - 0x84 # wakeup
+        - 0x85 # association
+    deviceProfileName: associate-me-sleepy
+    isJoinable: false
   - id: "Associate Me"
     deviceLabel: Z-Wave Utility Belt - Associator
     commandClasses:

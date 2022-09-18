@@ -1,4 +1,4 @@
-name: associate-me
+name: associate-me-sleepy
 components:
 - id: main
   label: Device capabilities and association groups
@@ -19,6 +19,17 @@ components:
   - id: platinummassive43262.zwubAssociationGroup
     version: 1
   - id: platinummassive43262.zwubAssociationSet
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: RemoteController
+- id: queue
+  label: Queued commands (wake up device to send)
+  capabilities:
+  - id: platinummassive43262.zwubMessageQueue
+    version: 1
+  - id: platinummassive43262.reset
     version: 1
   - id: refresh
     version: 1
