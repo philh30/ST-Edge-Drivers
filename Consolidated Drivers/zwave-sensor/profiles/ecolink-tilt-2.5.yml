@@ -65,7 +65,7 @@ preferences:
       default: 0
   - title: "Association Group 2"
     name: assocGroup2
-    description: "Enter a comma delimited list of hex IDs. Sends On & Off commands to associated devices. 5 node max."
+    description: "Enter a comma delimited list of hex IDs. Sends On & Off commands to associated devices. 3 node max."
     required: true
     preferenceType: string
     definition:

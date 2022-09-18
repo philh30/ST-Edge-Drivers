@@ -5,42 +5,30 @@ zwaveManufacturer:
 #    productType: 0x0005
 #    productId: 0x0010
 #    deviceProfileName: water-battery-tempalarm
-#  - id: "zooz/4in1"
-#    deviceLabel: Zooz 4-in-1 sensor
-#    manufacturerId: 0x027A
-#    productType: 0x2021
-#    productId: 0x2101
-#    deviceProfileName: multi-functional-motion
-#  - id: 014A/0001/0002
-#    deviceLabel: Ecolink Open/Closed Sensor
-#    manufacturerId: 0x014A
-#    productType: 0x0001
-#    productId: 0x0002
-#    deviceProfileName: contact-battery-tamperalert
+  - id: 014A/0001/0002   # DW-ZWAVE2
+    deviceLabel: Ecolink Open/Closed Sensor 2
+    manufacturerId: 0x014A
+    productType: 0x0001
+    productId: 0x0002
+    deviceProfileName: ecolink-contact-2
   - id: 014A/0001/0003   #TLT-ZWAVE2
     deviceLabel: Ecolink Tilt Sensor 2
     manufacturerId: 0x014A
     productType: 0x0001
     productId: 0x0003
     deviceProfileName: ecolink-tilt-2
+  - id: 014A/0004/0002   # DW-ZWAVE2.5
+    deviceLabel: Ecolink Open/Closed Sensor 2.5
+    manufacturerId: 0x014A
+    productType: 0x0004
+    productId: 0x0002
+    deviceProfileName: ecolink-contact-2.5
   - id: 014A/0004/0003   # TILT-ZWAVE2.5-ECO
     deviceLabel: Ecolink Tilt Sensor 2.5-ECO
     manufacturerId: 0x014A
     productType: 0x0004
     productId: 0x0003
     deviceProfileName: ecolink-tilt-2.5
-#  - id: 014A/0004/0002
-#    deviceLabel: Ecolink Open/Closed Sensor
-#    manufacturerId: 0x014A
-#    productType: 0x0004
-#    productId: 0x0002
-#    deviceProfileName: contact-battery-tamperalert
-#  - id: 0084/0053/0216
-#    deviceLabel: FortrezZ Water Leak Sensor
-#    manufacturerId: 0x0084
-#    productType: 0x0053
-#    productId: 0x0216
-#    deviceProfileName: water-battery-temperature
   - id: 027A/7000/E001
     deviceLabel: Zooz ZSE41 XS Contact Sensor
     manufacturerId: 0x027A
@@ -53,6 +41,12 @@ zwaveManufacturer:
     productType: 0x2021
     productId: 0x2101
     deviceProfileName: zooz-4-in-1-sensor
+  - id: "monoprice/4in1"
+    deviceLabel: Monoprice 4-in-1 sensor
+    manufacturerId: 0x0109
+    productType: 0x2021
+    productId: 0x2101
+    deviceProfileName: monoprice-4-in-1-sensor
   - id: "zooz/q-eu"
     deviceLabel: Zooz Q sensor
     manufacturerId: 0x027A

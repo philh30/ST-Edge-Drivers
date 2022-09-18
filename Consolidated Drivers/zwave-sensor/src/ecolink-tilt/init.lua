@@ -63,6 +63,7 @@ local LAST_BATTERY_REPORT_TIME = "lastBatteryReportTime"
 
 local ECOLINK_TILT_FINGERPRINTS = {
     { mfr = 0x014A, prod = 0x0001, model = 0x0003 }, -- Ecolink Tilt Sensor 2 (zwave)
+    { mfr = 0x014A, prod = 0x0004, model = 0x0002 }, -- Ecolink Door/Window Sensor 2.5 (zwave plus)
     { mfr = 0x014A, prod = 0x0004, model = 0x0003 }, -- Ecolink Tilt Sensor 2.5 (zwave plus)
 }
 

@@ -34,6 +34,7 @@ local LAST_BATTERY_REPORT_TIME = "lastBatteryReportTime"
 
 local ZOOZ_FINGERPRINTS = {
   { manufacturerId = 0x027A, productType = 0x2021, productId = 0x2101 }, -- Zooz 4-in-1 sensor
+  { manufacturerId = 0x0109, productType = 0x2021, productId = 0x2101 }, -- Monoprice 4-in-1 sensor
   { manufacturerId = 0x027A, productType = 0x0200, productId = 0x0006 }, -- Zooz Q Sensor - EU Version
   { manufacturerId = 0x027A, productType = 0x0201, productId = 0x0006 }, -- Zooz Q Sensor - US Version
   { manufacturerId = 0x027A, productType = 0x0202, productId = 0x0006 }, -- Zooz Q Sensor - AU Version

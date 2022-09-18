@@ -1,4 +1,4 @@
-name: ecolink-tilt-2
+name: ecolink-contact-2
 components:
 - id: main
   capabilities:
@@ -11,7 +11,7 @@ components:
   - id: battery
     version: 1
   categories:
-  - name: GarageDoor
+  - name: ContactSensor
 preferences:
   - name: "wakeUpInterval"
     title: "Wake Up Interval"

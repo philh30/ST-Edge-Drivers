@@ -1,4 +1,4 @@
-name: zooz-q-sensor
+name: monoprice-4-in-1-sensor
 components:
 - id: main
   capabilities:
@@ -12,11 +12,9 @@ components:
     version: 1
   - id: tamperAlert
     version: 1
-  - id: battery
-    version: 1
-  - id: powerSource
-    version: 1
   - id: platemusic11009.deviceNetworkId
+    version: 1
+  - id: battery
     version: 1
   categories:
   - name: MotionSensor
@@ -57,75 +55,69 @@ preferences:
         4:      "Every 4th wakeup"
         101:    "Once per day maximum"
       default: 1
+  - name: "temperatureScale"
+    title: "Temperature Scale"
+    description: "Switch from Fahrenheit to Celsius scale."
+    required: false
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Celsius"
+        1: "Fahrenheit"
+      default: 0
   - name: "temperatureChange"
     title: "Temperature Sensor Change"
-    description: "Set temperature change to be reported by the sensor (1 - 144 degrees F)."
+    description: "Set temperature change to be reported by the sensor (1 - 50 where 1 stands for 0.1 degree C and 50 stands for 5 degrees)."
     required: false
     preferenceType: integer
     definition:
       minimum: 1
-      maximum: 144
-      default: 1
+      maximum: 50
+      default: 10
   - name: "humidityChange"
     title: "Humidity Sensor Change"
-    description: "Set humidity percentage change to be reported by the sensor (0=off or 1 - 80%)."
+    description: "Set humidity percentage change to be reported by the sensor (1 - 50 where 1 stands for 1% and 50 stands for 50%)."
     required: false
     preferenceType: integer
     definition:
-      minimum: 0
-      maximum: 80
-      default: 5
+      minimum: 1
+      maximum: 50
+      default: 10
   - name: "illuminanceChange"
     title: "Light Sensor Change"
-    description: "Set light percentage change to be reported by the sensor (0=off, 1 - 30,000 lux)."
+    description: "Set light percentage change to be reported by the sensor (1 - 50 where 1 stands for 1% and 50 stands for 50%)."
     required: false
     preferenceType: integer
     definition:
-      minimum: 0
-      maximum: 30000
-      default: 50
+      minimum: 1
+      maximum: 50
+      default: 10
   - name: "motionInterval"
     title: "Motion Sensor Clear Delay"
-    description: "Set trigger interval - the time when motion is reported again after initial trigger (10 - 3,600 seconds)."
+    description: "Set trigger interval - the time when motion is reported again after initial trigger (1 - 255 minutes)."
     required: false
     preferenceType: integer
     definition:
-      minimum: 10
-      maximum: 3600
-      default: 30
+      minimum: 1
+      maximum: 255
+      default: 3
   - name: "motionSensitivity"
     title: "Motion Sensor Sensitivity"
-    description: "Adjust motion sensor sensitivity ( 0 - 8, where 0 = off and 8 = very high sensitivity)."
+    description: "Adjust motion sensor sensitivity ( 1 - 7, where 1 = very high sensitivity and 7 = very low sensitivity)."
     required: false
     preferenceType: integer
     definition:
-      minimum: 0
-      maximum: 8
-      default: 6
+      minimum: 1
+      maximum: 7
+      default: 4
   - name: "ledMode"
-    title: "LED Motion Indicator"
+    title: "LED Notification Mode"
     description: "Choose between LED indicator modes."
     required: false
     preferenceType: enumeration
     definition:
       options:
-        0: "Off"
-        1: "Flash LED when motion is detected"
-      default: 1
-  - name: "reportFrequency"
-    title: "Reporting Frequency"
-    description: "Set the reporting frequency for battery, temperature, humidity and light (1 - 744 hours)."
-    required: false
-    preferenceType: integer
-    definition:
-      minimum: 1
-      maximum: 744
-      default: 4
-  - title: "Association Group 2"
-    name: assocGroup2
-    description: "Enter a comma delimited list of hex IDs. Sends On & Off commands to associated devices. 5 node max."
-    required: true
-    preferenceType: string
-    definition:
-      stringType: text
-      default: ""
+        1: "Off"
+        2: "Temp pulse, motion flash"
+        3: "Temp flash, motion flash"
+      default: 3

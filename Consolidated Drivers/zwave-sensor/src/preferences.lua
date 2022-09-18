@@ -46,9 +46,9 @@ local devices = {
       wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
     }
   },
-  ZOOZ_4_IN_1_SENSOR = {
+  ZOOZ_4_IN_1_SENSOR = {  -- Includes Zooz and Monoprice 4-in-1 sensors
     MATCHING_MATRIX = {
-      mfrs = 0x027A,
+      mfrs = {0x027A,0x0109},
       product_types = 0x2021,
       product_ids = 0x2101
     },
@@ -125,21 +125,23 @@ local devices = {
       assocGroup2          = { type = 'assoc', group = 2, maxnodes = 5, addhub = false }
     }
   },
-  ECOLINK_TILT2 = {  -- Ecolink Tilt Sensor TILT-ZWAVE2 (zwave)
+  ECOLINK_TILT2 = {  -- Ecolink Tilt Sensor TILT-ZWAVE2 (zwave) & Door/Window Sensor DW-ZWAVE2 (zwave)
     MATCHING_MATRIX = {
       mfrs          = 0x014A,
       product_types = 0x0001,
-      product_ids   = 0x0003
+      product_ids   = {0x0002,0x0003}
     }, 
     PARAMETERS = {
       wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
+
+      assocGroup2          = { type = 'assoc', group = 2, maxnodes = 3, addhub = false }
     }
   },
-  ECOLINK_TILT25 = {  -- Ecolink Tilt Sensor TILT-ZWAVE2.5-ECO (zwave plus)
+  ECOLINK_TILT_CONTACT_25 = {  -- Ecolink Tilt Sensor TILT-ZWAVE2.5-ECO (zwave plus) & Door/Window Sensor DW-ZWAVE2.5 (zwave plus)
     MATCHING_MATRIX = {
       mfrs          = 0x014A,
       product_types = 0x0004,
-      product_ids   = 0x0003
+      product_ids   = {0x0002,0x0003}
     }, 
     PARAMETERS = {
       basicSetCommand      = { type = 'config', parameter_number = 1, size = 1 }, -- P1: BasicSet enabled/disabled for association group 2
@@ -147,7 +149,7 @@ local devices = {
 
       wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
 
-      assocGroup2          = { type = 'assoc', group = 2, maxnodes = 5, addhub = false }
+      assocGroup2          = { type = 'assoc', group = 2, maxnodes = 3, addhub = false }
     }
   },
 }
