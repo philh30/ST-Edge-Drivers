@@ -1,0 +1,32 @@
+name: remotec-zfm80
+components:
+- id: main
+  capabilities:
+  - id: switch
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: Switch
+preferences:
+  - title: "External Switch"
+    name: externalSwitchType
+    description: "Set external switch configuration"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Disabled"
+        1: "Momentary - NO"
+        2: "Momentary - NC"
+        3: "Toggle - NO"
+        4: "Toggle - NC"
+      default: 3
+  - title: "Association Group 1"
+    name: assocGroup1
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with the relay load (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

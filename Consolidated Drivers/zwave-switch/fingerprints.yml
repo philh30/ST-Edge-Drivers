@@ -501,6 +501,12 @@ zwaveManufacturer:
     productType: 0x0003
     productId: 0x0006
     deviceProfileName: metering-switch
+  - id: "5254/8000/0002"
+    deviceLabel: Remotec Fixture Switch Module ZFM-80
+    manufacturerId: 0x5254
+    productType: 0x8000
+    productId: 0x0002
+    deviceProfileName: remotec-zfm80
 # Iris Range Extender
   - id: "0246/0001/0001"
     deviceLabel: Iris Repeater/Extender
