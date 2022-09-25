@@ -1,6 +1,7 @@
 name: ge-motionswitch
 components:
 - id: main
+  label: Main
   capabilities:
   - id: switch
     version: 1
@@ -22,7 +23,7 @@ metadata:
   deviceType: Switch
   ocfDeviceType: oic.d.switch
   deviceTypeId: Switch
-  vid: 2ecc4fe9-d65b-3645-bcf0-4cd9b6c17f63
+  vid: 6c2fabf0-183d-3534-95fe-233598d8972a
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Enable/Disable Motion Sensor"

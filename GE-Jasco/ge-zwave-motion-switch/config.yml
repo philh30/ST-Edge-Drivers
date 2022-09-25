@@ -1,4 +1,6 @@
 name: 'GE Z-Wave Motion Switch/Dimmer'
 packageKey: 'ge-zwave-motion-switch'
+description: 'GE/Jasco motion switches and dimmers'
+vendorSupportInformation: 'Developer: philh30<br><br><a href="https://community.smartthings.com/t/st-edge-driver-for-ge-jasco-z-wave-motion-switches-and-dimmers-24770-26931-26932-26933/237043">SmartThings Community discussion</a><br><br><a href="https://github.com/philh30/ST-Edge-Drivers/blob/main/GE-Jasco/README.md#ge-z-wave-motion-switchdimmer-ge-zwave-motion-switch">List of supported models</a><br><br><a href="https://github.com/philh30/ST-Edge-Drivers/tree/main/GE-Jasco/ge-zwave-motion-switch">Source code</a>'
 permissions:
   zwave: {}
