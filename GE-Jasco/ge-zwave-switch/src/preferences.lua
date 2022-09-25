@@ -22,6 +22,7 @@ local GE_BASIC = {
     dimTimeManual   = {type = 'config', parameter_number = 10, size = 2},
     dimStepsAll     = {type = 'config', parameter_number = 11, size = 1},
     dimTimeAll      = {type = 'config', parameter_number = 12, size = 2},
+    excludeProtect  = {type = 'config', parameter_number = 19, size = 1},
     assocGroup2     = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
     assocGroup3     = {type = 'assoc', group = 3, maxnodes = 4, addhub = true},
   },

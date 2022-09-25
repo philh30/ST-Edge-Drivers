@@ -38,6 +38,16 @@ preferences:
         0: "No"
         1: "Yes"
       default: 0
+  - title: "Exclusion Sequence"
+    name: excludeProtect
+    description: "Never accidentally remove a device with alternate exclusion"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Press any button"
+        1: "Press ON twice and OFF twice"
+      default: 0
   - title: "Number of Dimming Steps (Z-Wave)"
     name: dimStepsZwave
     description: "Number of dimming steps when adjusted by z-wave"
