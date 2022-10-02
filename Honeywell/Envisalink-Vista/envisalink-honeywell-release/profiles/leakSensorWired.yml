@@ -1,6 +1,7 @@
 name: leak-sensor-wired
 components:
 - id: main
+  label: Main
   capabilities:
   - id: "platinummassive43262.leakZone"
     version: 1
@@ -20,7 +21,7 @@ metadata:
   deviceType: LeakSensor
   ocfDeviceType: x.com.st.d.sensor.moisture
   deviceTypeId: LeakSensor
-  vid: 7016a6e4-3bb5-3323-8505-8b6ad5688512
+  vid: 166f0b8f-6914-3455-b706-3895f8f4dbdb
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Partition"

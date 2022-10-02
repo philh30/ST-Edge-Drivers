@@ -1,6 +1,7 @@
 name: motion-sensor-wireless
 components:
 - id: main
+  label: Main
   capabilities:
   - id: "platinummassive43262.motionZone"
     version: 1
@@ -22,7 +23,7 @@ metadata:
   deviceType: MotionSensor
   ocfDeviceType: x.com.st.d.sensor.motion
   deviceTypeId: MotionSensor
-  vid: 3d15ff0f-677c-39d9-8ce5-363f9c7af082
+  vid: 70368012-9baf-318b-851d-6db9c9c7de12
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Partition"

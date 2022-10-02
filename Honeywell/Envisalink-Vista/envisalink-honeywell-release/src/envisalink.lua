@@ -385,12 +385,15 @@ local function parse_led_bitfield(led_bitfield)
 end
 
 function handlers.handle_keypad_update(driver,sock,data)
-	if #data == 6 then 
+	if #data >= 6 then
 		local partition = tonumber(data[2],16)
 		local led_bitfield = tonumber(data[3],16)
 		local zone_user = tonumber(data[4],10)
 		local beep = tonumber(data[5],16)
-		local alpha = data[6]
+		local alpha = ''
+		for i=6,#data,1 do
+			alpha = alpha .. (#alpha > 0 and ',' or '') .. (data[i] or '')
+		end
 		local flags = parse_led_bitfield(led_bitfield)
 		local partition_status = get_partition_state(flags, alpha)
 		local open_timer_count = 0

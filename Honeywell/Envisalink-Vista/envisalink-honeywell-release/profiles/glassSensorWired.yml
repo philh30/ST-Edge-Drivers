@@ -1,6 +1,7 @@
 name: glass-sensor-wired
 components:
 - id: main
+  label: Main
   capabilities:
   - id: "platinummassive43262.glassBreakZone"
     version: 1
@@ -22,7 +23,7 @@ metadata:
   deviceType: SoundSensor
   ocfDeviceType: x.com.st.d.sensor.sound
   deviceTypeId: SoundSensor
-  vid: ad5b19d8-60db-38ff-b72c-f0af8b8dffe6
+  vid: 45810f3b-7069-3d2e-9b71-6c249a16c05d
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Partition"

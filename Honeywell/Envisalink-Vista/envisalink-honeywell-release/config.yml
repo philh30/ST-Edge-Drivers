@@ -1,5 +1,7 @@
-name: 'Honeywell-Ademco Envisalink - Release'
+name: 'Honeywell-Ademco Envisalink'
 packageKey: 'envisalink-honeywell-release'
+description: 'Honeywell/Ademco Vista alarm panel with Envisalink'
+vendorSupportInformation: 'Developer: philh30<br><br><a href="https://community.smartthings.com/t/st-edge-honeywell-ademco-vista-panel-envisalink/233766?u=philh30">SmartThings Community discussion</a><br><br><a href="https://github.com/philh30/ST-Edge-Drivers/tree/main/Honeywell/Envisalink-Vista/envisalink-honeywell-release">Source code</a>'
 permissions:
   lan: {}
   discovery: {}

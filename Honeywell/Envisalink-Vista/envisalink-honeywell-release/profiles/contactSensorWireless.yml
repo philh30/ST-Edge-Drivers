@@ -1,6 +1,7 @@
 name: contact-sensor-wireless
 components:
 - id: main
+  label: Main
   capabilities:
   - id: "platinummassive43262.contactZone"
     version: 1
@@ -22,7 +23,7 @@ metadata:
   deviceType: ContactSensor
   ocfDeviceType: x.com.st.d.sensor.contact
   deviceTypeId: ContactSensor
-  vid: 7ebba88f-be60-32bc-b2a4-816faefc3e00
+  vid: 8260f961-765a-320d-82b4-c727953cba58
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Partition"
