@@ -7,6 +7,8 @@ components:
     version: 1
   - id: motionSensor
     version: 1
+  - id: button
+    version: 1
   - id: platinummassive43262.jascoOperationMode
     version: 1
   - id: platinummassive43262.jascoMotionSensitivity
@@ -23,7 +25,7 @@ metadata:
   deviceType: Switch
   ocfDeviceType: oic.d.switch
   deviceTypeId: Switch
-  vid: 6c2fabf0-183d-3534-95fe-233598d8972a
+  vid: 4a470478-2c04-3031-abe9-ad359f42dc47
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Enable/Disable Motion Sensor"
@@ -75,7 +77,7 @@ preferences:
       default: ""
   - title: "Association Group 3"
     name: assocGroup3
-    description: "Enter a comma delimited list of hex IDs to be turned on/off with the switch load (5 node max)"
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with the switch load (4 node max)"
     required: true
     preferenceType: string
     definition:

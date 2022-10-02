@@ -18,7 +18,10 @@ local capabilities = require "st.capabilities"
 local cc = require "st.zwave.CommandClass"
 local ZwaveDriver = require "st.zwave.driver"
 local defaults = require "st.zwave.defaults"
-local log = require "log"
+--- @type st.zwave.constants
+local constants = require "st.zwave.constants"
+--- @type st.utils
+local utils = require "st.utils"
 --- @type st.zwave.CommandClass.Association
 local Association = (require "st.zwave.CommandClass.Association")({ version=2 })
 --- @type st.zwave.CommandClass.Basic
@@ -27,10 +30,10 @@ local Basic = (require "st.zwave.CommandClass.Basic")({ version = 1 })
 local Configuration = (require "st.zwave.CommandClass.Configuration")({ version=4 })
 --- @type st.zwave.CommandClass.CentralScene
 local CentralScene = (require "st.zwave.CommandClass.CentralScene")({version=1,strict=true})
---- @type st.zwave.CommandClass.Notification
-local Notification = (require "st.zwave.CommandClass.Notification")({version=3})
 --- @type st.zwave.CommandClass.SwitchBinary
 local SwitchBinary = (require "st.zwave.CommandClass.SwitchBinary")({version=2,strict=true})
+--- @type st.zwave.CommandClass.SwitchMultilevel
+local SwitchMultilevel = (require "st.zwave.CommandClass.SwitchMultilevel")({version=4,strict=true})
 local preferencesMap = require "preferences"
 local splitAssocString = require "split_assoc_string"
 
@@ -42,7 +45,9 @@ local function update_preferences(driver, device, args)
     if not (args and args.old_st_store) or (args.old_st_store.preferences[id] ~= value and preferences and preferences[id]) then
       if preferences[id].type == 'config' then
         local new_parameter_value = preferencesMap.to_numeric_value(device.preferences[id])
-        device:send(Configuration:Set({parameter_number = preferences[id].parameter_number, size = preferences[id].size, configuration_value = new_parameter_value}))
+        local size = preferences[id].size
+        new_parameter_value = ((new_parameter_value >= (256^size)/2) and (new_parameter_value < 256^size)) and (new_parameter_value-256^size) or new_parameter_value
+        device:send(Configuration:Set({parameter_number = preferences[id].parameter_number, size = size, configuration_value = new_parameter_value}))
         device:send(Configuration:Get({parameter_number = preferences[id].parameter_number}))
       elseif preferences[id].type == 'assoc' then
         local group = preferences[id].group
@@ -156,15 +161,16 @@ end
 --- @param cmd st.zwave.CommandClass.Basic.Report
 local function basic_report(driver,device,cmd)
   local event
+  local value = nil
   if cmd.args.target_value ~= nil then
-    -- Target value is our best inidicator of eventual state.
-    -- If we see this, it should be considered authoritative.
+    value = cmd.args.target_value
     if cmd.args.target_value == SwitchBinary.value.OFF_DISABLE then
       event = capabilities.switch.switch.off()
     else
       event = capabilities.switch.switch.on()
     end
   else
+    value = cmd.args.value
     if cmd.args.value == SwitchBinary.value.OFF_DISABLE then
       event = capabilities.switch.switch.off()
     else
@@ -172,6 +178,96 @@ local function basic_report(driver,device,cmd)
     end
   end
   device:emit_event_for_endpoint(cmd.src_channel, event)
+  event = nil
+  if value ~= nil and value > 0 then
+    if value == 99 or value == 0xFF then
+      value = 100
+    end
+    event = capabilities.switchLevel.level(value)
+  end
+
+  if event ~= nil then
+    device:emit_event_for_endpoint(cmd.src_channel, event)
+  end
+end
+
+local function get_delay(device,dimmingDuration,distance)
+  local delay = constants.MIN_DIMMING_GET_STATUS_DELAY -- delay in seconds
+  if (device.preferences or {}).dimStepsZwave and (device.preferences or {}).dimTimeZwave and dimmingDuration == 'default' and not ((device.preferences or {}).dimRate == '0' and distance < 99) then
+    local steps = math.ceil(distance/device.preferences.dimStepsZwave)
+    local sec_per_step = device.preferences.dimTimeZwave/100
+    delay = math.max(steps * sec_per_step + constants.DEFAULT_POST_DIMMING_DELAY, delay)
+  elseif dimmingDuration ~= 'default' then
+    delay = math.max(dimmingDuration + constants.DEFAULT_POST_DIMMING_DELAY, delay)
+  end
+  return delay
+end
+
+local function get_distance(device,command)
+  local level = utils.round(command.args.level)
+  level = utils.clamp_value(level, 1, 99)
+  local current_level = device:get_latest_state(command.component,'switchLevel','level')
+  local current_switch = device:get_latest_state(command.component,'switch','switch')
+  local distance = 100
+  if current_switch == 'off' then
+    distance = level
+  elseif current_level then
+    current_level = utils.clamp_value(current_level,1,99)
+    distance = math.abs(current_level - level)
+  end
+  return level, distance
+end
+
+local function switch_set_helper(driver, device, value, command)
+  local set = Basic:Set({ value = value })
+  local get
+  local delay = constants.DEFAULT_GET_STATUS_DELAY
+  if device:is_cc_supported(cc.SWITCH_BINARY) then
+    get = SwitchBinary:Get({})
+  elseif device:is_cc_supported(cc.SWITCH_MULTILEVEL) then
+    local dimmingDuration = command.args.rate or 'default'
+    delay = get_delay(device,dimmingDuration,99)
+    get = SwitchMultilevel:Get({})
+  else
+    get = Basic:Get({})
+  end
+  device:send_to_component(set, command.component)
+  local query_device = function()
+    device:send_to_component(get, command.component)
+  end
+  device.thread:call_with_delay(delay, query_device)
+end
+
+local function on_handler(driver, device, command)
+  switch_set_helper(driver, device, SwitchBinary.value.ON_ENABLE, command)
+end
+
+local function off_handler(driver, device, command)
+  switch_set_helper(driver, device, SwitchBinary.value.OFF_DISABLE, command)
+end
+
+local function switch_level_handler(driver, device, command)
+  local set
+  local get
+  local level, distance = get_distance(device,command)
+  local dimmingDuration = command.args.rate or 'default' -- dimming duration in seconds
+  local delay = get_delay(device,dimmingDuration,distance) -- delay in seconds
+  if device:is_cc_supported(cc.SWITCH_MULTILEVEL) then
+    get = SwitchMultilevel:Get({})
+    if dimmingDuration == "default" then
+      set = Basic:Set({ value=level })
+    else
+      set = SwitchMultilevel:Set({ value=level, duration=dimmingDuration })
+    end
+  elseif device:is_cc_supported(cc.BASIC) then
+    get = Basic:Get({})
+    set = Basic:Set({ value=level})
+  end
+  device:send_to_component(set, command.component)
+  local query_level = function()
+    device:send_to_component(get, command.component)
+  end
+  device.thread:call_with_delay(delay, query_level)
 end
 
 local driver_template = {
@@ -182,6 +278,15 @@ local driver_template = {
     },
     [cc.CENTRAL_SCENE] = {
       [CentralScene.NOTIFICATION] = central_scene_notification_handler,
+    },
+  },
+  capability_handlers = {
+    [capabilities.switch.ID] = {
+      [capabilities.switch.commands.on.NAME] = on_handler,
+      [capabilities.switch.commands.off.NAME] = off_handler,
+    },
+    [capabilities.switchLevel.ID] = {
+      [capabilities.switchLevel.commands.setLevel.NAME] = switch_level_handler,
     },
   },
   supported_capabilities = {
