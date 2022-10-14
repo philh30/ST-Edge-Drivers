@@ -1,0 +1,7 @@
+zigbeeManufacturer:
+  # FANS
+  - id: "KOF"
+    deviceLabel: King of Fans
+    manufacturer: King Of Fans,  Inc.
+    model: HDC52EastwindFan
+    deviceProfileName: king-of-fans

@@ -1,0 +1,43 @@
+name: king-of-fans
+components:
+  - id: main
+    label: Fan
+    capabilities:
+      - id: switch
+        version: 1
+      - id: switchLevel
+        version: 1
+      - id: fanSpeed
+        version: 1
+      - id: firmwareUpdate
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: Fan
+  - id: light
+    label: Light
+    capabilities:
+      - id: switch
+        version: 1
+      - id: switchLevel
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: Switch
+preferences:
+  - name: "defaultFanOn"
+    title: "Default Fan Speed"
+    description: "Fan speed when ON button is toggled in SmartThings"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options: {
+        "1":"Low",
+        "2":"Medium",
+        "3":"High",
+        "4":"Max",
+        "6":"Breeze"
+        }
+      default: "1"
