@@ -26,6 +26,12 @@ components:
         version: 1
     categories:
       - name: Switch
+metadata:
+  deviceType: Fan
+  ocfDeviceType: oic.d.fan
+  deviceTypeId: Fan
+  vid: 840d96c0-330e-37dc-84bc-7d5694866422
+  mnmn: SmartThingsCommunity
 preferences:
   - name: "defaultFanOn"
     title: "Default Fan Speed"
@@ -34,10 +40,11 @@ preferences:
     preferenceType: enumeration
     definition:
       options: {
-        "1":"Low",
-        "2":"Medium",
-        "3":"High",
-        "4":"Max",
-        "6":"Breeze"
+        "0": "Return to last speed used",
+        "1": "Low",
+        "2": "Medium",
+        "3": "High",
+        "4": "Max",
+        "5": "Breeze"
         }
-      default: "1"
+      default: "0"

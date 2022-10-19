@@ -37,13 +37,20 @@ local levels_for_4_speed = {
   [2] = 50,
   [3] = 75,
   [4] = 100,
+  [5] = 1,
 }
 
 local function level_to_speed(level)
-  local speed = 0
-  for spd, lvl in ipairs(levels_for_4_speed) do
-    if (level >= lvl) and (spd > speed) then
-      speed = spd
+  local speed = 4
+  if level == 0 then
+    speed = 0
+  elseif level == 1 then
+    speed = 5
+  else
+    for spd=4,1,-1 do
+      if level <= levels_for_4_speed[spd] then
+        speed = spd
+      end
     end
   end
   return speed
@@ -55,7 +62,10 @@ local function on_handler(driver, device, command)
   if command.component == 'light' then
     device:send(OnOff.server.commands.On(device))
   else
-    local speed = tonumber(device.preferences.defaultFanOn) or 1
+    local last_speed = device:get_field('LAST_FAN_SPD') or 1
+    local pref_speed = tonumber(device.preferences.defaultFanOn) or 0
+    local speed = ((pref_speed == 0) and last_speed) or pref_speed
+    if speed == 5 then speed = 6 end
     device:send(FanControl.attributes.FanMode:write(device,speed))
   end
 end
@@ -75,24 +85,30 @@ local function switch_level_handler(driver, device, command)
   else
     local speed = level_to_speed(command.args.level)
     if speed then
+      if speed == 5 then speed = 6 end
       device:send(FanControl.attributes.FanMode:write(device,speed))
     end
   end
 end
 
 local function fan_speed_handler(driver, device, command)
+  if command.args.speed == 5 then command.args.speed = 6 end
   device:send(FanControl.attributes.FanMode:write(device,command.args.speed))
 end
 
 -- ZIGBEE HANDLERS
 
 local function zb_fan_control_handler(driver, device, value, zb_rx)
-  if value.value < 5 then
+  if value.value == 6 then value.value = 5 end
+  if levels_for_4_speed[value.value] then
     device:emit_event(capabilities.fanSpeed.fanSpeed(value.value))
   end
-  local attr = capabilities.switch.switch
-  device:emit_component_event(device.profile.components.main,value.value > 0 and attr.on() or attr.off())
-  device:emit_component_event(device.profile.components.main,capabilities.switchLevel.level(levels_for_4_speed[value.value]))
+  local evt = capabilities.switch.switch(value.value > 0 and 'on' or 'off', { visibility = { displayed = false } })
+  device:emit_component_event(device.profile.components.main,evt)
+  device:emit_component_event(device.profile.components.main,capabilities.switchLevel.level(levels_for_4_speed[value.value], { visibility = { displayed = false } }))
+  if value.value > 0 then
+    device:set_field('LAST_FAN_SPD', value.value, {persist = true})
+  end
 end
 
 local function zb_level_handler(driver, device, value, zb_rx)
