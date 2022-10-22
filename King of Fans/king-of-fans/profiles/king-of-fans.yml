@@ -30,7 +30,7 @@ metadata:
   deviceType: Fan
   ocfDeviceType: oic.d.fan
   deviceTypeId: Fan
-  vid: 840d96c0-330e-37dc-84bc-7d5694866422
+  vid: e2d9ad7f-3863-3f51-9be6-077149607ae9
   mnmn: SmartThingsCommunity
 preferences:
   - name: "defaultFanOn"

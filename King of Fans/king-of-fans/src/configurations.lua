@@ -23,6 +23,9 @@ local devices = {
   KING_OF_FANS = {
     FINGERPRINTS = {
       { mfr = "King Of Fans,  Inc.", model = "HDC52EastwindFan" },
+      { mfr = "King Of Fans,  Inc.", model = "HBUniversalCFRemote" },
+      { mfr = "King Of Fans, Inc.", model = "HDC52EastwindFan" },
+      { mfr = "King Of Fans, Inc.", model = "HBUniversalCFRemote" },
     },
     CONFIGURATION = {
       {

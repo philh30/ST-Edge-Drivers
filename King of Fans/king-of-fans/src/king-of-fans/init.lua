@@ -20,6 +20,9 @@ local OnOff = clusters.OnOff
 
 local KOF_FINGERPRINTS = {
   { mfr = "King Of Fans,  Inc.", model = "HDC52EastwindFan" },
+  { mfr = "King Of Fans,  Inc.", model = "HBUniversalCFRemote" },
+  { mfr = "King Of Fans, Inc.", model = "HDC52EastwindFan" },
+  { mfr = "King Of Fans, Inc.", model = "HBUniversalCFRemote" },
 }
 
 local is_kof = function(opts, driver, device)
