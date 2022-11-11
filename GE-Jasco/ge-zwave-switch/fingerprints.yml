@@ -336,7 +336,7 @@ zwaveManufacturer:
     productId: 0x3031
     deviceProfileName: ge-plugin-legacy
   - id: "0063/5052/3033"
-    deviceLabel: GE Plug In Switch 12720
+    deviceLabel: GE Plug In Switch 14282
     manufacturerId: 0x0063
     productType: 0x5052
     productId: 0x3033
