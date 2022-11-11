@@ -330,13 +330,13 @@ zwaveManufacturer:
     productId: 0x3132
     deviceProfileName: ge-plugdim-assoc
   - id: "0063/5052/3031"
-    deviceLabel: GE Plug In Switch 12719 (Ver 3.0e)
+    deviceLabel: GE Plug In Switch 12719
     manufacturerId: 0x0063
     productType: 0x5052
     productId: 0x3031
     deviceProfileName: ge-plugin-legacy
   - id: "0063/5052/3033"
-    deviceLabel: GE Plug In Switch 14282
+    deviceLabel: GE Plug In Switch 12720
     manufacturerId: 0x0063
     productType: 0x5052
     productId: 0x3033
@@ -366,13 +366,13 @@ zwaveManufacturer:
     productId: 0x3132
     deviceProfileName: ge-plugin-assoc
   - id: "0063/5250/3030"
-    deviceLabel: GE Plug In Switch 12719 (Ver 3.0d)
+    deviceLabel: GE Plug In Switch 12719
     manufacturerId: 0x0063
     productType: 0x5250
     productId: 0x3030
     deviceProfileName: ge-plugin-legacy
   - id: "0063/5250/3130"
-    deviceLabel: GE Plug In Outdoor Switch 14284
+    deviceLabel: GE Plug In Switch 12720
     manufacturerId: 0x0063
     productType: 0x5250
     productId: 0x3130
