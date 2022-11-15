@@ -1,6 +1,7 @@
 name: partition
 components:
 - id: main
+  label: Main
   capabilities:
   - id: "platinummassive43262.statusMessage"
     version: 1
@@ -24,7 +25,7 @@ metadata:
   deviceType: SecurityPanel
   ocfDeviceType: x.com.st.d.remotecontroller
   deviceTypeId: SecurityPanel
-  vid: 8403cae4-62d4-33d2-940e-38ef5c8037fd
+  vid: 425aa2d2-2466-3304-969f-ab8b9031bd03
   mnmn: SmartThingsCommunity
 preferences:
   - title: "STHM -> Partition Integration"

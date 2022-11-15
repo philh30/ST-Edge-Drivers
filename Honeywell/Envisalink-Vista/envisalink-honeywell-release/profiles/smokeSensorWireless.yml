@@ -1,6 +1,7 @@
 name: smoke-sensor-wireless
 components:
 - id: main
+  label: Main
   capabilities:
   - id: "platinummassive43262.smokeZone"
     version: 1
@@ -22,7 +23,7 @@ metadata:
   deviceType: SmokeDetector
   ocfDeviceType: x.com.st.d.sensor.smoke
   deviceTypeId: SmokeDetector
-  vid: 1680562a-4fb2-3815-a427-61f854ec2d19
+  vid: 391052de-3f6f-3ab3-8b9a-e2c3573e4956
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Partition"

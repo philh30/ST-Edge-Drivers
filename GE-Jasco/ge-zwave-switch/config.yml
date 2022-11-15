@@ -1,4 +1,6 @@
 name: 'GE Z-Wave Switch/Dimmer/Fan/Outlet'
 packageKey: 'ge-zwave-switch'
+description: 'GE/Jasco/Honeywell/Ultrapro switches, dimmers, fans and outlets'
+vendorSupportInformation: 'Developer: philh30<br><br><a href="https://community.smartthings.com/t/st-edge-driver-for-ge-jasco-honeywell-z-wave-switches-dimmers-fans-outlets-and-plug-ins/236733">SmartThings Community discussion</a><br><br><a href="https://github.com/philh30/ST-Edge-Drivers/tree/main/GE-Jasco#ge-z-wave-switchdimmerfanoutlet-ge-zwave-switch">List of supported models</a><br><br><a href="https://github.com/philh30/ST-Edge-Drivers/tree/main/GE-Jasco/ge-zwave-switch">Source code</a>'
 permissions:
   zwave: {}

@@ -30,7 +30,7 @@ local GE_MOTION = {
     dimRate           = {type = 'config', parameter_number = 18, size = 1},
     excludeProtect    = {type = 'config', parameter_number = 19, size = 1},
     assocGroup2       = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
-    assocGroup3       = {type = 'assoc', group = 3, maxnodes = 5, addhub = false},
+    assocGroup3       = {type = 'assoc', group = 3, maxnodes = 4, addhub = true},
   },
 }
 

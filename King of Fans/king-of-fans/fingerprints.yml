@@ -1,0 +1,22 @@
+zigbeeManufacturer:
+  # FANS
+  - id: "KOF/HDC52EastwindFan"
+    deviceLabel: King of Fans
+    manufacturer: King Of Fans,  Inc.
+    model: HDC52EastwindFan
+    deviceProfileName: king-of-fans
+  - id: "KOF/HBUniversalCFRemote"
+    deviceLabel: King of Fans
+    manufacturer: King Of Fans,  Inc.
+    model: HBUniversalCFRemote
+    deviceProfileName: king-of-fans
+  - id: "KOF2/HDC52EastwindFan"
+    deviceLabel: King of Fans
+    manufacturer: King Of Fans, Inc.
+    model: HDC52EastwindFan
+    deviceProfileName: king-of-fans
+  - id: "KOF2/HBUniversalCFRemote"
+    deviceLabel: King of Fans
+    manufacturer: King Of Fans, Inc.
+    model: HBUniversalCFRemote
+    deviceProfileName: king-of-fans

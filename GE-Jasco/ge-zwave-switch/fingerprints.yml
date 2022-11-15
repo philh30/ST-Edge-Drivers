@@ -71,6 +71,12 @@ zwaveManufacturer:
     productType: 0x4944
     productId: 0x3131
     deviceProfileName: ge-fan-assoc
+  - id: "0063/4944/3132"
+    deviceLabel: GE Dimmer
+    manufacturerId: 0x0063
+    productType: 0x4944
+    productId: 0x3132
+    deviceProfileName: ge-dimmer-assoc
   - id: "0063/4944/3233"
     deviceLabel: GE Dimmer 14289
     manufacturerId: 0x0063
@@ -299,6 +305,12 @@ zwaveManufacturer:
     productType: 0x5044
     productId: 0x3033
     deviceProfileName: ge-plugdim-assoc
+  - id: "0063/5044/3037"
+    deviceLabel: GE Plug In Dimmer 28166
+    manufacturerId: 0x0063
+    productType: 0x5044
+    productId: 0x3037
+    deviceProfileName: ge-plugdim-assoc
   - id: "0063/5044/3038"
     deviceLabel: GE Plug In Dimmer 28167
     manufacturerId: 0x0063
@@ -335,6 +347,12 @@ zwaveManufacturer:
     productType: 0x5052
     productId: 0x3038
     deviceProfileName: ge-plugin-assoc
+  - id: "0063/5052/3039"
+    deviceLabel: GE Plug In Switch 29172
+    manufacturerId: 0x0063
+    productType: 0x5052
+    productId: 0x3039
+    deviceProfileName: ge-plugin-assoc
   - id: "0063/5052/3130"
     deviceLabel: GE Plug In Switch 28173
     manufacturerId: 0x0063
@@ -359,6 +377,12 @@ zwaveManufacturer:
     productType: 0x5257
     productId: 0x3533
     deviceProfileName: ge-switch-legacy
+  - id: "0063/6363/3130"
+    deviceLabel: GE Plug In Switch 14284
+    manufacturerId: 0x0063
+    productType: 0x6363
+    productId: 0x3130
+    deviceProfileName: ge-plugin-assoc
   - id: "0039/4944/3038"
     deviceLabel: Honeywell Dimmer 39458
     manufacturerId: 0x0039

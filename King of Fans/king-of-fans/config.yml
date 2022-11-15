@@ -1,0 +1,6 @@
+name: 'King of Fans'
+packageKey: 'king-of-fans'
+description: 'Hampton Bay/King of Fans zigbee fan controller'
+vendorSupportInformation: 'Developer: philh30<br><br><a href="https://community.smartthings.com/t/st-edge-hampton-bay-king-of-fans-zigbee-fan-controller/250225">SmartThings Community discussion</a><br><br><a href="https://github.com/philh30/ST-Edge-Drivers/tree/main/King%20of%20Fans/king-of-fans">Source code</a>'
+permissions:
+  zigbee: {}

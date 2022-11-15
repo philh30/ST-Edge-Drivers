@@ -190,7 +190,7 @@ local function update_partition(driver,device,body)
       end
     end
   else
-    device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.bypass]}))
+    device:emit_event(capabilities.bypassable.bypassStatus({value = translate_state.bypassable[body.bypass]},{visibility = {displayed = false}}))
   end
 end
 

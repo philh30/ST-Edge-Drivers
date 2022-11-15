@@ -22,6 +22,9 @@ local GE_BASIC = {
     dimTimeManual   = {type = 'config', parameter_number = 10, size = 2},
     dimStepsAll     = {type = 'config', parameter_number = 11, size = 1},
     dimTimeAll      = {type = 'config', parameter_number = 12, size = 2},
+    switchMode      = {type = 'config', parameter_number = 16, size = 1},       -- fw 5.26+
+    excludeProtect  = {type = 'config', parameter_number = 19, size = 1},
+    minDim          = {type = 'config', parameter_number = 20, size = 1},       -- fw 5.26+
     assocGroup2     = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
     assocGroup3     = {type = 'assoc', group = 3, maxnodes = 4, addhub = true},
   },
@@ -93,7 +96,7 @@ local devices = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
       product_types = {0x4450, 0x4944},
-      product_ids = {0x3030, 0x3031, 0x3032, 0x3033, 0x3035, 0x3036, 0x3037, 0x3038, 0x3039, 0x3130, 0x3233},
+      product_ids = {0x3030, 0x3031, 0x3032, 0x3033, 0x3035, 0x3036, 0x3037, 0x3038, 0x3039, 0x3130, 0x3132, 0x3233},
     },
     PARAMETERS = GE_BASIC.PARAMETERS,
     BUTTONS = GE_BASIC.BUTTONS,
@@ -119,8 +122,8 @@ local devices = {
   GE_PLUGIN_BASIC = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
-      product_types = {0x4F50, 0x5052},
-      product_ids = {0x3031, 0x3032, 0x3033, 0x3038, 0x3130, 0x3132},
+      product_types = {0x4F50, 0x5052, 0x6363},
+      product_ids = {0x3031, 0x3032, 0x3033, 0x3038, 0x3039, 0x3130, 0x3132},
     },
     PARAMETERS = GE_BASIC.PARAMETERS,
     BUTTONS = GE_BASIC.BUTTONS,
@@ -129,7 +132,7 @@ local devices = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
       product_types = {0x5044},
-      product_ids = {0x3031, 0x3033, 0x3038, 0x3130, 0x3132},
+      product_ids = {0x3031, 0x3033, 0x3037, 0x3038, 0x3130, 0x3132},
     },
     PARAMETERS = GE_BASIC.PARAMETERS,
     BUTTONS = GE_BASIC.BUTTONS,

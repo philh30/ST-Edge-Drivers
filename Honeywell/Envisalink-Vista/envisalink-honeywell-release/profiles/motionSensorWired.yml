@@ -1,6 +1,7 @@
 name: motion-sensor-wired
 components:
 - id: main
+  label: Main
   capabilities:
   - id: "platinummassive43262.motionZone"
     version: 1
@@ -20,7 +21,7 @@ metadata:
   deviceType: MotionSensor
   ocfDeviceType: x.com.st.d.sensor.motion
   deviceTypeId: MotionSensor
-  vid: 0067dbf2-36fb-3a7c-be85-8229b3d60a93
+  vid: caa23136-9598-3eb3-901a-66b76c6e306c
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Partition"

@@ -1,6 +1,7 @@
 name: carbonmonoxide-sensor-wired
 components:
 - id: main
+  label: Main
   capabilities:
   - id: "platinummassive43262.carbonMonoxideZone"
     version: 1
@@ -22,7 +23,7 @@ metadata:
   deviceType: SmokeDetector
   ocfDeviceType: x.com.st.d.sensor.smoke
   deviceTypeId: SmokeDetector
-  vid: c1020c76-ccb4-3e86-b1b8-21394c60a945
+  vid: 36d0fc4e-4d33-35de-9b5d-4ea4e00257cb
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Partition"
