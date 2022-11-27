@@ -76,6 +76,10 @@ local driver_template = {
     capabilities.button,
     capabilities.energyMeter,
     capabilities.powerMeter,
+    capabilities.motionSensor,
+    capabilities.colorControl,
+    capabilities.colorTemperature,
+    capabilities.colorMode,
   },
   sub_drivers = {
     require("ge-switch"),

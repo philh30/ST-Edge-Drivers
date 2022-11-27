@@ -21,26 +21,26 @@ local zwave_fan_3_speed = {}
 
 local function map_fan_3_speed_to_switch_level (speed)
   if speed == fan_speed_helper.fan_speed.OFF then
-    return fan_speed_helper.levels_for_3_speed.OFF -- off
+    return fan_speed_helper.levels_for_inovelli_3_speed.OFF -- off
   elseif speed == fan_speed_helper.fan_speed.LOW then
-    return fan_speed_helper.levels_for_3_speed.LOW -- low
+    return fan_speed_helper.levels_for_inovelli_3_speed.LOW -- low
   elseif speed == fan_speed_helper.fan_speed.MEDIUM then
-    return fan_speed_helper.levels_for_3_speed.MEDIUM -- medium
+    return fan_speed_helper.levels_for_inovelli_3_speed.MEDIUM -- medium
   elseif speed == fan_speed_helper.fan_speed.HIGH or speed == fan_speed_helper.fan_speed.MAX then
-    return fan_speed_helper.levels_for_3_speed.HIGH -- high and max
+    return fan_speed_helper.levels_for_inovelli_3_speed.HIGH -- high and max
   else
     log.error (string.format("3 speed fan driver: invalid speed: %d", speed))
   end
 end
 
 local function map_switch_level_to_fan_3_speed (level)
-  if (level == fan_speed_helper.levels_for_3_speed.OFF) then
+  if (level == fan_speed_helper.levels_for_inovelli_3_speed.OFF) then
     return fan_speed_helper.fan_speed.OFF
-  elseif (fan_speed_helper.levels_for_3_speed.OFF < level and level <= fan_speed_helper.levels_for_3_speed.LOW) then
+  elseif (fan_speed_helper.levels_for_inovelli_3_speed.OFF < level and level <= fan_speed_helper.levels_for_inovelli_3_speed.LOW) then
     return fan_speed_helper.fan_speed.LOW
-  elseif (fan_speed_helper.levels_for_3_speed.LOW < level and level <= fan_speed_helper.levels_for_3_speed.MEDIUM) then
+  elseif (fan_speed_helper.levels_for_inovelli_3_speed.LOW < level and level <= fan_speed_helper.levels_for_inovelli_3_speed.MEDIUM) then
     return fan_speed_helper.fan_speed.MEDIUM
-  elseif (fan_speed_helper.levels_for_3_speed.MEDIUM < level and level <= fan_speed_helper.levels_for_3_speed.MAX) then
+  elseif (fan_speed_helper.levels_for_inovelli_3_speed.MEDIUM < level and level <= fan_speed_helper.levels_for_inovelli_3_speed.MAX) then
     return fan_speed_helper.fan_speed.HIGH
   else
     log.error (string.format("3 speed fan driver: invalid level: %d", level))
@@ -66,23 +66,4 @@ function zwave_fan_3_speed.fan_multilevel_report(driver, device, cmd)
   fan_speed_helper.zwave_handlers.fan_multilevel_report(driver, device, cmd, map_switch_level_to_fan_3_speed)
 end
 
---[[
-local zwave_fan_3_speed = {
-  capability_handlers = {
-    [capabilities.fanSpeed.ID] = {
-      [capabilities.fanSpeed.commands.setFanSpeed.NAME] = zwave_fan_3_speed.fan_speed_set
-    }
-  },
-  zwave_handlers = {
-    [cc.SWITCH_MULTILEVEL] = {
-      [SwitchMultilevel.REPORT] = zwave_fan_3_speed.fan_multilevel_report
-    },
-    [cc.BASIC] = {
-      [Basic.REPORT] = zwave_fan_3_speed.fan_multilevel_report
-    }
-  },
-  NAME = "Z-Wave fan 3 speed",
-  can_handle = is_fan_3_speed,
-}
---]]
 return zwave_fan_3_speed
