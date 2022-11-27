@@ -312,6 +312,17 @@ local devices = {
       assocGroup4             = {type = 'assoc', group = 4, maxnodes = 5, addhub = false},
     }
   },
+  REMOTEC_ZFM80 = {
+    MATCHING_MATRIX = {
+      mfrs = 0x5254,
+      product_types = 0x8000,
+      product_ids = 0x0002,
+    },
+    PARAMETERS = {
+      externalSwitchType      = {type = 'config', parameter_number = 1, size = 1},
+      assocGroup1             = {type = 'assoc', group = 1, maxnodes = 5, addhub = false},
+    }
+  },
 }
 local preferences = {}
 
