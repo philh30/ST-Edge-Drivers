@@ -12,6 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+local st_device = require "st.device"
 local clusters = require "st.zigbee.zcl.clusters"
 local capabilities = require "st.capabilities"
 local FanControl = clusters.FanControl
@@ -59,37 +60,78 @@ local function level_to_speed(level)
   return speed
 end
 
+--- Create child device
+---
+local function add_child(driver,parent,profile,child_type)
+    local child_metadata = {
+        type = "EDGE_CHILD",
+        label = string.format("%s %s", parent.label, child_type),
+        profile = profile,
+        parent_device_id = parent.id,
+        parent_assigned_child_key = child_type,
+        vendor_provided_label = string.format("%s %s", parent.label, child_type)
+    }
+    driver:try_create_device(child_metadata)
+end
+
+--- Preferences updated
+---
+--- @param driver st.zwave.Driver
+--- @param device st.zwave.Device
+local function info_changed(driver, device, event, args)
+    if (device.preferences or {}).childLight then
+        if not device:get_child_by_parent_assigned_key('light') then
+            add_child(driver,device,'switch-level','light')
+        end
+    end
+end
+
 -- CAPABILITY HANDLERS
 
 local function on_handler(driver, device, command)
+  local dev = device
+  if device.network_type == st_device.NETWORK_TYPE_CHILD then
+    command.component = 'light'
+    dev = device:get_parent_device()
+  end
   if command.component == 'light' then
-    device:send(OnOff.server.commands.On(device))
+    dev:send(OnOff.server.commands.On(dev))
   else
-    local last_speed = device:get_field('LAST_FAN_SPD') or 1
-    local pref_speed = tonumber(device.preferences.defaultFanOn) or 0
+    local last_speed = dev:get_field('LAST_FAN_SPD') or 1
+    local pref_speed = tonumber(dev.preferences.defaultFanOn) or 0
     local speed = ((pref_speed == 0) and last_speed) or pref_speed
     if speed == 5 then speed = 6 end
-    device:send(FanControl.attributes.FanMode:write(device,speed))
+    dev:send(FanControl.attributes.FanMode:write(dev,speed))
   end
 end
 
 local function off_handler(driver, device, command)
+  local dev = device
+  if device.network_type == st_device.NETWORK_TYPE_CHILD then
+    command.component = 'light'
+    dev = device:get_parent_device()
+  end
   if command.component == 'light' then
-    device:send(OnOff.server.commands.Off(device))
+    dev:send(OnOff.server.commands.Off(dev))
   else
-    device:send(FanControl.attributes.FanMode:write(device,FanControl.attributes.FanMode.OFF))
+    dev:send(FanControl.attributes.FanMode:write(dev,FanControl.attributes.FanMode.OFF))
   end
 end
 
 local function switch_level_handler(driver, device, command)
+  local dev = device
+  if device.network_type == st_device.NETWORK_TYPE_CHILD then
+    command.component = 'light'
+    dev = device:get_parent_device()
+  end
   if command.component == 'light' then
     local level = math.floor(command.args.level/100.0 * 254)
-    device:send(Level.server.commands.MoveToLevelWithOnOff(device, level, command.args.rate or 0xFFFF))
+    dev:send(Level.server.commands.MoveToLevelWithOnOff(dev, level, command.args.rate or 0xFFFF))
   else
     local speed = level_to_speed(command.args.level)
     if speed then
       if speed == 5 then speed = 6 end
-      device:send(FanControl.attributes.FanMode:write(device,speed))
+      dev:send(FanControl.attributes.FanMode:write(dev,speed))
     end
   end
 end
@@ -115,12 +157,22 @@ local function zb_fan_control_handler(driver, device, value, zb_rx)
 end
 
 local function zb_level_handler(driver, device, value, zb_rx)
-  device:emit_component_event(device.profile.components.light,capabilities.switchLevel.level(math.floor((value.value / 254.0 * 100) + 0.5)))
+  local evt = capabilities.switchLevel.level(math.floor((value.value / 254.0 * 100) + 0.5))
+  device:emit_component_event(device.profile.components.light,evt)
+  local child = device:get_child_by_parent_assigned_key('light')
+  if child ~= nil then
+      child:emit_event(evt)
+  end
 end
 
 local function zb_onoff_handler(driver, device, value, zb_rx)
   local attr = capabilities.switch.switch
-  device:emit_component_event(device.profile.components.light,value.value and attr.on() or attr.off())
+  local evt = value.value and attr.on() or attr.off()
+  device:emit_component_event(device.profile.components.light,evt)
+  local child = device:get_child_by_parent_assigned_key('light')
+  if child ~= nil then
+      child:emit_event(evt)
+  end
 end
 
 local king_of_fans = {
@@ -149,6 +201,9 @@ local king_of_fans = {
     [capabilities.fanSpeed.ID] = {
       [capabilities.fanSpeed.commands.setFanSpeed.NAME] = fan_speed_handler
     }
+  },
+  lifecycle_handlers = {
+    infoChanged = info_changed,
   },
   can_handle = is_kof
 }
