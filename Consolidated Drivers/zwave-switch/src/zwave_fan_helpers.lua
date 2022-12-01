@@ -91,6 +91,13 @@ local helpers  = {
     HIGH = 99,
     MAX = 99,
   },
+  levels_for_inovelli_3_speed = {
+    OFF = 0,
+    LOW = 33,
+    MEDIUM = 66,
+    HIGH = 99,
+    MAX = 99,
+  },
   levels_for_4_speed = {
     OFF = 0,
     LOW = 25,

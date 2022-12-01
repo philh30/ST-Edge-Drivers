@@ -1,5 +1,6 @@
 name: 'Z-Wave Switch PH'
 packageKey: 'zwave-switch-ph'
 description: 'GE, Honeywell, Jasco, Inovelli, and Zooz Z-wave switches'
+vendorSupportInformation: 'Version: 0.01<br>Developer: philh30<br>Web: <a href="https://github.com/philh30/ST-Edge-Drivers">GitHub repo</a><br><br>Supports:<br>- GE/Jasco/Honeywell/Ultrapro actuators<br>- Inovelli LZW36/LZW45<br>- Zooz ZEN32/ZEN51'
 permissions:
   zwave: {}

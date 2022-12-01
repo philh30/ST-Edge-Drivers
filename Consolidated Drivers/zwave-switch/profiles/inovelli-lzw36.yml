@@ -1,6 +1,25 @@
 name: inovelli-lzw36
 components:
   - id: main
+    label: Fan
+    capabilities:
+      - id: switch
+        version: 1
+      - id: fanSpeed
+        version: 1
+        #config:
+        #  values:
+        #    - key: "fanSpeed.value"
+        #      range: [0,3]
+      - id: switchLevel
+        version: 1
+      - id: button
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: Fan
+  - id: light
     label: Light
     capabilities:
       - id: switch
@@ -13,21 +32,6 @@ components:
         version: 1
     categories:
       - name: Switch
-  - id: fan
-    label: Fan
-    capabilities:
-      - id: switch
-        version: 1
-      - id: fanSpeed
-        version: 1
-      - id: switchLevel
-        version: 1
-      - id: button
-        version: 1
-      - id: refresh
-        version: 1
-    categories:
-      - name: Fan
   - id: energy
     label: Energy monitoring
     capabilities:
@@ -62,11 +66,11 @@ components:
     categories:
       - name: Light
 metadata:
-  deviceType: Switch
-  ocfDeviceType: oic.d.switch
-  deviceTypeId: Switch
-  #vid: 36202cb9-262e-3903-a48d-2f595e2b223c
-  #mnmn: SmartThingsCommunity
+  deviceType: Fan
+  ocfDeviceType: oic.d.fan
+  deviceTypeId: Fan
+  vid: 91237117-2f48-3579-ab8e-aab14f28c679
+  mnmn: SmartThingsCommunity
 preferences:
   - title: "Dimming Speed"
     name: dimmingSpeed
@@ -323,3 +327,10 @@ preferences:
     definition:
       stringType: text
       default: ""
+  - title: "Add Child Device - Light"
+    name: childLight
+    description: "Create separate child device for light controls"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false
