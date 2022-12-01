@@ -115,7 +115,7 @@ local function update_device_info_table(device)
   local fw_major = (((device.st_store or {}).zwave_version or {}).firmware or {}).major
   local fw_minor = (((device.st_store or {}).zwave_version or {}).firmware or {}).minor
   if fw_major and fw_minor then
-    device_table = device_table .. table_row({'Firmware: ' .. fw_major .. '.' .. fw_minor})
+    device_table = device_table .. table_row({'Firmware: ' .. fw_major .. '.' .. string.format('%02d',fw_minor)})
   end
   local security
   if (device.st_store or {}).zwave_security_flags then
