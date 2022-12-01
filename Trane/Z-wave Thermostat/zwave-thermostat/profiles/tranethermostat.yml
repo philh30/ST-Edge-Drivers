@@ -14,7 +14,7 @@ components:
     version: 1
   - id: thermostatOperatingState
     version: 1
-  - id: "platinummassive43262.thermostatScheduleMode"
+  - id: "platinummassive43262.thermostatProgram"
     version: 1
   - id: refresh
     version: 1
@@ -24,5 +24,25 @@ metadata:
   deviceType: Thermostat
   ocfDeviceType: oic.d.thermostat
   deviceTypeId: Thermostat
-  vid: 125d5ee9-8513-3c9c-8477-e3211d230ea6
+  vid: 2c09511d-a1cc-31ab-a201-b27b436c290e
   mnmn: SmartThingsCommunity
+preferences:
+  - title: "Time Zone (offset from UTC)"
+    name: timezoneUTC
+    description: "Enter the local time zone offset from UTC (-12 to +14 hours)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: -12
+      maximum: 14
+      default: -5
+  - title: "Daylight Savings Time"
+    name: timezoneDST
+    description: "Change the PE653 time to reflect daylight savings vs standard time."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Standard time (winter)"
+        1: "Daylight savings time (summer)"
+      default: 0
