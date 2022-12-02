@@ -12,7 +12,6 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-local Basic = (require "st.zwave.CommandClass.Basic")({ version = 1 })
 local SensorMultilevel = (require "st.zwave.CommandClass.SensorMultilevel")({ version = 1 })
 local ThermostatSetpoint = (require "st.zwave.CommandClass.ThermostatSetpoint")({ version = 1 })
 local ThermostatMode = (require "st.zwave.CommandClass.ThermostatMode")({ version = 1 })
@@ -25,14 +24,11 @@ local ZwaveDriver = require "st.zwave.driver"
 local defaults = require "st.zwave.defaults"
 local cc = require "st.zwave.CommandClass"
 local log = require "log"
-local zw = require "st.zwave"
 local constants = require "st.zwave.constants"
 local utils = require "st.utils"
-local capdefs = require "capabilitydefs"
-local socket = require "cosock.socket"
 local delay_send = require "delay_send"
 
-capabilities[capdefs.thermostatScheduleMode.name]  = capdefs.thermostatScheduleMode.capability
+local program_cap = "platinummassive43262.thermostatProgram"
 
 local ZWAVE_THERMOSTAT_FINGERPRINTS = {
   {mfr = 0x008B, prod = 0x5452, model = 0x5433} -- Trane TZEMT400BB3NX
@@ -52,12 +48,11 @@ end
 local function refresh(driver,device)
   log.debug('Refresh')
   
-  local now = os.date('*t')
-	local offset = -5                 -- Currently EST. Update when local time is available.
-	local now_hour = (now.hour + offset > 0) and ((now.hour + offset < 24) and (now.hour + offset) or (now.hour - 24 + offset)) or (now.hour + 24 + offset)
-
+  local offset = ((device.preferences or {}).timezoneUTC or 0) + ((device.preferences or {}).timezoneDST or 0)
+  local now = os.date('*t', os.time() + offset * 60 * 60)
+	
   local cmds = {
-    Clock:Set({ weekday = (now.wday + 5) % 7, hour = now_hour, minute = now.min }),
+    Clock:Set({ weekday = (now.wday + 5) % 7, hour = now.hour, minute = now.min }),
     Clock:Get({}),
     ThermostatFanMode:SupportedGet({}),
     ThermostatMode:SupportedGet({}),
@@ -76,11 +71,6 @@ end
 local function dev_init(driver, device)
   log.debug('Device Init')
   refresh(driver,device)
-end
-
-local function dev_added(driver, device)
-  log.debug('Device added - getting supported modes')
-  device:emit_event(capabilities[capdefs.thermostatScheduleMode.name].supportedThermostatScheduleModes({ value = {'run','hold','esm'} }))
 end
 
 ---------------------------
@@ -156,7 +146,7 @@ local function configuration_report(driver, device, command)
   CONFIG_PARAMS[command.args.parameter_number] = command.args.configuration_value
   if CONFIG_PARAMS[25] and CONFIG_PARAMS[132] then
     local schedule_mode = ((CONFIG_PARAMS[25] == 2) and 'esm') or (((CONFIG_PARAMS[132] == 0) and 'hold') or 'run')
-    device:emit_event(capabilities[capdefs.thermostatScheduleMode.name].thermostatScheduleMode({ value = schedule_mode }))
+    device:emit_event(capabilities[program_cap].thermostatProgram({ value = schedule_mode }))
   end
 end
 
@@ -178,7 +168,6 @@ local driver_template = {
   },
   lifecycle_handlers = {
     init = dev_init,
-    added = dev_added,
   },
   -- Override the default handlers for heating and cooling set points. As of 10/2021, defaults are not handling
   -- locations set to Fahrenheit properly. Remove in future if defaults are fixed.
@@ -189,8 +178,8 @@ local driver_template = {
     [capabilities.thermostatCoolingSetpoint.ID] = {
           [capabilities.thermostatCoolingSetpoint.commands.setCoolingSetpoint.NAME] = set_cooling_setpoint,
         },
-    [capdefs.thermostatScheduleMode.capability.ID] = {
-          [capdefs.thermostatScheduleMode.capability.commands.setThermostatScheduleMode.NAME] = set_schedule_mode,
+    [program_cap] = {
+          [capabilities[program_cap].commands.setThermostatProgram.NAME] = set_schedule_mode,
         },
     [capabilities.refresh.ID] = {
           [capabilities.refresh.commands.refresh.NAME] = refresh,
