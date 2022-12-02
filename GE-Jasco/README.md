@@ -145,7 +145,7 @@ Fingerprint | Device | Profile
 
 Fingerprint | Device | Profile
 --- | --- | ---
-0063/4F50/3031 | GE Smart Outdoor Plug In Switch (12720) | ge-plugin-legacy
+0063/4F50/3031 | GE Smart Outdoor Plug In Switch (12720 / ZW4201) | ge-plugin-legacy
 0063/4F50/3032 | GE Smart Outdoor Plug In Switch (14284 / ZW4201) | ge-plugin-assoc
 0063/4F50/3034 | GE Smart Outdoor Plug In Switch (14298 / ZW4202) | ge-plugin-scene
 0063/5052/3031 | GE Smart Plug In Switch (12719 / ZW4101) | ge-plugin-legacy
@@ -153,6 +153,8 @@ Fingerprint | Device | Profile
 0063/5052/3038 | GE Smart Plug In Switch (28169 / ZW4103) | ge-plugin-assoc
 0063/5052/3130 | GE Smart Plug In Switch (28173 / ZW4104) | ge-plugin-assoc
 0063/5052/3132 | GE Smart Plug In Switch (28177 / ZW4105) | ge-plugin-assoc
+0063/5250/3030 | GE Fluorescent Light and Appliance Module (12719 / ZW4101) | ge-plugin-legacy
+0063/5250/3130 | GE Outdoor Light and Appliance Module (12720 / ZW4201) | ge-plugin-legacy
 0039/4F50/3032 | Honeywell Smart Outdoor Plug In Switch (39346 / ZW4201) | ge-plugin-assoc
 0039/4F50/3034 | Honeywell Smart Outdoor Plug In Switch (39363 / ZW4203) | ge-plugin-scene
 0039/5052/3033 | Honeywell Smart Plug In Switch (39449  / ZW4106) | ge-plugin-assoc

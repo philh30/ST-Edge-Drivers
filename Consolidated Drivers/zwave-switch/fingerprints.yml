@@ -463,6 +463,12 @@ zwaveManufacturer:
     productType: 0x7000
     productId: 0xA008
     deviceProfileName: zooz-zen32
+  - id: "027A/7000/A00A"
+    deviceLabel: Zooz ZEN17 Relay
+    manufacturerId: 0x027A
+    productType: 0x7000
+    productId: 0xA00A
+    deviceProfileName: zooz-zen17
   - id: "027A/0104/0201"
     deviceLabel: Zooz ZEN51 Dry Contact Relay
     manufacturerId: 0x027A

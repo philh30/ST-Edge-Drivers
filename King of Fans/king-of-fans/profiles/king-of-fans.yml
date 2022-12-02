@@ -48,3 +48,10 @@ preferences:
         "5": "Breeze"
         }
       default: "0"
+  - title: "Add Child Device - Light"
+    name: childLight
+    description: "Create separate child device for light controls"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: false

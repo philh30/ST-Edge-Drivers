@@ -157,17 +157,6 @@ local inovelli_lzw45 = {
             [Configuration.REPORT] = configuration_report,
         },
     },
-    supported_capabilities = {
-        capabilities.switch,
-        capabilities.switchLevel,
-        capabilities.colorControl,
-        capabilities.colorTemperature,
-        capabilities.colorMode,
-        capabilities.powerMeter,
-        capabilities.energyMeter,
-        capabilities.button,
-        capabilities.refresh,
-    },
     capability_handlers = {
         [capabilities.switch.ID] = {
             [capabilities.switch.commands.on.NAME] = commands.set_switch,
@@ -182,9 +171,9 @@ local inovelli_lzw45 = {
         [cap_defs.pixelEffect.ID] = {
             [cap_defs.pixelEffect.commands.setEffect.NAME] = commands.set_pixel_effect
         },
-        [capabilities.colorControl.ID] = {
-            [capabilities.colorControl.commands.setColor] = set_color
-        }
+        --[capabilities.colorControl.ID] = {
+        --    [capabilities.colorControl.commands.setColor] = set_color
+       -- }
     },
     lifecycle_handlers = {
         added = device_added,

@@ -12,7 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
---- @type st.capabilities
+local st_device = require "st.device"
 local capabilities = require "st.capabilities"
 --- @type st.zwave.constants
 local constants = require "st.zwave.constants"
@@ -20,8 +20,6 @@ local constants = require "st.zwave.constants"
 local utils = require "st.utils"
 --- @type st.zwave.CommandClass
 local cc = require "st.zwave.CommandClass"
---- @type st.zwave.CommandClass.Indicator
-local Indicator = (require "st.zwave.CommandClass.Indicator")({ version=1 })
 --- @type st.zwave.CommandClass.Basic
 local Basic = (require "st.zwave.CommandClass.Basic")({ version=1 })
 --- @type st.zwave.CommandClass.CentralScene
@@ -38,6 +36,7 @@ local SwitchMultilevel = (require "st.zwave.CommandClass.SwitchMultilevel")({ver
 local Version = (require "st.zwave.CommandClass.Version")({ version=3 })
 local config_handlers = require "inovelli-lzw36.config_handlers"
 local fan_handlers = require "inovelli-lzw36.fan"
+local update_preferences = require "update_preferences"
 local call_parent_handler = require "call_parent"
 local log = require "log"
 
@@ -47,8 +46,8 @@ local LZW36_FINGERPRINT = {
 
 local map_ep_component = {
     [0] = 'energy',
-    [1] = 'main',
-    [2] = 'fan',
+    [1] = 'light',
+    [2] = 'main',
 }
 
 local paramMap = {
@@ -61,12 +60,12 @@ local paramMap = {
 }
 
 local map_scene = {
-    [1] = { comp = 'fan',   type = 'pushed' },
-    [2] = { comp = 'main', type = 'pushed' },
-    [3] = { comp = 'main', type = 'up'     },
-    [4] = { comp = 'main', type = 'down'   },
-    [5] = { comp = 'fan',   type = 'up'     },
-    [6] = { comp = 'fan',   type = 'down'   },
+    [1] = { comp = 'main',   type = 'pushed' },
+    [2] = { comp = 'light', type = 'pushed' },
+    [3] = { comp = 'light', type = 'up'     },
+    [4] = { comp = 'light', type = 'down'   },
+    [5] = { comp = 'main',   type = 'up'     },
+    [6] = { comp = 'main',   type = 'down'   },
 }
 
 local map_key_attribute_to_capability = {
@@ -154,17 +153,38 @@ end
 --- @param device st.zwave.Device
 --- @param command st.zwave.CommandClass.SwitchMultilevel.Report | st.zwave.CommandClass.Basic.Report
 local function level_report(driver,device,command)
-    if map_ep_component[command.src_channel] == 'fan' then
+    if map_ep_component[command.src_channel] == 'main' then
         fan_handlers.fan_multilevel_report(driver,device,command)
-    elseif map_ep_component[command.src_channel] == 'main' then
-        call_parent_handler(driver.zwave_handlers[cc.SWITCH_MULTILEVEL][SwitchMultilevel.REPORT], driver, device, command)
+    elseif map_ep_component[command.src_channel] == 'light' then
+        local value = command.args.value and command.args.value or command.args.target_value
+        if value ~= nil and value > 0 then
+            if value == 99 or value == 0xFF then
+                value = 100
+            end
+            local evt = capabilities.switchLevel.level(value)
+            local evt_sw = capabilities.switch.switch.on()
+            device:emit_component_event(device.profile.components.light,evt)
+            device:emit_component_event(device.profile.components.light,evt_sw)
+            local child = device:get_child_by_parent_assigned_key('light')
+            if child ~= nil then
+                child:emit_event(evt)
+                child:emit_event(evt_sw)
+            end
+        elseif value == 0 then
+            local evt_sw = capabilities.switch.switch.off()
+            device:emit_component_event(device.profile.components.light,evt_sw)
+            local child = device:get_child_by_parent_assigned_key('light')
+            if child ~= nil then
+                child:emit_event(evt_sw)
+            end
+        end
     end
 end
 
 --- @param driver st.zwave.Driver
 --- @param device st.zwave.Device
 local function set_level(driver, device, command)
-    local comp_type = { main = 'SwitchMultiLevel', energy = 'None', fan = 'SwitchMultiLevel', lightIndicator = 'Configuration', fanIndicator = 'Configuration'}
+    local comp_type = { main = 'SwitchMultiLevel', energy = 'None', light = 'SwitchMultiLevel', lightIndicator = 'Configuration', fanIndicator = 'Configuration'}
     local comp_map = { lightIndicator = 19, fanIndicator = 21 }
     local set
     local get
@@ -188,11 +208,70 @@ local function set_level(driver, device, command)
     else
         return
     end
+    if device.network_type == st_device.NETWORK_TYPE_CHILD then
+        command.component = 'light'
+    end
     device:send_to_component(set, command.component)
     local query_level = function()
         device:send_to_component(get, command.component)
     end
     device.thread:call_with_delay(delay, query_level)
+end
+
+--- @param driver st.zwave.Driver
+--- @param device st.zwave.Device
+--- @param value number
+--- @param command table
+local function switch_set_helper(driver, device, value, command)
+    local set
+    local get
+    local delay = constants.DEFAULT_GET_STATUS_DELAY
+    if device.network_type == st_device.NETWORK_TYPE_CHILD then
+        command.component = 'light'
+    end
+    if device:is_cc_supported(cc.SWITCH_BINARY) then
+        log.trace_with({ hub_logs = true }, "SWITCH_BINARY supported.")
+        set = SwitchBinary:Set({
+            target_value = value,
+            duration = 0
+        })
+        get = SwitchBinary:Get({})
+    elseif device:is_cc_supported(cc.SWITCH_MULTILEVEL) then
+        log.trace_with({ hub_logs = true }, "SWITCH_MULTILEVEL supported.")
+        set = SwitchMultilevel:Set({
+            value = value,
+            duration = constants.DEFAULT_DIMMING_DURATION
+        })
+        delay = constants.MIN_DIMMING_GET_STATUS_DELAY
+        get = SwitchMultilevel:Get({})
+    else
+        log.trace_with({ hub_logs = true }, "SWITCH_BINARY and SWITCH_MULTILEVEL NOT supported. Use Basic.Set()")
+        set = Basic:Set({
+            value = value
+        })
+        get = Basic:Get({})
+    end
+    device:send_to_component(set, command.component)
+    local query_device = function()
+        device:send_to_component(get, command.component)
+    end
+    device.thread:call_with_delay(delay, query_device)
+end
+
+--- @param driver st.zwave.Driver
+--- @param device st.zwave.Device
+--- @param command table The capability command table
+local function switch_on(driver, device, command)
+    switch_set_helper(driver, device, SwitchBinary.value.ON_ENABLE, command)
+end
+
+--- Issue a switch-off command to the specified device.
+---
+--- @param driver st.zwave.Driver
+--- @param device st.zwave.Device
+--- @param command table The capability command table
+local function switch_off(driver, device, command)
+    switch_set_helper(driver, device, SwitchBinary.value.OFF_DISABLE, command)
 end
 
 --- Added device
@@ -216,7 +295,7 @@ end
 --- @return table dst_channels destination channels e.g. {2} for Z-Wave channel 2 or {} for unencapsulated
 local function component_to_endpoint(device, component_id)
     local ep_num = indexOf(map_ep_component,component_id)
-    return { ep_num and tonumber(ep_num) } 
+    return { ep_num and tonumber(ep_num) }
 end
 
 --- Map end_point to Z-Wave endpoint
@@ -242,6 +321,33 @@ local device_init = function(self, device)
     device:set_endpoint_to_component_fn(endpoint_to_component)
 end
 
+--- Create child device
+---
+local function add_child(driver,parent,profile,child_type)
+    local child_metadata = {
+        type = "EDGE_CHILD",
+        label = string.format("%s %s", parent.label, child_type),
+        profile = profile,
+        parent_device_id = parent.id,
+        parent_assigned_child_key = child_type,
+        vendor_provided_label = string.format("%s %s", parent.label, child_type)
+    }
+    driver:try_create_device(child_metadata)
+end
+
+--- Preferences updated
+---
+--- @param driver st.zwave.Driver
+--- @param device st.zwave.Device
+local function info_changed(driver, device, event, args)
+    if (device.preferences or {}).childLight then
+        if not device:get_child_by_parent_assigned_key('light') then
+            add_child(driver,device,'switch-level','light')
+        end
+    end
+    update_preferences(driver, device, args)
+end
+
 local lzw36_fan_light = {
     NAME = "Inovelli LZW36 Fan Light",
     zwave_handlers = {
@@ -265,6 +371,10 @@ local lzw36_fan_light = {
         [capabilities.colorControl.ID] = {
             [capabilities.colorControl.commands.setColor.NAME] = set_color,
         },
+        [capabilities.switch.ID] = {
+            [capabilities.switch.commands.on.NAME] = switch_on,
+            [capabilities.switch.commands.off.NAME] = switch_off,
+        },
         [capabilities.switchLevel.ID] = {
             [capabilities.switchLevel.commands.setLevel.NAME] = set_level,
         },
@@ -275,6 +385,7 @@ local lzw36_fan_light = {
     lifecycle_handlers = {
         init = device_init,
         added = device_added,
+        infoChanged = info_changed,
     },
     can_handle = can_handle_lzw36_fan_light,
 }
