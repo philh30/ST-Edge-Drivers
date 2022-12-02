@@ -312,6 +312,18 @@ local devices = {
       assocGroup4             = {type = 'assoc', group = 4, maxnodes = 5, addhub = false},
     }
   },
+  NZW97 = {
+    MATCHING_MATRIX = {
+      mfrs = 0x0312,
+      product_types = 0x6100,
+      product_ids = 0x6100
+    },
+    PARAMETERS = {
+      ledIndicator            = {type = 'config', parameter_number = 1, size = 1 },
+      autoOffChannel1         = {type = 'config', parameter_number = 2, size = 2 },
+      autoOffChannel2         = {type = 'config', parameter_number = 3, size = 2 },
+    }
+  },
   REMOTEC_ZFM80 = {
     MATCHING_MATRIX = {
       mfrs = 0x5254,
