@@ -52,14 +52,8 @@
 --      0x85: 1,   // Association V1
 --      0x86: 1,   // Version V1
 
-local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version = 1 })
-local Battery = (require "st.zwave.CommandClass.Battery")({ version = 1 })
 local SensorBinary = (require "st.zwave.CommandClass.SensorBinary")({ version = 2})
-local Notification = (require "st.zwave.CommandClass.Notification")({ version = 4})
-local capabilities = require "st.capabilities"
 local cc = require "st.zwave.CommandClass"
-
-local LAST_BATTERY_REPORT_TIME = "lastBatteryReportTime"
 
 local ECOLINK_TILT_FINGERPRINTS = {
     { mfr = 0x014A, prod = 0x0001, model = 0x0003 }, -- Ecolink Tilt Sensor 2 (zwave)
@@ -85,74 +79,6 @@ local function call_parent_handler(handlers, self, device, event, args)
     end
 end
 
--- Request a battery update from the device.
--- This should only be called when the radio is known to be listening
--- (during initial inclusion/configuration and during Wakeup)
-local function getBatteryUpdate(device, force)
-    device.log.trace("getBatteryUpdate()")
-    if not force then
-        -- Calculate if its time
-        local last = device:get_field(LAST_BATTERY_REPORT_TIME)
-        if last then
-            local now = os.time()
-            local diffsec = os.difftime(now, last)
-            device.log.debug("Last battery update: " .. os.date("%c", last) .. "(" .. diffsec .. " seconds ago)" )
-            local wakeup_offset = 60 * 60 * 24  -- Assume 1 day preference
-
-            if tonumber(device.preferences.batteryInterval) < 100 then
-                -- interval is a multiple of our wakeup time (in seconds)
-                wakeup_offset = tonumber(device.preferences.wakeUpInterval) * tonumber(device.preferences.batteryInterval)
-            end
-
-            if wakeup_offset > 0 then
-                -- Adjust for about 5 minutes to cover waking up "early"
-                wakeup_offset = wakeup_offset - (60 * 5)
-                
-                -- Has it been longer than our interval?
-                force = diffsec >= wakeup_offset
-            end
-        else
-            force = true -- No last battery report, get one now
-        end
-    end
-
-    if not force then device.log.debug("No battery update needed") end
-
-    if force then
-        -- Request a battery update now
-        device:send(Battery:Get({}))
-    end
-
-end
-
---- @param self st.zwave.Driver
---- @param device st.zwave.Device
---- @param cmd st.zwave.CommandClass.WakeUp.Notification
-local function wakeup_notification(self, device, cmd)
-    device.log.trace("wakeup_notification(ecolink-tilt)")
-
-    call_parent_handler(self.zwave_handlers[cc.WAKE_UP][WakeUp.NOTIFICATION], self, device, cmd)
-
-    -- When the cover is restored (tamper switch closed), the device wakes up.  Assume tamper is clear.
-    device:emit_event(capabilities.tamperAlert.tamper.clear())
-
-    -- We may need to request a battery update while we're woken up
-    getBatteryUpdate(device)
-end
-
---- @param self st.zwave.Driver
---- @param device st.zwave.Device
---- @param cmd st.zwave.CommandClass.Battery.Report
-local function battery_report(self, device, cmd)
-    -- Save the timestamp of the last battery report received.
-    device:set_field(LAST_BATTERY_REPORT_TIME, os.time(), { persist = true } )
-    if cmd.args.battery_level == 99 then cmd.args.battery_level = 100 end
-    if cmd.args.battery_level == 0xFF then cmd.args.battery_level = 1 end
-
-    -- Forward on to the default battery report handlers from the top level
-    call_parent_handler(self.zwave_handlers[cc.BATTERY][Battery.REPORT], self, device, cmd)
-end
-
 ---  Handler for binary sensor command class reports
 ---
 --- This converts Ecolink binary sensor reports to contact open/closed events 
@@ -170,36 +96,12 @@ local function sensor_binary_report_handler(self, device, cmd)
   end
 end
 
---- @param self st.zwave.Driver
---- @param device st.zwave.Device
---- @param event table
---- @param args
-local function eco_doConfigure(self, device, event, args)
-    device.log.trace("eco_doConfigure()")
-    -- Call the topmost 'doConfigure' lifecycle hander to do the default work first
-    call_parent_handler(self.lifecycle_handlers.doConfigure, self, device, event, args)
-
-    -- Force a battery update now
-    getBatteryUpdate(device, true)
-end
-
 local ecolink_tilt = {
     NAME = "Ecolink Tilt Sensor",
     zwave_handlers = {
-        [cc.WAKE_UP] = {
-            [WakeUp.NOTIFICATION] = wakeup_notification,
-        },
-        [cc.BATTERY] = {
-            [Battery.REPORT] = battery_report,
-        },
         [cc.SENSOR_BINARY] = {
             [SensorBinary.REPORT] = sensor_binary_report_handler
         },
-    },
-    lifecycle_handlers = {
-        -- init  =
-        -- added = 
-        doConfigure = eco_doConfigure,
     },
     can_handle = can_handle_ecolink_tilt,
 }

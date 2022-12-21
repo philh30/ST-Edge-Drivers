@@ -1,5 +1,6 @@
 name: 'Z-Wave Sensor PH'
 packageKey: 'zwave-sensor-ph'
-description: "Supports HomeSeer HS-LS100+ leak sensor; Ecolink tilt sensor 2 and 2.5; FortrezZ leak sensor; Zooz ZSE11, ZSE40 and ZSE41; and generic Zwave sensors."
+description: "Supports a variety of HomeSeer, Ecolink, FortrezZ, Monoprice, and Zooz Zwave sensors."
+vendorSupportInformation: '<a href="https://community.smartthings.com/t/st-edge-z-wave-sensor-driver-channel-including-specific-ecolink-fortrezz-homeseer-and-zooz-models/248133">SmartThings Community discussion</a><br><br><a href="https://github.com/philh30/ST-Edge-Drivers">GitHub repo</a><br><br>Supports:<br>- Ecolink contact, tilt and flood sensors<br>- FortrezZ leak sensor<br>- HomeSeer HS-LS100+ leak sensor<br>- Monoprice 4-in-1 sensor<br>- Zooz ZSE11, ZSE40 and ZSE41'
 permissions:
   zwave: {}
