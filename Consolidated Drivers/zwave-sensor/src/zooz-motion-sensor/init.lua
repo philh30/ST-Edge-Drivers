@@ -15,20 +15,18 @@
 local capabilities = require "st.capabilities"
 --- @type st.zwave.CommandClass
 local cc = require "st.zwave.CommandClass"
---- @type st.zwave.defaults
-local defaults = require "st.zwave.defaults"
 --- @type st.zwave.CommandClass.Battery
 local Battery = (require "st.zwave.CommandClass.Battery")({ version = 1 })
 --- @type st.zwave.CommandClass.Notification
 local Notification = (require "st.zwave.CommandClass.Notification")({ version = 3 })
+--- @type st.zwave.CommandClass.SensorBinary
+local SensorBinary = (require "st.zwave.CommandClass.SensorBinary")({ version = 2 })
 --- @type st.zwave.CommandClass.SensorMultilevel
 local SensorMultilevel = (require "st.zwave.CommandClass.SensorMultilevel")({ version = 5 })
 --- @type st.zwave.CommandClass.WakeUp
 local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version = 1 })
 --- @type st.utils
 local utils = require "st.utils"
-local preferences = require "preferences"
-local log = require "log"
 
 local LAST_BATTERY_REPORT_TIME = "lastBatteryReportTime"
 
@@ -177,6 +175,15 @@ end
 local function wakeup_notification(self, device, cmd)
   device.log.trace("wakeup_notification()")
 
+  -- Check the motion sensor if it's currently tripped
+  if device:get_latest_state('main',capabilities.motionSensor.ID,'motion','active') == 'active' then
+    if device:is_cc_supported(cc.SENSOR_BINARY) then
+      device:send(SensorBinary:Get({sensor_type = SensorBinary.sensor_type.MOTION}))
+    else
+      device:send(Notification:Get({v1_alarm_type=7,notification_type=Notification.notification_type.HOME_SECURITY,event=Notification.event.home_security.MOTION_DETECTION}))
+    end
+  end
+
   -- We may need to request a battery update while we're woken up
   getBatteryUpdate(device)
 end
@@ -227,7 +234,7 @@ local zooz_sensor = {
   lifecycle_handlers = {
     added = device_added,
   },
-  NAME = "zooz sensor",
+  NAME = "zooz motion sensor",
   can_handle = can_handle_zooz_sensor
 }
 

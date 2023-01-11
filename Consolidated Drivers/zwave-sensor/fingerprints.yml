@@ -1,10 +1,5 @@
 zwaveManufacturer:
-#  - id: "Ecolink/0x0010"
-#    deviceLabel: Ecolink Water Leak Sensor
-#    manufacturerId: 0x014A
-#    productType: 0x0005
-#    productId: 0x0010
-#    deviceProfileName: water-battery-tempalarm
+# Ecolink
   - id: 014A/0001/0002   # DW-ZWAVE2
     deviceLabel: Ecolink Open/Closed Sensor 2
     manufacturerId: 0x014A
@@ -29,6 +24,47 @@ zwaveManufacturer:
     productType: 0x0004
     productId: 0x0003
     deviceProfileName: ecolink-tilt-2.5
+  - id: 014A/0005/000F
+    deviceLabel: Ecolink Flood/Freeze Sensor 5
+    manufacturerId: 0x014A
+    productType: 0x0005
+    productId: 0x000F
+    deviceProfileName: ecolink-flood-5
+  - id: 014A/0005/0010
+    deviceLabel: Ecolink Flood/Freeze Sensor 5
+    manufacturerId: 0x014A
+    productType: 0x0005
+    productId: 0x0010
+    deviceProfileName: ecolink-flood-5
+# FortrezZ
+  - id: "0084/0053/0216"
+    deviceLabel: FortrezZ Temperature and Leak Sensor
+    manufacturerId: 0x0084
+    productType: 0x0053
+    productId: 0x0216
+    deviceProfileName: fortrezz-leak
+# HomeSeer
+  - id: "000C/0201/000A"
+    deviceLabel: HomeSeer HS-LS100+ Leak Sensor
+    manufacturerId: 0x000C
+    productType: 0x0201
+    productId: 0x000A
+    deviceProfileName: homeseer-leak    # by default, no temperature
+# Monoprice
+  - id: "monoprice/4in1"
+    deviceLabel: Monoprice 4-in-1 sensor
+    manufacturerId: 0x0109
+    productType: 0x2021
+    productId: 0x2101
+    deviceProfileName: monoprice-4-in-1-sensor
+# Ring
+  - id: 0346/0201/0301
+    deviceLabel: Ring Contact Sensor 2
+    manufacturerId: 0x0346
+    productType: 0x0201
+    productId: 0x0301
+    deviceProfileName: ring-contact-2
+# Zooz
   - id: 027A/7000/E001
     deviceLabel: Zooz ZSE41 XS Contact Sensor
     manufacturerId: 0x027A
@@ -41,12 +77,6 @@ zwaveManufacturer:
     productType: 0x2021
     productId: 0x2101
     deviceProfileName: zooz-4-in-1-sensor
-  - id: "monoprice/4in1"
-    deviceLabel: Monoprice 4-in-1 sensor
-    manufacturerId: 0x0109
-    productType: 0x2021
-    productId: 0x2101
-    deviceProfileName: monoprice-4-in-1-sensor
   - id: "zooz/q-eu"
     deviceLabel: Zooz Q sensor
     manufacturerId: 0x027A
@@ -65,18 +95,6 @@ zwaveManufacturer:
     productType: 0x0202
     productId: 0x0006
     deviceProfileName: zooz-q-sensor
-  - id: "0084/0053/0216"
-    deviceLabel: FortrezZ Temperature and Leak Sensor
-    manufacturerId: 0x0084
-    productType: 0x0053
-    productId: 0x0216
-    deviceProfileName: fortrezz-leak
-  - id: "000C/0201/000A"
-    deviceLabel: HomeSeer HS-LS100+ Leak Sensor
-    manufacturerId: 0x000C
-    productType: 0x0201
-    productId: 0x000A
-    deviceProfileName: homeseer-leak    # by default, no temperature
 zwaveGeneric:
   - id: "GenericSensorAlarm"
     deviceLabel: Z-Wave Sensor

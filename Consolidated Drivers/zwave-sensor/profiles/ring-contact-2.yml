@@ -1,0 +1,67 @@
+name: ring-contact-2
+components:
+- id: main
+  capabilities:
+  - id: contactSensor
+    version: 1
+  - id: button
+    version: 1
+  - id: tamperAlert
+    version: 1
+  - id: platemusic11009.deviceNetworkId
+    version: 1
+  - id: battery
+    version: 1
+  categories:
+  - name: ContactSensor
+preferences:
+  - name: "wakeUpInterval"
+    title: "Wake Up Interval"
+    description: "Default = <b>Every 12 hours</b>.<br>During wakeup the sensor can send battery updates and receive parameter changes."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        3600:   "Every hour"
+        7200:   "Every 2 hours"
+        10800:  "Every 3 hours"
+        14400:  "Every 4 hours"
+        21600:  "Every 6 hours"
+        28800:  "Every 8 hours"
+        43200:  "Every 12 hours"   # default
+        86400:  "Every 24 hours"
+      default: 43200
+  - name: "batteryInterval"
+    title: "Battery Update Interval"
+    description: "Battery updates are requested during the wake up interval.<br>Default = <b>every wakeup</b>.<br>If disabled, the device will still send an alert when battery reaches critical."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0:      "Disabled"
+        1:      "Every wakeup"   # default
+        2:      "Every other wakeup"
+        3:      "Every 3rd wakeup"
+        4:      "Every 4th wakeup"
+        101:    "Once per day maximum"
+      default: 1
+  - name: "heartbeats"
+    title: "Minutes between Heartbeats"
+    description: "The number of minutes between heartbeats. Heartbeats are automatic battery reports on a timer after the last event."
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 70
+      default: 70
+  - name: "ledIndicator"
+    title: "LED Indicator"
+    description: "Configure the various LED indications on the device."
+    required: false
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Don't show green"
+        1: "Show green after fault"
+        2: "Show green after fault and clear"
+      default: 1
