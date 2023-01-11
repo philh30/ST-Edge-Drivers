@@ -1,3 +1,5 @@
+-- Copyright 2021 SmartThings
+--
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
@@ -10,23 +12,30 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version = 1 })
-local Battery = (require "st.zwave.CommandClass.Battery")({ version = 1 })
-local Basic = (require "st.zwave.CommandClass.Basic")({ version = 1 })
-local SensorBinary = (require "st.zwave.CommandClass.SensorBinary")({ version = 1 })
-local SensorMultilevel = (require "st.zwave.CommandClass.SensorMultilevel")({ version = 1 })
 local capabilities = require "st.capabilities"
+--- @type st.zwave.CommandClass
 local cc = require "st.zwave.CommandClass"
+--- @type st.zwave.CommandClass.Battery
+local Battery = (require "st.zwave.CommandClass.Battery")({ version = 1 })
+--- @type st.zwave.CommandClass.Notification
+local Notification = (require "st.zwave.CommandClass.Notification")({ version = 3 })
+--- @type st.zwave.CommandClass.WakeUp
+local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version = 1 })
 
 local LAST_BATTERY_REPORT_TIME = "lastBatteryReportTime"
 
-local ZWAVE_TEMP_LEAK_SENSOR_FINGERPRINTS = {
-  {mfr = 0x0084, prod = 0x0053, model = 0x0216} -- FortrezZ Temperature and Leak Sensor
+local RING_FINGERPRINTS = {
+  { manufacturerId = 0x0346, productType = 0x0201, productId = 0x0301 }, -- Ring contact sensor v2
 }
 
-local function can_handle_zwave_temp_leak_sensor(opts, driver, device, ...)
-  for _, fingerprint in ipairs(ZWAVE_TEMP_LEAK_SENSOR_FINGERPRINTS) do
-    if device:id_match(fingerprint.mfr, fingerprint.prod, fingerprint.model) then
+--- Determine whether the passed device is RING_FINGERPRINTS
+---
+--- @param driver st.zwave.Driver
+--- @param device st.zwave.Device
+--- @return boolean true if the device proper, else false
+local function can_handle_ring_sensor(opts, driver, device, ...)
+  for _, fingerprint in ipairs(RING_FINGERPRINTS) do
+    if device:id_match(fingerprint.manufacturerId, fingerprint.productType, fingerprint.productId) then
       return true
     end
   end
@@ -38,7 +47,45 @@ local function call_parent_handler(handlers, self, device, event, args)
     handlers = { handlers }  -- wrap as table
   end
   for _, func in ipairs( handlers or {} ) do
-    func(self, device, event, args)
+      func(self, device, event, args)
+  end
+end
+
+--- Handler for notification report command class
+---
+--- @param self st.zwave.Driver
+--- @param device st.zwave.Device
+--- @param cmd st.zwave.CommandClass.Notification.Report
+local function notification_report_handler(self, device, cmd)
+  local home_security_notification_events_map = {
+    [Notification.event.home_security.INTRUSION] = {
+      active = capabilities.contactSensor.contact.open(),
+      inactive = capabilities.contactSensor.contact.closed()
+    },
+    [Notification.event.home_security.TAMPERING_PRODUCT_COVER_REMOVED] = {
+      active = capabilities.tamperAlert.tamper.detected(),
+      inactive = capabilities.tamperAlert.tamper.clear(),
+    },
+    -- To do: Should this be a separate custom capability?
+    [Notification.event.home_security.MAGNETIC_FIELD_INTERFERENCE_DETECTED] = {
+      active = capabilities.tamperAlert.tamper.detected(),
+      inactive = capabilities.tamperAlert.tamper.clear(),
+    },
+  }
+
+  local event
+  if cmd.args.notification_type == Notification.notification_type.HOME_SECURITY then
+    if cmd.args.event == Notification.event.home_security.STATE_IDLE then
+      event = home_security_notification_events_map[string.byte(cmd.args.event_parameter)].inactive
+    else
+      event = home_security_notification_events_map[cmd.args.event].active
+    end
+  elseif cmd.args.notification_type == Notification.notification_type.SYSTEM and cmd.args.event == Notification.event.system.HEARTBEAT then
+    event = capabilities.button.button.pushed()
+    event.state_change = true
+  end
+  if (event ~= nil) then
+    device:emit_event(event)
   end
 end
 
@@ -88,13 +135,13 @@ end
 local function wakeup_notification(self, device, cmd)
   device.log.trace("wakeup_notification()")
 
+  -- Check the contact sensor if it's currently tripped
+  if device:get_latest_state('main',capabilities.contactSensor.ID,'contact','open') == 'open' then
+    device:send(Notification:Get({notification_type=Notification.notification_type.HOME_SECURITY,event=Notification.event.home_security.INTRUSION}))
+  end
+
   -- We may need to request a battery update while we're woken up
   getBatteryUpdate(device)
-
-  -- Request a temperature report
-  if device.preferences.requestTemperature then
-    device:send(SensorMultilevel:Get({}))
-  end
 end
 
 --- @param self st.zwave.Driver
@@ -109,47 +156,20 @@ local function battery_report(self, device, cmd)
   call_parent_handler(self.zwave_handlers[cc.BATTERY][Battery.REPORT], self, device, cmd)
 end
 
-local function basic_set(driver,device,cmd)
-  device:emit_event(capabilities.waterSensor.water({ value = cmd.args.value == 0 and "dry" or "wet" }))
-end
-
-local function sensor_binary_report(driver,device,cmd)
-  -- Freeze alarm triggers at 39F (not configurable)
-  device:emit_event(capabilities.temperatureAlarm.temperatureAlarm({ value = cmd.args.value == 0 and "cleared" or "freeze" }))
-end
-
-local function temperature_report(self, device, cmd)
-  if (cmd.args.sensor_type == SensorMultilevel.sensor_type.TEMPERATURE) then
-    local scale = 'C'
-    if (cmd.args.scale == SensorMultilevel.scale.temperature.FAHRENHEIT) then scale = 'F' end
-    local evt = capabilities.temperatureMeasurement.temperature({value = cmd.args.sensor_value, unit = scale})
-    device:emit_event_for_endpoint(cmd.src_channel, evt)
-  end
-end
-
-local fortrezz_leak = {
+local ring_contact_sensor = {
   zwave_handlers = {
     [cc.WAKE_UP] = {
-      [WakeUp.NOTIFICATION] = wakeup_notification,
-    },
-    [cc.BASIC] = {
-      [Basic.SET] = basic_set,
+        [WakeUp.NOTIFICATION] = wakeup_notification,
     },
     [cc.BATTERY] = {
         [Battery.REPORT] = battery_report,
     },
-    [cc.SENSOR_BINARY] = {
-      [SensorBinary.REPORT] = sensor_binary_report,
-    },
-    [cc.SENSOR_MULTILEVEL] = {
-      [SensorMultilevel.REPORT] = temperature_report,
+    [cc.NOTIFICATION] = {
+      [Notification.REPORT] = notification_report_handler
     },
   },
-  lifecycle_handlers = {
-    --added = dev_added
-  },
-  NAME = "FortrezZ Leak Sensor",
-  can_handle = can_handle_zwave_temp_leak_sensor,
+  NAME = "Ring Contact Sensor 2",
+  can_handle = can_handle_ring_sensor
 }
 
-return fortrezz_leak
+return ring_contact_sensor
