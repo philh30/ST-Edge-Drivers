@@ -1,0 +1,13 @@
+zwaveGeneric:
+  - id: "Thing - Sleepy"
+    deviceLabel: Z-Wave Utility Belt - Explorer
+    commandClasses:
+      supported:
+        - 0x84 # wakeup
+    deviceProfileName: thing-sleepy
+    isJoinable: false
+zwaveThing :
+  - id: Thing
+    deviceLabel: Z-Wave Utility Belt - Explorer
+    deviceProfileName: thing
+    isJoinable: true

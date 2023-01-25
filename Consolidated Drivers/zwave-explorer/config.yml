@@ -1,0 +1,6 @@
+name: 'Z-Wave Explorer'
+packageKey: 'zwave-explorer'
+description: 'View z-wave device attributes.'
+vendorSupportInformation: 'Developer: philh30<br><br><a href="https://github.com/philh30/ST-Edge-Drivers/tree/main/Consolidated%20Drivers/zwave-explorer">Source code</a>'
+permissions:
+  zwave: {}
