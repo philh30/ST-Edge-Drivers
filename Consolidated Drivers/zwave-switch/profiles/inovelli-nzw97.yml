@@ -1,0 +1,56 @@
+name: inovelli-nzw97
+components:
+  - id: main
+    capabilities:
+    - id: switch
+      version: 1
+    - id: platemusic11009.deviceNetworkId
+      version: 1
+    - id: platemusic11009.firmware
+      version: 1  
+    - id: refresh
+      version: 1
+    categories:
+    - name: SmartPlug
+  - id: switch1
+    capabilities:
+    - id: switch
+      version: 1
+    categories:
+    - name: Switch
+  - id: switch2
+    capabilities:
+      - id: switch
+        version: 1
+    categories:
+      - name: Switch
+preferences:
+  - title: "LED Indicator"
+    name: ledIndicator
+    description: "Turn LED indicator on"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Turn on when switch is on"
+        1: "Turn on when switch is off"
+        2: "Always off"
+      default: 0
+  - title: "Auto Off Channel 1"
+    name: autoOffChannel1
+    description: "Automatically turn switch 1 off after this number of seconds"
+    required: false
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 32767
+      default: 0
+  - title: "Auto Off Channel 2"
+    name: autoOffChannel2
+    description: "Automatically turn switch 2 off after this number of seconds"
+    required: false
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 32767
+      default: 0

@@ -190,7 +190,7 @@ preferences.update_preferences = function(driver, device, args)
           new_parameter_value = ((new_parameter_value >= (256^size)/2) and (new_parameter_value < 256^size)) and (new_parameter_value-256^size) or new_parameter_value
           device:send(Configuration:Set({parameter_number = prefs[id].parameter_number, size = size, configuration_value = new_parameter_value}))
           table.insert(get_params, prefs[id].parameter_number)
-        elseif prefs[id].type == 'wakeup' then
+        elseif prefs[id].type == 'wakeup' and device:is_cc_supported(cc.WAKEUP) then
           local wakeUpInterval = preferences.to_numeric_value(device.preferences[id])
           if type(prefs[id].conversion) == "function" then
             wakeUpInterval = prefs[id].conversion(wakeUpInterval)

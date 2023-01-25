@@ -82,7 +82,6 @@ local function getBatteryUpdate(device, force)
         -- Request a battery update now
         device:send(Battery:Get({}))
     end
-
 end
 
 --- @param self st.zwave.Driver

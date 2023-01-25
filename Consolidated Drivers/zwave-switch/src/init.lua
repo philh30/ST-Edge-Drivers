@@ -18,6 +18,14 @@ local ZwaveDriver = require "st.zwave.driver"
 local defaults = require "st.zwave.defaults"
 local update_preferences = require "update_preferences"
 
+local customCap = {}
+customCap.deviceNetworkId = {}
+customCap.deviceNetworkId.name = "platemusic11009.deviceNetworkId"
+customCap.deviceNetworkId.capability = capabilities[customCap.deviceNetworkId.name]
+customCap.firmware= {}
+customCap.firmware.name = "platemusic11009.firmware"
+customCap.firmware.capability = capabilities[customCap.firmware.name]
+
 --- Map component to en_point
 ---
 --- @param device st.zwave.Device
@@ -42,6 +50,36 @@ local function endpoint_to_component(device, ep)
   end
 end
 
+---
+--- @param self st.zwave.Driver
+--- @param device st.zwave.Device
+local function updateNetworkId(self, device, deviceId)
+  -- Set our zwave deviceNetworkID 
+  for _, component in pairs(device.profile.components) do
+    if device:supports_capability_by_id(customCap.deviceNetworkId.name,component.id) then
+      local fmtDeviceId = "[" .. deviceId .. "]"
+      device:emit_component_event(component,capabilities[customCap.deviceNetworkId.name].deviceNetworkId({value = fmtDeviceId }))
+    end
+  end
+end
+
+---
+--- @param self st.zwave.Driver
+--- @param device st.zwave.Device
+local function updateFirmwareVersion(self, device)
+  -- Set our zwave deviceNetworkID 
+  for _, component in pairs(device.profile.components) do
+    if device:supports_capability_by_id(customCap.firmware.name,component.id) then
+      local fw_major = (((device.st_store or {}).zwave_version or {}).firmware or {}).major
+      local fw_minor = (((device.st_store or {}).zwave_version or {}).firmware or {}).minor
+      if fw_major and fw_minor then
+        local fmtFirmwareVersion= fw_major .. "." .. string.format('%02d',fw_minor)
+        device:emit_component_event(component,capabilities[customCap.firmware.name].firmwareVersion({value = tonumber(fmtFirmwareVersion) }))
+      end
+    end
+  end
+end
+
 --- Initialize device
 ---
 --- @param self st.zwave.Driver
@@ -60,14 +98,16 @@ end
 --- @param driver st.zwave.Driver
 --- @param device st.zwave.Device
 local function device_added(driver, device)
+  updateNetworkId(driver, device, device.device_network_id)
+  updateFirmwareVersion(driver, device)
   device:refresh()
 end
 
 local driver_template = {
   lifecycle_handlers = {
-    init = device_init,
-    infoChanged = info_changed,
-    added = device_added
+    init           = device_init,
+    infoChanged    = info_changed,
+    added          = device_added,
   },
   supported_capabilities = {
     capabilities.switch,
@@ -86,6 +126,7 @@ local driver_template = {
     require("ge-motion-switch"),
     require("inovelli-lzw36"),
     require("inovelli-lzw45"),
+    require("inovelli-nzw97"),
     require("zooz-zen32"),
     require("zooz-zen51"),
   },

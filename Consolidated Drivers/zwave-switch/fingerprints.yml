@@ -500,6 +500,12 @@ zwaveManufacturer:
     productType: 0x000A
     productId: 0x0001
     deviceProfileName: inovelli-lzw45
+  - id: "0312/6100/6100/PH"
+    deviceLabel: Inovelli NZW97 Outdoor Outlet
+    manufacturerId: 0x0312
+    productType: 0x6100
+    productId: 0x6100
+    deviceProfileName: inovelli-nzw97
 # Misc Switch
   - id: "0086/0003/0006"
     deviceLabel: Aeotec Heavy Duty Metering Plug

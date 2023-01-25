@@ -11,7 +11,6 @@
 -- limitations under the License.
 
 local CC = require "st.zwave.CommandClass"
-local Battery = (require "st.zwave.CommandClass.Battery")({ version = 1 })
 local Basic = (require "st.zwave.CommandClass.Basic")({ version = 1 })
 local capabilities = require "st.capabilities"
 
@@ -82,8 +81,9 @@ local function hsl_doConfigure(self, device, event, args)
   -- Call the topmost 'doConfigure' lifecycle hander to do the default work first
   call_parent_handler(self.lifecycle_handlers.doConfigure, self, device, event, args)
 
-  -- Request a battery update now
-  device:send(Battery:Get({}))
+  -- Send the default refresh commands for the capabilities of this device
+  -- This includes SENSOR_BINARY GET and BATTERY GET.
+  device:default_refresh()
 end
 
 --- @param self st.zwave.Driver
