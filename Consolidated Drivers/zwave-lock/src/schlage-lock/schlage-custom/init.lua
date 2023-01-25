@@ -190,8 +190,6 @@ local function notification_report(self, device, cmd)
 end
 
 local function added_handler(self, device, event, args)
-  device:emit_event(capabilities.lockCodes.minCodeLength({value = 4}))
-  device:emit_event(capabilities.lockCodes.minCodeLength({value = 8}))
   call_parent_handler(self.lifecycle_handlers.added, self, device, event, args)
 end
 
