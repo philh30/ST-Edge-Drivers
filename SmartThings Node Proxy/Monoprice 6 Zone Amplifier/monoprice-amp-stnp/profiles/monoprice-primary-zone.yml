@@ -1,0 +1,52 @@
+name: monoprice-primary-zone
+components:
+- id: main
+  label: Main
+  capabilities:
+  - id: switch
+    version: 1
+  - id: audioVolume
+    version: 1
+  - id: audioMute
+    version: 1
+  - id: switchLevel
+    version: 1
+  - id: platinummassive43262.monopriceSource
+    version: 1
+  - id: platinummassive43262.sourceName
+    version: 1
+  - id: platinummassive43262.doNotDisturb
+    version: 1
+  - id: platinummassive43262.monopriceAudioAdjustments
+    version: 1
+  - id: platinummassive43262.discover
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: NetworkAudio
+metadata:
+  deviceType: NetworkAudio
+  ocfDeviceType: oic.d.networkaudio
+  deviceTypeId: NetworkAudio
+preferences:
+  - title: "SmartThings Node Proxy LAN Address"
+    name: lanAddress
+    description: "IP:Port address of STNP"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      minLength: 12
+      maxLength: 20
+      default: '192.168.1.nnn:8080'
+  - title: "ST Node Proxy Auth Code"
+    name: authCode
+    description: "Auth code saved in SmartThings Node Proxy config.json"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: password
+      minLength: 4
+      maxLength: 16
+      default: "authcode"

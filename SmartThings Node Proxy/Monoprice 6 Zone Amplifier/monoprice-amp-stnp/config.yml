@@ -1,0 +1,5 @@
+name: 'Monoprice 6-Zone Amplifier STNP v1.01'
+packageKey: 'monoprice-amp-stnp-v1.01'
+permissions:
+  lan: {}
+  discovery: {}
