@@ -142,7 +142,7 @@ local function infoChanged_handler(driver,device, event, args)
     add_zones(driver,'Carbon Monoxide',device.preferences.coZones)
     add_zones(driver,'Smoke',device.preferences.smokeZones)
     add_zones(driver,'Leak',device.preferences.leakZones)
-    add_zones(driver,'Glass Break',device.preferences.glassZones)
+    add_zones(driver,'Glass',device.preferences.glassZones)
   end
   if device.preferences.addSwitches or device.preferences.addPartition or device.preferences.addTriggers then
     local device_list = driver:get_devices()
