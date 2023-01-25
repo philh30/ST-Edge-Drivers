@@ -30,7 +30,7 @@ metadata:
   deviceType: WaterValve
   ocfDeviceType: oic.d.watervalve
   deviceTypeId: WaterValve
-  vid: 42a1d24d-370d-3fd3-9a39-9ae4db520163
+  vid: 3b29a4fc-ca79-371e-8b8c-bb24ddc8cb45
   mnmn: SmartThingsCommunity
 preferences:
   - title: "SmartThings Node Proxy LAN Address"

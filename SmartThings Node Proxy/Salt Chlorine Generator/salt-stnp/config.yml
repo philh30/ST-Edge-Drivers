@@ -1,5 +1,7 @@
 name: 'Pool Pilot Total Control STNP'
 packageKey: 'salt-stnp'
+description: 'Pool Pilot salt chlorine generator with serial connection to STNP'
+vendorSupportInformation: 'Developer: philh30'
 permissions:
   lan: {}
   discovery: {}
