@@ -1,6 +1,6 @@
-name: 'Z-Wave Switch PH'
-packageKey: 'zwave-switch-ph'
-description: 'GE, Honeywell, Jasco, Inovelli, and Zooz Z-wave switches'
-vendorSupportInformation: 'Version: 0.01<br>Developer: philh30<br>Web: <a href="https://github.com/philh30/ST-Edge-Drivers">GitHub repo</a><br><br>Supports:<br>- GE/Jasco/Honeywell/Ultrapro actuators<br>- Inovelli LZW36/LZW45<br>- Zooz ZEN32/ZEN51'
+name: 'Z-Wave Switch CS'
+packageKey: 'zwave-switch-cs'
+description: 'GE, HomeSeer, Honeywell, Jasco, Inovelli, Remotec and Zooz Z-wave switches'
+vendorSupportInformation: 'Version: 0.02<br>Developer: philh30/csstup<br>Web: <a href="https://github.com/philh30/ST-Edge-Drivers">GitHub repo</a><br><br>Supports:<br>- GE/Jasco/Honeywell/Ultrapro actuators<br>- HomeSeer FLS100+/FLS100+G2<br>- Inovelli LZW36/LZW45/NZW97<br>- Remotec ZFM80<br>- Zooz ZEN32/ZEN51'
 permissions:
   zwave: {}
