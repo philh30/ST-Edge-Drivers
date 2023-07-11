@@ -103,6 +103,7 @@ Fingerprint | Device | Profile
 0063/4944/3130 | GE Smart Toggle Dimmer (14295 / ZW3004) | ge-dimmer-assoc
 0063/4944/3132 | GE Smart Toggle Dimmer (14296 / ZW3011) | ge-dimmer-scene
 0063/4944/3135 | GE Smart Dimmer (14321 / ZW3005) | ge-dimmer-assoc
+0063/4944/3136 | GE Smart Dimmer (14326 / ZW3006) | ge-dimmer-assoc
 0063/4944/3233 | GE Smart Touch Dimmer (14289 / ZW3009) | ge-dimmer-assoc
 0063/4944/3235 | GE Smart Dimmer (14294 / 46203 / ZW3010) | ge-dimmer-scene
 0063/4944/3237 | GE Smart Toggle Dimmer (14295 / 46204 / ZW3011) | ge-dimmer-scene

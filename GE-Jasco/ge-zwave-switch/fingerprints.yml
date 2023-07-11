@@ -83,6 +83,12 @@ zwaveManufacturer:
     productType: 0x4944
     productId: 0x3135
     deviceProfileName: ge-dimmer-assoc
+  - id: "0063/4944/3136"
+    deviceLabel: GE Dimmer 14326
+    manufacturerId: 0x0063
+    productType: 0x4944
+    productId: 0x3136
+    deviceProfileName: ge-dimmer-assoc
   - id: "0063/4944/3138"
     deviceLabel: GE Fan 14314
     manufacturerId: 0x0063
