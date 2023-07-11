@@ -169,6 +169,49 @@ local function time_get_handler(driver, device, cmd)
     device:endpoint_to_component(cmd.src_channel)
   )
 end
+--[[
+local function set_code_handler(driver, device, cmd)
+  local code_str = cmd.args.codeStr
+  local sep = ':'
+  local t = {}
+  for str in string.gmatch(code_str, "([^"..sep.."]+)") do
+    table.insert(t, str)
+  end
+  if tonumber(t[1],10) and tonumber(t[2],10) then
+    driver:inject_capability_command(device, {
+      capability = capabilities.lockCodes.ID,
+      command = capabilities.lockCodes.commands.setCode.NAME,
+      args = {tonumber(t[1],10), tostring(tonumber(t[2],10)), ''},
+    })
+  end
+end
+
+local function delete_code_handler(driver, device, cmd)
+  local code_str = cmd.args.codeStr
+  if tonumber(code_str,10) then
+    driver:inject_capability_command(device, {
+      capability = capabilities.lockCodes.ID,
+      command = capabilities.lockCodes.commands.deleteCode.NAME,
+      args = {tonumber(code_str,10)},
+    })
+  end
+end
+
+local function name_code_handler(driver, device, cmd)
+  local code_str = cmd.args.codeStr
+  local sep = ':'
+  local t = {}
+  for str in string.gmatch(code_str, "([^"..sep.."]+)") do
+    table.insert(t, str)
+  end
+  if tonumber(t[1],10) and t[2] then
+    driver:inject_capability_command(device, {
+      capability = capabilities.lockCodes.ID,
+      command = capabilities.lockCodes.commands.nameSlot.NAME,
+      args = {tonumber(t[1],10), t[2]},
+    })
+  end
+end--]]
 
 local driver_template = {
   supported_capabilities = {
@@ -184,7 +227,13 @@ local driver_template = {
   capability_handlers = {
     [capabilities.lockCodes.ID] = {
       [capabilities.lockCodes.commands.updateCodes.NAME] = update_codes
-    }
+    },
+    --[[
+    [capabilities['platinummassive43262.lockCodeMaintenance'].ID] = {
+      [capabilities['platinummassive43262.lockCodeMaintenance'].commands.setCode.NAME] = set_code_handler,
+      [capabilities['platinummassive43262.lockCodeMaintenance'].commands.setCodeName.NAME] = name_code_handler,
+      [capabilities['platinummassive43262.lockCodeMaintenance'].commands.deleteCode.NAME] = delete_code_handler
+    }--]]
   },
   zwave_handlers = {
     [cc.TIME] = {

@@ -129,22 +129,28 @@ local function is_user_code_report_mfr_specific(device, cmd)
 end
 
 local function user_code_report_handler(self, device, cmd)
-  local code_id = cmd.args.user_identifier
+  -- FIX IN LINE BELOW - almost all of these default handler calls expect a string
+  local code_id = tostring(cmd.args.user_identifier)
   if is_user_code_report_mfr_specific(device, cmd) then
     local reported_user_id_status = cmd.args.user_id_status
     local user_code = cmd.args.user_code
     local event
 
-    if reported_user_id_status == user_id_status.ENABLED_GRANT_ACCESS or -- OCCUPIED in UserCodeV1
-        (user_code == user_id_status.STATUS_NOT_AVAILABLE and user_code ~= nil) then
+    if (reported_user_id_status == user_id_status.ENABLED_GRANT_ACCESS or -- OCCUPIED in UserCodeV1
+        (reported_user_id_status == user_id_status.STATUS_NOT_AVAILABLE and user_code)) then  -- FIX HERE TOO - stock driver was comparing user_code to user_id_status???
       local code_name = LockCodesDefaults.get_code_name(device, code_id)
       local change_type = LockCodesDefaults.get_change_type(device, code_id)
       event = capabilities.lockCodes.codeChanged(code_id..""..change_type, { state_change = true })
       event.data = {codeName = code_name}
-      if code_id ~= 0 then -- ~= MASTER_CODE
+      
+      -- ADDED THIS
+      local lock_codes = LockCodesDefaults.get_lock_codes(device)
+      -- FIX IN LINE BELOW - only a SET event if we don't already know the code. Also change comparison to string
+      if (code_id ~= '0') and (lock_codes[code_id] == nil) then -- ~= MASTER_CODE and not already discovered
         LockCodesDefaults.code_set_event(device, code_id, code_name)
       end
-    elseif code_id == 0 and reported_user_id_status == user_id_status.AVAILABLE then
+    -- FIX IN LINE BELOW - change comparison to string
+    elseif code_id == '0' and reported_user_id_status == user_id_status.AVAILABLE then
       local lock_codes = LockCodesDefaults.get_lock_codes(device)
       for _code_id, _ in pairs(lock_codes) do
         LockCodesDefaults.code_deleted(device, _code_id)
@@ -158,7 +164,8 @@ local function user_code_report_handler(self, device, cmd)
       device:emit_event(event)
     end
     LockCodesDefaults.clear_code_state(device, code_id)
-    LockCodesDefaults.verify_set_code_completion(device, cmd, code_id)
+    -- FIX IN LINE BELOW - this is the one default handler call that expects a number
+    LockCodesDefaults.verify_set_code_completion(device, cmd, tonumber(code_id))
   else
     LockCodesDefaults.zwave_handlers[cc.USER_CODE][UserCode.REPORT](self, device, cmd)
   end

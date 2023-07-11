@@ -5,6 +5,8 @@ components:
   capabilities:
   - id: lock
     version: 1
+  - id: platinummassive43262.unlockCodeName
+    version: 1
   - id: lockCodes
     version: 1
   - id: tamperAlert
