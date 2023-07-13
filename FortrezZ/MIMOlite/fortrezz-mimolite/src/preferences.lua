@@ -18,7 +18,7 @@ local devices = {
     MATCHING_MATRIX = {
       mfrs = 0x0084,
       product_types = 0x0453,
-      product_ids = 0x0111
+      product_ids = {0x0110,0x0111}
     },
     PARAMETERS = {
       impulseDuration         = {type = 'config', parameter_number = 11, size = 1},
