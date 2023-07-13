@@ -21,6 +21,8 @@ local ZwaveDriver = require "st.zwave.driver"
 local defaults = require "st.zwave.defaults"
 --- @type st.zwave.CommandClass.Basic
 local Basic = (require "st.zwave.CommandClass.Basic")({version=1,strict=true})
+--- @type st.zwave.CommandClass.Battery
+local Battery = (require "st.zwave.CommandClass.Battery")({ version = 1 })
 --- @type st.zwave.CommandClass.SwitchBinary
 local SwitchBinary = (require "st.zwave.CommandClass.SwitchBinary")({version=2,strict=true})
 --- @type st.zwave.CommandClass.SwitchMultilevel

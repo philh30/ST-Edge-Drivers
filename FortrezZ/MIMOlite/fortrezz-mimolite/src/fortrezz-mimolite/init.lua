@@ -30,6 +30,7 @@ local SwitchBinary = (require "st.zwave.CommandClass.SwitchBinary")({version=2})
 local update_preferences = require "update_preferences"
 
 local MIMOLITE_FINGERPRINTS = {
+  {mfr = 0x0084, prod = 0x0453, model = 0x0110},
   {mfr = 0x0084, prod = 0x0453, model = 0x0111},
 }
 
