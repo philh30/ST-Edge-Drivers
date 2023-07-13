@@ -10,5 +10,7 @@ components:
     version: 1
   - id: refresh
     version: 1
+  #- id: platinummassive43262.lockCodeMaintenance
+  #  version: 1
   categories:
   - name: SmartLock

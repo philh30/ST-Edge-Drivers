@@ -101,6 +101,9 @@ Fingerprint | Device | Profile
 0063/4944/3038 | GE Smart Dimmer (14294 / ZW3005) | ge-dimmer-assoc
 0063/4944/3039 | GE Smart Dimmer (14299 / ZW3006) | ge-dimmer-assoc
 0063/4944/3130 | GE Smart Toggle Dimmer (14295 / ZW3004) | ge-dimmer-assoc
+0063/4944/3132 | GE Smart Toggle Dimmer (14296 / ZW3011) | ge-dimmer-scene
+0063/4944/3135 | GE Smart Dimmer (14321 / ZW3005) | ge-dimmer-assoc
+0063/4944/3136 | GE Smart Dimmer (14326 / ZW3006) | ge-dimmer-assoc
 0063/4944/3233 | GE Smart Touch Dimmer (14289 / ZW3009) | ge-dimmer-assoc
 0063/4944/3235 | GE Smart Dimmer (14294 / 46203 / ZW3010) | ge-dimmer-scene
 0063/4944/3237 | GE Smart Toggle Dimmer (14295 / 46204 / ZW3011) | ge-dimmer-scene
@@ -124,6 +127,7 @@ Fingerprint | Device | Profile
 --- | --- | ---
 0063/4944/3034 | GE Z-Wave In-Wall Smart Fan Control (12730 / ZW4002) | ge-fan-legacy
 0063/4944/3131 | GE Z-Wave In-Wall Smart Fan Control (14287 / ZW4002) | ge-fan-assoc
+0063/4944/3138 | GE Z-Wave In-Wall Smart Fan Control (14314 / ZW4002) | ge-fan-assoc
 0063/4944/3337 | GE Z-Wave In-Wall Smart Fan Control (55258 / ZW4002) | ge-fan-scene
 0039/4944/3131 | Honeywell Smart Fan Control (39358 / ZW4002) | ge-fan-assoc
 

@@ -1,5 +1,8 @@
-name: 'Z-Wave Lock PH v1.00'
+name: 'Z-Wave Lock PH'
+#name: 'Z-Wave Lock PH BETA'
 packageKey: 'zwave-lock-v1.00'
+#packageKey: 'zwave-lock-beta'
 description: 'Enhanced functionality for Schlage 468/469 locks'
+vendorSupportInformation: 'Developer: philh30 <br><br><a href="https://community.smartthings.com/t/st-edge-z-wave-lock-ph/255998/24">SmartThings Community discussion</a><br><br><a href="https://github.com/philh30/ST-Edge-Drivers">GitHub repo</a>'
 permissions:
   zwave: {}

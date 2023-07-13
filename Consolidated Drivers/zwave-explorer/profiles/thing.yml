@@ -1,0 +1,13 @@
+name: thing
+components:
+- id: main
+  label: Device capabilities and association groups
+  capabilities:
+  - id: platinummassive43262.deviceInformation
+    version: 1
+  - id: platinummassive43262.zwubCommandClasses
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: RemoteController

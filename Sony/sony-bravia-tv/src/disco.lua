@@ -35,7 +35,7 @@ function disco.find_device()
     res, ip, port = udp:receivefrom()
     if res ~= nil then
       local headers = upnpcommon.process_response(res,{'200 OK'})
-      local id = headers.usn:match("uuid:([^,::]+)")
+      local id = ((headers or {}).usn or ''):match("uuid:([^,::]+)")
       if headers and id and headers.st == config.ST then
         local dev = {
           ip = ip,

@@ -4,6 +4,8 @@ local http = cosock.asyncify('socket.http')
 local ltn12 = require('ltn12')
 local capabilities = require('st.capabilities')
 
+http.TIMEOUT = 5
+
 local command_handler = {}
 
 local err_codes = {

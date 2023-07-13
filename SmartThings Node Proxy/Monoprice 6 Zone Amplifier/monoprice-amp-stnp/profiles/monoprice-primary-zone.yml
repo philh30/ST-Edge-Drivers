@@ -1,37 +1,34 @@
-name: salt
+name: monoprice-primary-zone
 components:
 - id: main
+  label: Main
   capabilities:
-  - id: temperatureMeasurement
+  - id: switch
     version: 1
-  - id: voltageMeasurement
+  - id: audioVolume
     version: 1
-  - id: powerMeter
+  - id: audioMute
     version: 1
-  - id: pHMeasurement
+  - id: switchLevel
     version: 1
-  - id: "platinummassive43262.orpMeasurement"
+  - id: platinummassive43262.monopriceSource
     version: 1
-  - id: "platinummassive43262.phMeasurement"
+  - id: platinummassive43262.sourceName
     version: 1
-  - id: "platinummassive43262.saltMeasurement"
+  - id: platinummassive43262.doNotDisturb
     version: 1
-  - id: "platinummassive43262.currentMeter"
+  - id: platinummassive43262.monopriceAudioAdjustments
     version: 1
-  - id: "platinummassive43262.statusMessage"
-    version: 1
-  - id: "platinummassive43262.errorReport"
+  - id: platinummassive43262.discover
     version: 1
   - id: refresh
     version: 1
   categories:
-  - name: WaterValve
+  - name: NetworkAudio
 metadata:
-  deviceType: WaterValve
-  ocfDeviceType: oic.d.watervalve
-  deviceTypeId: WaterValve
-  vid: 3b29a4fc-ca79-371e-8b8c-bb24ddc8cb45
-  mnmn: SmartThingsCommunity
+  deviceType: NetworkAudio
+  ocfDeviceType: oic.d.networkaudio
+  deviceTypeId: NetworkAudio
 preferences:
   - title: "SmartThings Node Proxy LAN Address"
     name: lanAddress

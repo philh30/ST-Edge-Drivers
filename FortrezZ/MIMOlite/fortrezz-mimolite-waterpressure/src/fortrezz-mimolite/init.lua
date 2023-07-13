@@ -67,7 +67,7 @@ end
 --- @param driver st.zwave.Driver
 --- @param device st.zwave.Device
 local function basic_set(driver, device, cmd)
-  local evt = (cmd.args.value == 0) and capabilities.contactSensor.contactSensor.closed() or capabilities.contactSensor.contactSensor.open()
+  local evt = (cmd.args.value == 0) and capabilities.contactSensor.contact.closed() or capabilities.contactSensor.contact.open()
   device:emit_event(evt)
   device:emit_event(capabilities.powerSource.powerSource.dc())
   device:send(SensorMultilevel:Get({}))
@@ -76,7 +76,7 @@ end
 --- @param driver st.zwave.Driver
 --- @param device st.zwave.Device
 local function sensor_binary_report(driver, device, cmd)
-  local evt = (cmd.args.value == 0) and capabilities.contactSensor.contactSensor.closed() or capabilities.contactSensor.contactSensor.open()
+  local evt = (cmd.args.sensor_value == 0) and capabilities.contactSensor.contact.closed() or capabilities.contactSensor.contact.open()
   device:emit_event(evt)
   device:emit_event(capabilities.powerSource.powerSource.dc())
 end

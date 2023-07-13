@@ -21,14 +21,19 @@ local ZwaveDriver = require "st.zwave.driver"
 local defaults = require "st.zwave.defaults"
 --- @type st.zwave.CommandClass.DoorLock
 local DoorLock = (require "st.zwave.CommandClass.DoorLock")({ version = 1 })
+--- @type st.zwave.CommandClass.UserCode
+local UserCode = (require "st.zwave.CommandClass.UserCode")({ version = 1 })
 --- @type st.zwave.CommandClass.Battery
 local Battery = (require "st.zwave.CommandClass.Battery")({ version = 1 })
+--- @type st.zwave.CommandClass.Time
+local Time = (require "st.zwave.CommandClass.Time")({ version = 1 })
 local constants = require "st.zwave.constants"
 local utils = require "st.utils"
 local json = require "st.json"
 
 local SCAN_CODES_CHECK_INTERVAL = 30
 local MIGRATION_COMPLETE = "migrationComplete"
+local MIGRATION_RELOAD_SKIPPED = "migrationReloadSkipped"
 
 local customCap = {}
 customCap.deviceNetworkId = {}
@@ -70,7 +75,8 @@ local function populate_state_from_data(device)
   if device.data.lockCodes ~= nil and device:get_field(MIGRATION_COMPLETE) ~= true then
     -- build the lockCodes table
     local lockCodes = {}
-    for k, v in pairs(device.data.lockCodes) do
+    local lc_data = json.decode(device.data.lockCodes)
+    for k, v in pairs(lc_data) do
       lockCodes[k] = v
     end
     -- Populate the devices `lockCodes` field
@@ -90,17 +96,21 @@ end
 --- @param device st.zwave.Device
 local function added_handler(self, device)
   populate_state_from_data(device)
-  if (device:supports_capability(capabilities.lockCodes)) then
-    self:inject_capability_command(device,
-            { capability = capabilities.lockCodes.ID,
-              command = capabilities.lockCodes.commands.reloadAllCodes.NAME,
-              args = {} })
-    device.thread:call_with_delay(
-      SCAN_CODES_CHECK_INTERVAL,
-      function(d)
-        periodic_codes_state_verification(self, device)
-      end
-    )
+  if device.data.lockCodes == nil or device:get_field(MIGRATION_RELOAD_SKIPPED) == true then
+    if (device:supports_capability(capabilities.lockCodes)) then
+      self:inject_capability_command(device,
+          { capability = capabilities.lockCodes.ID,
+            command = capabilities.lockCodes.commands.reloadAllCodes.NAME,
+            args = {} })
+      device.thread:call_with_delay(
+          SCAN_CODES_CHECK_INTERVAL,
+          function(d)
+            periodic_codes_state_verification(self, device)
+          end
+      )
+    end
+  else
+    device:set_field(MIGRATION_RELOAD_SKIPPED, true, { persist = true })
   end
   device:send(DoorLock:OperationGet({}))
   device:send(Battery:Get({}))
@@ -114,6 +124,95 @@ local init_handler = function(driver, device, event)
   populate_state_from_data(device)
 end
 
+--- @param driver st.zwave.Driver
+--- @param device st.zwave.Device
+--- @param cmd table
+local function update_codes(driver, device, cmd)
+  local delay = 0
+  -- args.codes is json
+  for name, code in pairs(cmd.args.codes) do
+    -- these seem to come in the format "code[slot#]: code"
+    local code_slot = tonumber(string.gsub(name, "code", ""), 10)
+    if (code_slot ~= nil) then
+      if (code ~= nil and (code ~= "0" and code ~= "")) then
+        -- code changed
+        device.thread:call_with_delay(delay, function ()
+          device:send(UserCode:Set({
+            user_identifier = code_slot,
+            user_code = code,
+            user_id_status = UserCode.user_id_status.ENABLED_GRANT_ACCESS}))
+        end)
+        delay = delay + 2.2
+      else
+        -- code deleted
+        device.thread:call_with_delay(delay, function ()
+          device:send(UserCode:Set({user_identifier = code_slot, user_id_status = UserCode.user_id_status.AVAILABLE}))
+        end)
+        delay = delay + 2.2
+        device.thread:call_with_delay(delay, function ()
+          device:send(UserCode:Get({user_identifier = code_slot}))
+        end)
+        delay = delay + 2.2
+      end
+    end
+  end
+end
+
+local function time_get_handler(driver, device, cmd)
+  local time = os.date("*t")
+  device:send_to_component(
+    Time:Report({
+      hour_local_time = time.hour,
+      minute_local_time = time.min,
+      second_local_time = time.sec
+    }),
+    device:endpoint_to_component(cmd.src_channel)
+  )
+end
+--[[
+local function set_code_handler(driver, device, cmd)
+  local code_str = cmd.args.codeStr
+  local sep = ':'
+  local t = {}
+  for str in string.gmatch(code_str, "([^"..sep.."]+)") do
+    table.insert(t, str)
+  end
+  if tonumber(t[1],10) and tonumber(t[2],10) then
+    driver:inject_capability_command(device, {
+      capability = capabilities.lockCodes.ID,
+      command = capabilities.lockCodes.commands.setCode.NAME,
+      args = {tonumber(t[1],10), tostring(tonumber(t[2],10)), ''},
+    })
+  end
+end
+
+local function delete_code_handler(driver, device, cmd)
+  local code_str = cmd.args.codeStr
+  if tonumber(code_str,10) then
+    driver:inject_capability_command(device, {
+      capability = capabilities.lockCodes.ID,
+      command = capabilities.lockCodes.commands.deleteCode.NAME,
+      args = {tonumber(code_str,10)},
+    })
+  end
+end
+
+local function name_code_handler(driver, device, cmd)
+  local code_str = cmd.args.codeStr
+  local sep = ':'
+  local t = {}
+  for str in string.gmatch(code_str, "([^"..sep.."]+)") do
+    table.insert(t, str)
+  end
+  if tonumber(t[1],10) and t[2] then
+    driver:inject_capability_command(device, {
+      capability = capabilities.lockCodes.ID,
+      command = capabilities.lockCodes.commands.nameSlot.NAME,
+      args = {tonumber(t[1],10), t[2]},
+    })
+  end
+end--]]
+
 local driver_template = {
   supported_capabilities = {
     capabilities.lock,
@@ -124,6 +223,22 @@ local driver_template = {
   lifecycle_handlers = {
     added = added_handler,
     init = init_handler,
+  },
+  capability_handlers = {
+    [capabilities.lockCodes.ID] = {
+      [capabilities.lockCodes.commands.updateCodes.NAME] = update_codes
+    },
+    --[[
+    [capabilities['platinummassive43262.lockCodeMaintenance'].ID] = {
+      [capabilities['platinummassive43262.lockCodeMaintenance'].commands.setCode.NAME] = set_code_handler,
+      [capabilities['platinummassive43262.lockCodeMaintenance'].commands.setCodeName.NAME] = name_code_handler,
+      [capabilities['platinummassive43262.lockCodeMaintenance'].commands.deleteCode.NAME] = delete_code_handler
+    }--]]
+  },
+  zwave_handlers = {
+    [cc.TIME] = {
+      [Time.GET] = time_get_handler -- used by DanaLock
+    }
   },
   sub_drivers = {
     require("zwave-alarm-v1-lock"),

@@ -71,7 +71,7 @@ local device_profiles = {
   ['Carbon Monoxide']   = 'carbonmonoxide-sensor',
   ['Smoke']             = 'smoke-sensor',
   ['Leak']              = 'leak-sensor',
-  ['Glass Break']       = 'glass-sensor',
+  ['Glass']             = 'glass-sensor',
   ['Switch']            = 'switch'
 }
 
@@ -157,13 +157,13 @@ event_handler.zone_handler = {
   ['Honeywell Carbon Monoxide Sensor Wireless'] = update_zone_carbonmonoxide,
   ['Honeywell Smoke Sensor Wireless']           = update_zone_smoke,
   ['Honeywell Leak Sensor Wireless']            = update_zone_leak,
-  ['Honeywell Glass Break Sensor Wireless']     = update_zone_glass,
+  ['Honeywell Glass Sensor Wireless']           = update_zone_glass,
   ['Honeywell Contact Sensor Wired']            = update_zone_contact,
   ['Honeywell Motion Sensor Wired']             = update_zone_motion,
   ['Honeywell Carbon Monoxide Sensor Wired']    = update_zone_carbonmonoxide,
   ['Honeywell Smoke Sensor Wired']              = update_zone_smoke,
   ['Honeywell Leak Sensor Wired']               = update_zone_leak,
-  ['Honeywell Glass Break Sensor Wired']        = update_zone_glass,
+  ['Honeywell Glass Sensor Wired']              = update_zone_glass,
 }
 
 local function update_partition(driver,device,body)

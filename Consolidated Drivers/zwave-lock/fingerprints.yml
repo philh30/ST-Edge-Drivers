@@ -37,6 +37,12 @@ zwaveManufacturer:
     productType: 0x0003
     productId: 0x0440
     deviceProfileName: base-lock
+  - id: "KwikSet/914/3"
+    deviceLabel: KwikSet Door Lock
+    manufacturerId: 0x0090
+    productType: 0x0003
+    productId: 0x0236
+    deviceProfileName: base-lock
   - id: "KwikSet/916/1"
     deviceLabel: KwikSet Door Lock
     manufacturerId: 0x0090
@@ -153,11 +159,17 @@ zwaveManufacturer:
     productType: 0x0007
     productId: 0x0001
     deviceProfileName: base-lock
-  - id: "Yale/YRD216"
+  - id: "Yale/YRD216/1"
     deviceLabel: Yale Door Lock
     manufacturerId: 0x0129
     productType: 0x8004
     productId: 0x0600
+    deviceProfileName: base-lock
+  - id: "Yale/YRD216/2"
+    deviceLabel: Yale Door Lock
+    manufacturerId: 0x0129
+    productType: 0x810A
+    productId: 0x0DD1
     deviceProfileName: base-lock
   - id: "Yale/Conexis"
     deviceLabel: Yale Door Lock

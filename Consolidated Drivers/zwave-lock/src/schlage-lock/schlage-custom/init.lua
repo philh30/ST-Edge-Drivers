@@ -35,6 +35,7 @@ local lockAndLeave    = 'platinummassive43262.lockAndLeave'
 local vacationMode    = 'platinummassive43262.vacationMode'
 local keypadBeep      = 'platinummassive43262.keypadBeep'
 local interiorButton  = 'platinummassive43262.schlageInteriorButton'
+local unlockCodeName  = 'platinummassive43262.unlockCodeName'
 
 local LockCodesDefaults = require "st.zwave.defaults.lockCodes"
 
@@ -48,6 +49,13 @@ local FINGERPRINTS = {
 local SCHLAGE_LOCK_CODE_LENGTH_PARAM = {number = 16, size = 1}
 
 local DEFAULT_COMMANDS_DELAY = 4.2 -- seconds
+
+local METHOD = {
+  KEYPAD = "keypad",
+  MANUAL = "manual",
+  COMMAND = "command",
+  AUTO = "auto"
+}
 
 local paramMap = {
   [3]  = { comp = 'settings', cap = keypadBeep,     attr = capabilities[keypadBeep].keypadBeep,             size = 1, map = { [0] = 'off', [-1] = 'beep' }},
@@ -184,14 +192,64 @@ local function notification_report(self, device, cmd)
       device:emit_event(capabilities.tamperAlert.tamper.clear())
     end
     device.thread:call_with_delay(delay, clear_tamper)
+  elseif (cmd.args.notification_type == Notification.notification_type.ACCESS_CONTROL) then
+    local event
+    local event_code = cmd.args.event
+    local lock_action
+    if ((event_code >= access_control_event.MANUAL_LOCK_OPERATION and
+          event_code <= access_control_event.KEYPAD_UNLOCK_OPERATION) or
+            event_code == access_control_event.AUTO_LOCK_LOCKED_OPERATION) then
+      -- even event codes are unlocks, odd event codes are locks
+      local events = {[0] = capabilities.lock.lock.unlocked(), [1] = capabilities.lock.lock.locked()}
+      event = events[event_code & 1]
+      local lock_actions = {[0] = nil, [1] = 'Locked'}
+      lock_action = lock_actions[event_code & 1]
+    elseif (event_code >= access_control_event.MANUAL_NOT_FULLY_LOCKED_OPERATION and
+            event_code <= access_control_event.LOCK_JAMMED) then
+      event = capabilities.lock.lock.unknown()
+    end
+
+    if (event ~= nil) then
+      local method_map = {
+        [access_control_event.MANUAL_UNLOCK_OPERATION] = METHOD.MANUAL,
+        [access_control_event.MANUAL_LOCK_OPERATION] = METHOD.MANUAL,
+        [access_control_event.MANUAL_NOT_FULLY_LOCKED_OPERATION] = METHOD.MANUAL,
+        [access_control_event.RF_LOCK_OPERATION] = METHOD.COMMAND,
+        [access_control_event.RF_UNLOCK_OPERATION] = METHOD.COMMAND,
+        [access_control_event.RF_NOT_FULLY_LOCKED_OPERATION] = METHOD.COMMAND,
+        [access_control_event.KEYPAD_LOCK_OPERATION] = METHOD.KEYPAD,
+        [access_control_event.KEYPAD_UNLOCK_OPERATION] = METHOD.KEYPAD,
+        [access_control_event.AUTO_LOCK_LOCKED_OPERATION] = METHOD.AUTO,
+        [access_control_event.AUTO_LOCK_NOT_FULLY_LOCKED_OPERATION] = METHOD.AUTO
+      }
+
+      event["data"] = {method = method_map[event_code]}
+
+      -- SPECIAL CASES:
+      if (event_code == access_control_event.MANUAL_UNLOCK_OPERATION and cmd.args.event_parameter == 2) then
+        -- functionality from DTH, some locks can distinguish being manually locked via keypad
+        event.data.method = METHOD.KEYPAD
+      elseif (event_code == access_control_event.KEYPAD_LOCK_OPERATION or event_code == access_control_event.KEYPAD_UNLOCK_OPERATION) then
+        if (device:supports_capability(capabilities.lockCodes)) then
+          local lock_codes = device:get_field(constants.LOCK_CODES)
+          local code_id = tostring(cmd.args.v1_alarm_level)
+          if cmd.args.event_parameter ~= nil and string.len(cmd.args.event_parameter) ~= 0 then
+            local event_params = {cmd.args.event_parameter:byte(1,-1)}
+            code_id = (#event_params == 1) and tostring(event_params[1]) or tostring(event_params[3])
+          end
+          local code_name = lock_codes[code_id] or "Code " .. code_id
+          event["data"] = { codeId = code_id, codeName = code_name, method = event["data"].method}
+        end
+      end
+      device:emit_event(event)
+      device:emit_event(capabilities[unlockCodeName].unlockCodeName({value = lock_action or event.data.codeName or event.data.method or 'Unknown'}))
+    end
   else
     call_parent_handler(self.zwave_handlers[cc.NOTIFICATION][Notification.REPORT], self, device, cmd)
   end
 end
 
 local function added_handler(self, device, event, args)
-  device:emit_event(capabilities.lockCodes.minCodeLength({value = 4}))
-  device:emit_event(capabilities.lockCodes.minCodeLength({value = 8}))
   call_parent_handler(self.lifecycle_handlers.added, self, device, event, args)
 end
 

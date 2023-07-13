@@ -72,11 +72,29 @@ zwaveManufacturer:
     productId: 0x3131
     deviceProfileName: ge-fan-assoc
   - id: "0063/4944/3132"
-    deviceLabel: GE Dimmer
+    deviceLabel: GE Dimmer 14296
     manufacturerId: 0x0063
     productType: 0x4944
     productId: 0x3132
+    deviceProfileName: ge-dimmer-scene
+  - id: "0063/4944/3135"
+    deviceLabel: GE Dimmer 14321
+    manufacturerId: 0x0063
+    productType: 0x4944
+    productId: 0x3135
     deviceProfileName: ge-dimmer-assoc
+  - id: "0063/4944/3136"
+    deviceLabel: GE Dimmer 14326
+    manufacturerId: 0x0063
+    productType: 0x4944
+    productId: 0x3136
+    deviceProfileName: ge-dimmer-assoc
+  - id: "0063/4944/3138"
+    deviceLabel: GE Fan 14314
+    manufacturerId: 0x0063
+    productType: 0x4944
+    productId: 0x3138
+    deviceProfileName: ge-fan-assoc
   - id: "0063/4944/3233"
     deviceLabel: GE Dimmer 14289
     manufacturerId: 0x0063
@@ -118,6 +136,12 @@ zwaveManufacturer:
     manufacturerId: 0x0063
     productType: 0x4944
     productId: 0x3339
+    deviceProfileName: ge-dimmer-scene
+  - id: "0063/4944/3431"
+    deviceLabel: Enbrighten Dimmer 59335
+    manufacturerId: 0x0063
+    productType: 0x4944
+    productId: 0x3431
     deviceProfileName: ge-dimmer-scene
   - id: "0063/494D/3031"
     deviceLabel: GE Motion Switch 24770
@@ -269,6 +293,12 @@ zwaveManufacturer:
     productType: 0x4952
     productId: 0x3238
     deviceProfileName: ge-switch-scene
+  - id: "0063/4F44/3031"
+    deviceLabel: GE Direct-Wire Outdoor Switch 12726
+    manufacturerId: 0x0063
+    productType: 0x4F44
+    productId: 0x3031
+    deviceProfileName: ge-heavyswitch-assoc
   - id: "0063/4F44/3032"
     deviceLabel: GE Direct-Wire Outdoor Switch 14285
     manufacturerId: 0x0063

@@ -96,7 +96,7 @@ local devices = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
       product_types = {0x4450, 0x4944},
-      product_ids = {0x3030, 0x3031, 0x3032, 0x3033, 0x3035, 0x3036, 0x3037, 0x3038, 0x3039, 0x3130, 0x3132, 0x3233},
+      product_ids = {0x3030, 0x3031, 0x3032, 0x3033, 0x3035, 0x3036, 0x3037, 0x3038, 0x3039, 0x3130, 0x3135, 0x3136, 0x3233},
     },
     PARAMETERS = GE_BASIC.PARAMETERS,
     BUTTONS = GE_BASIC.BUTTONS,
@@ -105,7 +105,7 @@ local devices = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
       product_types = {0x4944},
-      product_ids = {0x3034, 0x3131},
+      product_ids = {0x3034, 0x3131, 0x3138},
     },
     PARAMETERS = GE_BASIC.PARAMETERS,
     BUTTONS = GE_BASIC.BUTTONS,
@@ -137,6 +137,15 @@ local devices = {
     PARAMETERS = GE_BASIC.PARAMETERS,
     BUTTONS = GE_BASIC.BUTTONS,
   },
+  GE_HEAVYSWITCH_BASIC = {
+    MATCHING_MATRIX = {
+      mfrs = {0x0063},
+      product_types = {0x4F44},
+      product_ids = {0x3031},
+    },
+    PARAMETERS = GE_BASIC.PARAMETERS,
+    BUTTONS = {},
+  },
   GE_SWITCH_SCENE = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
@@ -150,7 +159,7 @@ local devices = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
       product_types = {0x4944},
-      product_ids = {0x3235, 0x3237, 0x3333, 0x3334, 0x3339},
+      product_ids = {0x3132, 0x3235, 0x3237, 0x3333, 0x3334, 0x3339, 0x3431},
     },
     PARAMETERS = GE_SCENE.PARAMETERS,
     BUTTONS = GE_SCENE.BUTTONS,
