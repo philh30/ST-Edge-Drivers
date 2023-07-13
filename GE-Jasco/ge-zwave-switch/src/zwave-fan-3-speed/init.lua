@@ -44,7 +44,7 @@ local function map_fan_3_speed_to_switch_level (speed)
   end
 end
 
-local function map_switch_level_to_fan_3_speed (level)
+local function map_switch_level_to_fan_3_speed(level)
   if (level == fan_speed_helper.levels_for_3_speed.OFF) then
     return fan_speed_helper.fan_speed.OFF
   elseif (fan_speed_helper.levels_for_3_speed.OFF < level and level <= fan_speed_helper.levels_for_3_speed.LOW) then
