@@ -159,7 +159,8 @@ local driver_template = {
     require("homeseer-leak"),
     require("ring-contact-2"),
     require("zooz-motion-sensor"),
-    require("zooz-zse41")
+    require("zooz-zse41"),
+    require("linear-motion"),
   },
   lifecycle_handlers = {
     added          = added_handler,

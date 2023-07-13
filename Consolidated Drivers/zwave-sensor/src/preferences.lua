@@ -165,6 +165,18 @@ local devices = {
       assocGroup2          = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
     }
   },
+  LINEAR_WAPIRZ = {
+    MATCHING_MATRIX = {
+      mfrs          = 0x014F,
+      product_types = 0x2002,
+      product_ids   = 0x0203
+    },
+    PARAMETERS = {
+      retriggerWaitTime    = {type = 'config', parameter_number = 1, size = 1},
+      
+      wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
+    }
+  },
 }
 
 preferences.update_preferences = function(driver, device, args)

@@ -1,0 +1,62 @@
+name: linear-motion-wapirz
+components:
+- id: main
+  capabilities:
+  - id: motionSensor
+    version: 1
+  - id: temperatureMeasurement
+    version: 1
+  - id: tamperAlert
+    version: 1
+  - id: platemusic11009.deviceNetworkId
+    version: 1
+  - id: battery
+    version: 1
+  categories:
+  - name: MotionSensor
+metadata:
+  deviceType: MotionSensor
+  ocfDeviceType: x.com.st.d.sensor.motion
+  deviceTypeId: MotionSensor
+  vid: f4bc6649-ac90-397b-b8a1-a4d0f8a01f52
+  mnmn: SmartThingsCommunity
+preferences:
+  - name: "wakeUpInterval"
+    title: "Wake Up Interval"
+    description: "Default = <b>Every 4 hours</b>.<br>During wakeup the sensor can send battery updates and receive parameter changes."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        3600:   "Every hour"
+        7200:   "Every 2 hours"
+        10800:  "Every 3 hours"
+        14400:  "Every 4 hours"   # default
+        21600:  "Every 6 hours"
+        28800:  "Every 8 hours"
+        43200:  "Every 12 hours"
+        86400:  "Every 24 hours"
+      default: 14400
+  - name: "batteryInterval"
+    title: "Battery Update Interval"
+    description: "Battery updates are requested during the wake up interval.<br>Default = <b>every wakeup</b>.<br>If disabled, the device will still send an alert when battery reaches critical."
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0:      "Disabled"
+        1:      "Every wakeup"   # default
+        2:      "Every other wakeup"
+        3:      "Every 3rd wakeup"
+        4:      "Every 4th wakeup"
+        101:    "Once per day maximum"
+      default: 1
+  - name: "retriggerWaitTime"
+    title: "Motion Re-Trigger Wait Time"
+    description: "Set trigger interval - the time when motion is reported again after initial trigger (1 - 255 minutes)."
+    required: false
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 255
+      default: 3

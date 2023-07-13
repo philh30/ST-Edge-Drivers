@@ -50,6 +50,13 @@ zwaveManufacturer:
     productType: 0x0201
     productId: 0x000A
     deviceProfileName: homeseer-leak    # by default, no temperature
+# Linear
+  - id: "014F/2002/0203"
+    deviceLabel: Linear Motion Sensor
+    manufacturerId: 0x014F
+    productType: 0x2002
+    productId: 0x0203
+    deviceProfileName: linear-motion-wapirz
 # Monoprice
   - id: "monoprice/4in1"
     deviceLabel: Monoprice 4-in-1 sensor
