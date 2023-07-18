@@ -14,12 +14,6 @@ components:
     version: 1
   categories:
   - name: MotionSensor
-metadata:
-  deviceType: MotionSensor
-  ocfDeviceType: x.com.st.d.sensor.motion
-  deviceTypeId: MotionSensor
-  vid: f4bc6649-ac90-397b-b8a1-a4d0f8a01f52
-  mnmn: SmartThingsCommunity
 preferences:
   - name: "wakeUpInterval"
     title: "Wake Up Interval"

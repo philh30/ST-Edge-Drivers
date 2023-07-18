@@ -185,6 +185,19 @@ local function sensor_binary_report_handler(self, device, cmd)
   end
 end
 
+--- @param self st.zwave.Driver
+--- @param device st.zwave.Device
+--- @param event table
+--- @param args
+local function doConfigure(self, device, event, args)
+  -- Call the topmost 'doConfigure' lifecycle hander to do the default work first
+  call_parent_handler(self.lifecycle_handlers.doConfigure, self, device, event, args)
+
+  -- Send the default refresh commands for the capabilities of this device
+  -- This includes SENSOR_BINARY GET and BATTERY GET.
+  device:default_refresh()
+end
+
 local linear_sensor = {
   zwave_handlers = {
     [cc.BASIC] = {
@@ -202,6 +215,9 @@ local linear_sensor = {
     [cc.NOTIFICATION] = {
       [Notification.REPORT] = notification_report_handler,
     },
+  },
+  lifecycle_handlers = {
+    doConfigure = doConfigure,
   },
   NAME = "linear motion sensor",
   can_handle = can_handle_linear_sensor
