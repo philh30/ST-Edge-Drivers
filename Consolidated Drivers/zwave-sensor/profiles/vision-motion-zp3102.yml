@@ -1,4 +1,4 @@
-name: vision-motion-vp3102
+name: vision-motion-zp3102
 components:
 - id: main
   capabilities:

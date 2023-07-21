@@ -71,6 +71,13 @@ zwaveManufacturer:
     productType: 0x0201
     productId: 0x0301
     deviceProfileName: ring-contact-2
+# Vision
+  - id: "0109/2002/0203"
+    deviceLabel: Vision Motion Sensor
+    manufacturerId: 0x0109
+    productType: 0x2002
+    productId: 0x0203
+    deviceProfileName: vision-motion-zp3102
 # Zooz
   - id: 027A/7000/E001
     deviceLabel: Zooz ZSE41 XS Contact Sensor
