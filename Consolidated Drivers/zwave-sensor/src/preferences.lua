@@ -165,9 +165,10 @@ local devices = {
       assocGroup2          = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
     }
   },
+  -- Support for one model of the Vision VP3102, and the Linear WAPIRZ.  Monoprice clones of them as well.
   LINEAR_WAPIRZ = {
     MATCHING_MATRIX = {
-      mfrs          = 0x014F,
+      mfrs          = { 0x0109, 0x014F, },   -- 109 = Vision, 0x14F = Linear
       product_types = 0x2002,
       product_ids   = 0x0203
     },

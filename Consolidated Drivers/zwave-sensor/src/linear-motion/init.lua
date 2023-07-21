@@ -31,7 +31,9 @@ local utils = require "st.utils"
 local LAST_BATTERY_REPORT_TIME = "lastBatteryReportTime"
 
 local LINEAR_FINGERPRINTS = {
-  { manufacturerId = 0x14F, productType = 0x2002, productId = 0x0203 }, -- Linear WAPIRZ motion detector (also Monoprice rebrand)
+  { manufacturerId = 0x014F, productType = 0x2002, productId = 0x0203 }, -- Linear WAPIRZ motion detector (also Monoprice rebrand)
+  { manufacturerId = 0x0109, productType = 0x2002, productId = 0x0203 }, -- Vision VP3102 motion sensor (also Monoprice rebrand)
+
 }
 
 ---
