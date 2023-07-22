@@ -36,6 +36,16 @@ preferences:
         0: "No"
         1: "Yes"
       default: 0
+  - title: "Exclusion Sequence"
+    name: excludeProtect
+    description: "Never accidentally remove a device with alternate exclusion"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Press any button"
+        1: "Press ON twice and OFF twice"
+      default: 0
   - title: "Association Group 2"
     name: assocGroup2
     description: "Enter a comma delimited list of hex IDs to be turned on/off with the switch load (5 node max)"

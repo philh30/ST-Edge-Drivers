@@ -1,0 +1,117 @@
+name: ge-motionswitch-assoc
+components:
+- id: main
+  capabilities:
+  - id: switch
+    version: 1
+  - id: motionSensor
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: Switch
+metadata:
+  deviceType: Switch
+  ocfDeviceType: oic.d.switch
+  deviceTypeId: Switch
+preferences:
+  - title: "Operation Mode"
+    name: operationMode
+    description: "Operation Mode"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        1: "Manual"
+        2: "Vacancy"
+        3: "Occupancy"
+      default: 3
+  - title: "Motion Sensor Sensitivity"
+    name: motionSensitivity
+    description: "Motion sensor sensitivity"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        1: "High"
+        2: "Medium"
+        3: "Low"
+      default: 2
+  - title: "Enable/Disable Motion Sensor"
+    name: enableMotion
+    description: "Enable/disable motion sensor"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Disabled"
+        1: "Enabled"
+      default: 1
+  - title: "Enable/Disable Light Sensing"
+    name: lightSensing
+    description: "Enable/disable light sensing"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Disabled"
+        1: "Enabled"
+      default: 0
+  - title: "Light Duration After Motion Stops"
+    name: timeoutDuration
+    description: "Timeout duration - amount of time the light stays on after motion stops"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "5 seconds"
+        1: "1 minute"
+        5: "5 minutes"
+        15: "15 minutes"
+        30: "30 minutes"
+      default: 5
+  - title: "Motion Reset Time"
+    name: resetCycle
+    description: "Time elapsed before reporting motion inactive after motion stops (0=disable, 1=10s, 2=20s, 3=30s, 4=45s, 5-109=1m to 27m in 15s intervals, 110=27m 15s)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 110
+      default: 2
+  - title: "Exclusion Sequence"
+    name: excludeProtect
+    description: "Never accidentally remove a device with alternate exclusion"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Press any button"
+        1: "Press ON twice and OFF twice"
+      default: 0
+  - title: "Invert Accessory Switch"
+    name: invertSwitch
+    description: "Invert accessory switch attached to traveler wire"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "No"
+        1: "Yes"
+      default: 0
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with the switch load (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
+  - title: "Association Group 3"
+    name: assocGroup3
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with the switch load (5 node max)"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

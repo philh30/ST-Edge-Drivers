@@ -18,7 +18,7 @@ metadata:
   deviceType: Fan
   ocfDeviceType: oic.d.fan
   deviceTypeId: Fan
-  vid: d3ce967b-9a38-388f-bd73-43d347cff051
+  vid: 12a872c0-6b74-3e99-ace1-2ff81e1f283b
   mnmn: SmartThingsCommunity
 preferences:
   - title: "LED Indicator"

@@ -22,6 +22,9 @@ local GE_BASIC = {
     dimTimeManual   = {type = 'config', parameter_number = 10, size = 2},
     dimStepsAll     = {type = 'config', parameter_number = 11, size = 1},
     dimTimeAll      = {type = 'config', parameter_number = 12, size = 2},
+    switchMode      = {type = 'config', parameter_number = 16, size = 1},       -- fw 5.26+
+    excludeProtect  = {type = 'config', parameter_number = 19, size = 1},
+    minDim          = {type = 'config', parameter_number = 20, size = 1},       -- fw 5.26+
     assocGroup2     = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
     assocGroup3     = {type = 'assoc', group = 3, maxnodes = 4, addhub = true},
   },
@@ -54,7 +57,9 @@ local GE_SCENE = {
 }
 local GE_MOTION = {
   PARAMETERS = {
+    timeoutDuration   = {type = 'config', parameter_number = 1, size = 1},
     --assocBright       = {type = 'config', parameter_number = 2, size = 2},
+    operationMode     = {type = 'config', parameter_number = 3, size = 1},
     --associationMode   = {type = 'config', parameter_number = 4, size = 1},
     invertSwitch      = {type = 'config', parameter_number = 5, size = 1},
     enableMotion      = {type = 'config', parameter_number = 6, size = 1},
@@ -64,9 +69,11 @@ local GE_MOTION = {
     dimTimeManual     = {type = 'config', parameter_number = 10, size = 2},
     dimStepsAll       = {type = 'config', parameter_number = 11, size = 1},
     dimTimeAll        = {type = 'config', parameter_number = 12, size = 2},
+    motionSensitivity = {type = 'config', parameter_number = 13, size = 1},
+    lightSensing      = {type = 'config', parameter_number = 14, size = 1},
     resetCycle        = {type = 'config', parameter_number = 15, size = 2},
     switchMode        = {type = 'config', parameter_number = 16, size = 1},
-    --switchLevel       = {type = 'config', parameter_number = 17, size = 1},
+    switchLevel       = {type = 'config', parameter_number = 17, size = 1},
     dimRate           = {type = 'config', parameter_number = 18, size = 1},
     excludeProtect    = {type = 'config', parameter_number = 19, size = 1},
     assocGroup2       = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
@@ -89,7 +96,7 @@ local devices = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
       product_types = {0x4450, 0x4944},
-      product_ids = {0x3030, 0x3031, 0x3032, 0x3033, 0x3035, 0x3036, 0x3037, 0x3038, 0x3039, 0x3130, 0x3233},
+      product_ids = {0x3030, 0x3031, 0x3032, 0x3033, 0x3035, 0x3036, 0x3037, 0x3038, 0x3039, 0x3130, 0x3135, 0x3136, 0x3233},
     },
     PARAMETERS = GE_BASIC.PARAMETERS,
     BUTTONS = GE_BASIC.BUTTONS,
@@ -98,7 +105,7 @@ local devices = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
       product_types = {0x4944},
-      product_ids = {0x3034, 0x3131},
+      product_ids = {0x3034, 0x3131, 0x3138},
     },
     PARAMETERS = GE_BASIC.PARAMETERS,
     BUTTONS = GE_BASIC.BUTTONS,
@@ -115,8 +122,8 @@ local devices = {
   GE_PLUGIN_BASIC = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
-      product_types = {0x4F50, 0x5052},
-      product_ids = {0x3031, 0x3032, 0x3033, 0x3038, 0x3130, 0x3132},
+      product_types = {0x4F50, 0x5052, 0x5250, 0x6363},
+      product_ids = {0x3030, 0x3031, 0x3032, 0x3033, 0x3038, 0x3039, 0x3130, 0x3132},
     },
     PARAMETERS = GE_BASIC.PARAMETERS,
     BUTTONS = GE_BASIC.BUTTONS,
@@ -125,10 +132,19 @@ local devices = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
       product_types = {0x5044},
-      product_ids = {0x3031, 0x3033, 0x3038, 0x3130, 0x3132},
+      product_ids = {0x3031, 0x3033, 0x3037, 0x3038, 0x3130, 0x3132},
     },
     PARAMETERS = GE_BASIC.PARAMETERS,
     BUTTONS = GE_BASIC.BUTTONS,
+  },
+  GE_HEAVYSWITCH_BASIC = {
+    MATCHING_MATRIX = {
+      mfrs = {0x0063},
+      product_types = {0x4F44},
+      product_ids = {0x3031},
+    },
+    PARAMETERS = GE_BASIC.PARAMETERS,
+    BUTTONS = {},
   },
   GE_SWITCH_SCENE = {
     MATCHING_MATRIX = {
@@ -143,7 +159,7 @@ local devices = {
     MATCHING_MATRIX = {
       mfrs = {0x0039, 0x0063},
       product_types = {0x4944},
-      product_ids = {0x3235, 0x3237, 0x3333, 0x3334, 0x3339},
+      product_ids = {0x3132, 0x3235, 0x3237, 0x3333, 0x3334, 0x3339, 0x3431},
     },
     PARAMETERS = GE_SCENE.PARAMETERS,
     BUTTONS = GE_SCENE.BUTTONS,
