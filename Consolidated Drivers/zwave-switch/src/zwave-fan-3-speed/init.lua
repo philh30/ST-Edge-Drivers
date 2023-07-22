@@ -25,6 +25,7 @@ local fan_speed_helper = (require "zwave_fan_helpers")
 local FAN_3_SPEED_FINGERPRINTS = {
   {mfr = 0x0063, prod = 0x4944, model = 0x3034}, -- GE In-Wall Smart Fan Control
   {mfr = 0x0063, prod = 0x4944, model = 0x3131}, -- GE In-Wall Smart Fan Control
+  {mfr = 0x0063, prod = 0x4944, model = 0x3138}, -- GE In-Wall Smart Fan Control 14314
   {mfr = 0x0063, prod = 0x4944, model = 0x3337}, -- GE In-Wall Smart Fan Control
   {mfr = 0x0039, prod = 0x4944, model = 0x3131}, -- Honeywell Z-Wave Plus In-Wall Fan Speed Control
 }
