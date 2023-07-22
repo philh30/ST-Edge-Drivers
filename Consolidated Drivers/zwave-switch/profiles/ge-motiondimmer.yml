@@ -1,12 +1,15 @@
 name: ge-motiondimmer
 components:
 - id: main
+  label: Main
   capabilities:
   - id: switch
     version: 1
   - id: switchLevel
     version: 1
   - id: motionSensor
+    version: 1
+  - id: button
     version: 1
   - id: platinummassive43262.jascoOperationMode
     version: 1
@@ -26,7 +29,7 @@ metadata:
   deviceType: Switch
   ocfDeviceType: oic.d.switch
   deviceTypeId: Switch
-  vid: 6c2fabf0-183d-3534-95fe-233598d8972a
+  vid: 4a470478-2c04-3031-abe9-ad359f42dc47
   mnmn: SmartThingsCommunity
 preferences:
   - title: "Enable/Disable Motion Sensor"
@@ -58,9 +61,9 @@ preferences:
         0: "Dim quickly"
         1: "Dim slowly"
       default: 0
-  - title: "Number of Dimming Steps (Z-Wave)"
+  - title: "Size of Dimming Steps (Z-Wave)"
     name: dimStepsZwave
-    description: "Number of dimming steps when adjusted by z-wave"
+    description: "Size of dimming steps (1-99%) when adjusted by z-wave"
     required: true
     preferenceType: integer
     definition:
@@ -76,9 +79,9 @@ preferences:
       minimum: 1
       maximum: 255
       default: 3
-  - title: "Number of Dimming Steps (Manual)"
+  - title: "Size of Dimming Steps (Manual)"
     name: dimStepsManual
-    description: "Number of dimming steps when adjusted by pressing the dimmer button"
+    description: "Size of dimming steps (1-99%) when adjusted by pressing the dimmer button"
     required: true
     preferenceType: integer
     definition:
@@ -94,9 +97,9 @@ preferences:
       minimum: 1
       maximum: 255
       default: 3
-  - title: "Number of Dimming Steps (All-On/Off)"
+  - title: "Size of Dimming Steps (All-On/Off)"
     name: dimStepsAll
-    description: "Number of dimming steps when adjusted by an All-On or All-Off command"
+    description: "Size of dimming steps (1-99%) when adjusted by an All-On or All-Off command"
     required: true
     preferenceType: integer
     definition:
@@ -152,7 +155,7 @@ preferences:
       default: ""
   - title: "Association Group 3"
     name: assocGroup3
-    description: "Enter a comma delimited list of hex IDs to be turned on/off with the switch load (5 node max)"
+    description: "Enter a comma delimited list of hex IDs to be turned on/off with the switch load (4 node max)"
     required: true
     preferenceType: string
     definition:
