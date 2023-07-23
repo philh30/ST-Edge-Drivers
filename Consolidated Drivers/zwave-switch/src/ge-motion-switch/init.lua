@@ -36,6 +36,7 @@ local SensorBinary = (require "st.zwave.CommandClass.SensorBinary")({version=2})
 local Notification = (require "st.zwave.CommandClass.Notification")({version=3})
 local capdefs = require('ge-motion-switch.capabilitydefs')
 local config_handlers = require "ge-motion-switch.config_handlers"
+local parent = require('call_parent')
 
 local TimeoutDuration = capdefs.TimeoutDuration.capability
 local OperationMode = capdefs.OperationMode.capability
@@ -62,6 +63,27 @@ local function can_handle_ge_motion(opts, driver, device, ...)
     end
   end
   return false
+end
+
+--- @param self st.zwave.Driver
+--- @param device st.zwave.Device
+--- @param event table
+--- @param args
+--- @param driver st.zwave.Driver
+--- @param device st.zwave.Device
+local function init(driver, device)
+  local supported_buttons = device:get_latest_state('main','button','supportedButtonValues')
+  if not supported_buttons then
+    -- setup for button capability
+    -- only necessary due to adding button after initial driver release
+    device:emit_event(capabilities.button.supportedButtonValues({ value = {'up','down'} }, { visibility = { displayed = false } }))
+    device:emit_event(capabilities.button.numberOfButtons({ value = 1 }, { visibility = { displayed = false } }))
+    local hubnode = device.driver.environment_info.hub_zwave_id or 1
+    device:send(Association:Set({grouping_identifier = 3, node_ids = {hubnode}}))
+    device:send(Association:Get({grouping_identifier = 3}))
+  end
+  -- Call the topmost 'init' lifecycle hander to do any default work
+  parent.call_parent_handler(self.lifecycle_handlers.init, self, device, event, args)
 end
 
 --- @param driver st.zwave.Driver
@@ -298,6 +320,9 @@ local ge_motion = {
     LightSensing,
     DefaultLevel,
   },
+  lifecycle_handlers = {
+    init = init,
+  },  
   capability_handlers = {
     [capabilities.refresh.ID] = {
       [capabilities.refresh.commands.refresh.NAME] = refresh_handler,
