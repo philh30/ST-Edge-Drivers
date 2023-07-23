@@ -71,7 +71,7 @@ end
 --- @param args
 --- @param driver st.zwave.Driver
 --- @param device st.zwave.Device
-local function init(driver, device)
+local function init(driver, device, event, args)
   local supported_buttons = device:get_latest_state('main','button','supportedButtonValues')
   if not supported_buttons then
     -- setup for button capability
@@ -83,7 +83,7 @@ local function init(driver, device)
     device:send(Association:Get({grouping_identifier = 3}))
   end
   -- Call the topmost 'init' lifecycle hander to do any default work
-  parent.call_parent_handler(self.lifecycle_handlers.init, self, device, event, args)
+  parent.call_parent_handler(driver.lifecycle_handlers.init, driver, device, event, args)
 end
 
 --- @param driver st.zwave.Driver
