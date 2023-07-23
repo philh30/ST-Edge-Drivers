@@ -83,7 +83,7 @@ local function init(driver, device, event, args)
     device:send(Association:Get({grouping_identifier = 3}))
   end
   -- Call the topmost 'init' lifecycle hander to do any default work
-  parent.call_parent_handler(driver.lifecycle_handlers.init, driver, device, event, args)
+  parent(driver.lifecycle_handlers.init, driver, device, event, args)
 end
 
 --- @param driver st.zwave.Driver
