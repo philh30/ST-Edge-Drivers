@@ -54,3 +54,5 @@ preferences:
       minimum: 1
       maximum: 255
       default: 3
+  - preferenceId: tempOffset
+    explicit: true      

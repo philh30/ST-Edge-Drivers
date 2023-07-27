@@ -45,3 +45,5 @@ preferences:
         4:      "Every 4th wakeup"
         101:    "Once per day maximum"
       default: 1
+  - preferenceId: tempOffset
+    explicit: true   

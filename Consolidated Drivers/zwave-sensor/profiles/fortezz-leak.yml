@@ -56,3 +56,5 @@ preferences:
     preferenceType: boolean
     definition:
       default: true
+  - preferenceId: tempOffset
+    explicit: true   
