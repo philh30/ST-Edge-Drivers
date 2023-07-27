@@ -72,6 +72,12 @@ zwaveManufacturer:
     productId: 0x0301
     deviceProfileName: ring-contact-2
 # Vision
+  - id: "0109/2001/0102"
+    deviceLabel: Vision Door/Window Sensor
+    manufacturerId: 0x0109
+    productType: 0x2001
+    productId: 0x0102
+    deviceProfileName: vision-contact-zd2102
   - id: "0109/2002/0203"
     deviceLabel: Vision Motion Sensor
     manufacturerId: 0x0109

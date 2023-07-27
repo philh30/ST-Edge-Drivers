@@ -161,6 +161,7 @@ local driver_template = {
     require("zooz-motion-sensor"),
     require("zooz-zse41"),
     require("linear-motion"),
+    require("vision-contact"),
   },
   lifecycle_handlers = {
     added          = added_handler,
