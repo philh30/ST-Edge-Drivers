@@ -32,6 +32,7 @@ local LAST_BATTERY_REPORT_TIME = "lastBatteryReportTime"
 
 local VISION_FINGERPRINTS = {
   { manufacturerId = 0x0109, productType = 0x2001, productId = 0x0102 }, -- Vision ZP2102 motion sensor (also Monoprice #10795 rebrand)
+  { manufacturerId = 0x0109, productType = 0x200A, productId = 0x0A02 }, -- Vision ZG8101 garage sensor (also Monoprice #11987 rebrand)
 }
 
 ---

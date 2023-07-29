@@ -84,6 +84,12 @@ zwaveManufacturer:
     productType: 0x2002
     productId: 0x0203
     deviceProfileName: vision-motion-zp3102
+  - id: "0109/200A/0A02"
+    deviceLabel: Vision Garage Door Detector
+    manufacturerId: 0x0109
+    productType: 0x200A
+    productId: 0x0A02
+    deviceProfileName: vision-contact-zg8101   
 # Zooz
   - id: 027A/7000/E001
     deviceLabel: Zooz ZSE41 XS Contact Sensor
