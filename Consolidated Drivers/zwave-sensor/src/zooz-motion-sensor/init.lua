@@ -27,6 +27,7 @@ local SensorMultilevel = (require "st.zwave.CommandClass.SensorMultilevel")({ ve
 local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version = 1 })
 --- @type st.utils
 local utils = require "st.utils"
+local call_parent_handler = require "call_parent"
 
 local LAST_BATTERY_REPORT_TIME = "lastBatteryReportTime"
 
@@ -50,15 +51,6 @@ local function can_handle_zooz_sensor(opts, driver, device, ...)
     end
   end
   return false
-end
-
-local function call_parent_handler(handlers, self, device, event, args)
-  if type(handlers) == "function" then
-    handlers = { handlers }  -- wrap as table
-  end
-  for _, func in ipairs( handlers or {} ) do
-      func(self, device, event, args)
-  end
 end
 
 --- Handler for notification report command class

@@ -21,6 +21,7 @@ local Battery = (require "st.zwave.CommandClass.Battery")({ version = 1 })
 local SensorBinary = (require "st.zwave.CommandClass.SensorBinary")({ version = 2 })
 --- @type st.zwave.CommandClass.WakeUp
 local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version = 1 })
+local call_parent_handler = require "call_parent"
 
 local LAST_BATTERY_REPORT_TIME = "lastBatteryReportTime"
 
@@ -40,15 +41,6 @@ local function can_handle_zooz_sensor(opts, driver, device, ...)
     end
   end
   return false
-end
-
-local function call_parent_handler(handlers, self, device, event, args)
-  if type(handlers) == "function" then
-    handlers = { handlers }  -- wrap as table
-  end
-  for _, func in ipairs( handlers or {} ) do
-      func(self, device, event, args)
-  end
 end
 
 -- Request a battery update from the device.

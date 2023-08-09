@@ -18,19 +18,11 @@
 
 local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version = 1 })
 local cc = require "st.zwave.CommandClass"
+local call_parent_handler = require "call_parent"
 
 
 local function can_handle_sleepy_device(opts, driver, device, ...)
     return device:is_cc_supported(cc.WAKE_UP)
-end
-
-local function call_parent_handler(handlers, self, device, event, args)
-    if type(handlers) == "function" then
-      handlers = { handlers }  -- wrap as table
-    end
-    for _, func in ipairs( handlers or {} ) do
-        func(self, device, event, args)
-    end
 end
 
 --- @param self st.zwave.Driver

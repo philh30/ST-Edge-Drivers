@@ -13,6 +13,7 @@
 local CC = require "st.zwave.CommandClass"
 local Basic = (require "st.zwave.CommandClass.Basic")({ version = 1 })
 local capabilities = require "st.capabilities"
+local call_parent_handler = require "call_parent"
 
 local ZWAVE_TEMP_LEAK_SENSOR_FINGERPRINTS = {
   { -- Homeseer HS-LS100+ Temperature Shock and Leak Sensor
@@ -46,15 +47,6 @@ local function can_handle_zwave_temp_leak_sensor(opts, driver, device, ...)
     end
   end
   return false
-end
-
-local function call_parent_handler(handlers, self, device, event, args)
-  if type(handlers) == "function" then
-    handlers = { handlers }  -- wrap as table
-  end
-  for _, func in ipairs( handlers or {} ) do
-      func(self, device, event, args)
-  end
 end
 
 --- @param self st.zwave.Driver

@@ -16,6 +16,7 @@ local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version = 1 })
 local Battery = (require "st.zwave.CommandClass.Battery")({ version = 1 })
 local capabilities = require "st.capabilities"
 local cc = require "st.zwave.CommandClass"
+local call_parent_handler = require "call_parent"
 
 local LAST_BATTERY_REPORT_TIME = "lastBatteryReportTime"
 
@@ -34,15 +35,6 @@ local function can_handle_ecolink(opts, driver, device, ...)
         end
     end
     return false
-end
-
-local function call_parent_handler(handlers, self, device, event, args)
-    if type(handlers) == "function" then
-      handlers = { handlers }  -- wrap as table
-    end
-    for _, func in ipairs( handlers or {} ) do
-        func(self, device, event, args)
-    end
 end
 
 -- Request a battery update from the device.
