@@ -1,0 +1,99 @@
+name: homeseer-motion-fls100g2
+components:
+- id: main
+  capabilities:
+  - id: switch
+    version: 1
+  - id: motionSensor
+    version: 1
+  - id: temperatureMeasurement
+    version: 1
+  - id: illuminanceMeasurement
+    version: 1
+    config:
+      values:
+        - key: "illuminance.value"
+          range: [0, 900]
+  - id: platemusic11009.deviceNetworkId
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: Switch
+preferences:
+  - name: "onTime"
+    title: "ON Time"
+    description: "Determines how long floodlights stay on after motion sensed (in seconds)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 8
+      maximum: 720
+      default: 180
+  - name: "luxSensorThreshold"
+    title: "Lux Sensor Threshold"
+    description: "values under this setting will allow motion to control load (in lux)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 10
+      maximum: 900
+      default: 50
+  - name: "sensorReportInterval"
+    title: "Sensor Report Interval"
+    description: "Frequency of Lux and Temperature reporting (in minutes)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 1440
+      default: 10
+  - name: "motionSensorReports"
+    title: "Motion Sensor Reports"
+    description: "Sensor will send notification for motion detection"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Disabled"
+        1: "Enabled"
+      default: 1
+  - name: "loadControlMode"
+    title: "Load Control Mode"
+    description: ""
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Load Controlled by Zwave Only"
+        1: "Load Controlled by Zwave and Sensors"
+      default: 0
+  - name: "luxSensorControl"
+    title: "Sensor Control Mode"
+    description: ""
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Lux+PIR trigger light (night motion)"
+        1: "Lux only trigger light (night)"
+      default: 0
+  - name: "hsmotionSensitivity"
+    title: "Motion Sensitivity"
+    description: "Level of sensitivity for motion sensor"
+    required: false
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Low (6m from sensor)"
+        1: "Medium (10m from sensor)"
+        2: "High (20m from sensor)"
+      default: 0
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs. Sends On & Off commands to associated devices. 4 nodes max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""

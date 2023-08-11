@@ -1,0 +1,75 @@
+name: homeseer-motion-fls100
+components:
+- id: main
+  capabilities:
+  - id: switch
+    version: 1
+  - id: motionSensor
+    version: 1
+  - id: illuminanceMeasurement
+    version: 1
+    config:
+      values:
+        - key: "illuminance.value"
+          range: [0, 250]
+  - id: platemusic11009.deviceNetworkId
+    version: 1
+  - id: refresh
+    version: 1
+  categories:
+  - name: Switch
+preferences:
+  - name: "onTime"
+    title: "ON Time"
+    description: "Determines how long floodlights stay on after motion sensed (in seconds)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 8
+      maximum: 720
+      default: 15
+  - name: "luxSensorThreshold"
+    title: "Sensor Load Control"
+    description: "values under this setting will allow motion to control load (in lux)"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Disables Light Turn On From Motion"
+        30: "Light turn on below 30 lux"
+        40: "Light turn on below 40 lux"
+        50: "Light turn on below 50 lux"
+        60: "Light turn on below 60 lux"
+        70: "Light turn on below 70 lux"
+        80: "Light turn on below 80 lux"
+        90: "Light turn on below 90 lux"
+        100: "Light turn on below 100 lux"
+        110: "Light turn on below 110 lux"
+        120: "Light turn on below 120 lux"
+        130: "Light turn on below 130 lux"
+        140: "Light turn on below 140 lux"
+        150: "Light turn on below 150 lux" 
+        160: "Light turn on below 160 lux" 
+        170: "Light turn on below 170 lux" 
+        180: "Light turn on below 180 lux" 
+        190: "Light turn on below 190 lux"
+        200: "Light turn on below 200 lux"
+        255: "Ignore lux and turn on from motion"                                                                                                                            
+      default: 50
+  - name: "sensorReportInterval"
+    title: "Lux Sensor Report Interval"
+    description: "Frequency of Lux reporting (in minutes)"
+    required: true
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 1440
+      default: 10
+  - title: "Association Group 2"
+    name: assocGroup2
+    description: "Enter a comma delimited list of hex IDs. Sends On & Off commands to associated devices. 4 nodes max."
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      default: ""
