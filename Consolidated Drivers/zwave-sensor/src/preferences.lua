@@ -106,7 +106,7 @@ local devices = {
       wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
     }
   },
-  ZOOZ_4_IN_1_SENSOR = {  -- Includes Zooz and Monoprice 4-in-1 sensors
+  ZOOZ_4_IN_1_SENSOR = {  -- Includes Zooz ZSE40 and Monoprice 4-in-1 sensors
     MATCHING_MATRIX = {
       mfrs          = {0x027A,0x0109},
       product_types = 0x2021,
@@ -163,6 +163,30 @@ local devices = {
       wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
       
       assocGroup2          = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
+    }
+  },
+  -- Support for one model of the Vision VP3102, and the Linear WAPIRZ.  Monoprice clones of them as well.
+  LINEAR_WAPIRZ = {
+    MATCHING_MATRIX = {
+      mfrs          = { 0x0109, 0x014F, },   -- 109 = Vision, 0x14F = Linear
+      product_types = 0x2002,
+      product_ids   = 0x0203
+    },
+    PARAMETERS = {
+      retriggerWaitTime    = {type = 'config', parameter_number = 1, size = 1},
+      
+      wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
+    }
+  },
+  -- Support for one model of the Vision ZP2102. Monoprice clones  (model 10795) of them as well.
+  VISION_ZP2102 = {
+    MATCHING_MATRIX = {
+      mfrs          = { 0x0109 },   -- 109 = Vision
+      product_types = 0x2001,
+      product_ids   = 0x0102
+    },
+    PARAMETERS = {
+      wakeUpInterval       = { type = 'wakeup' }, -- Wake up interval, preference is in seconds
     }
   },
 }

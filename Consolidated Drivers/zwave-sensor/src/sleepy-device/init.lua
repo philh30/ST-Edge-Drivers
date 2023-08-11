@@ -18,19 +18,11 @@
 
 local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version = 1 })
 local cc = require "st.zwave.CommandClass"
+local call_parent_handler = require "call_parent"
 
 
 local function can_handle_sleepy_device(opts, driver, device, ...)
     return device:is_cc_supported(cc.WAKE_UP)
-end
-
-local function call_parent_handler(handlers, self, device, event, args)
-    if type(handlers) == "function" then
-      handlers = { handlers }  -- wrap as table
-    end
-    for _, func in ipairs( handlers or {} ) do
-        func(self, device, event, args)
-    end
 end
 
 --- @param self st.zwave.Driver
@@ -41,10 +33,13 @@ local function wakeup_notification(self, device, cmd)
 
   -- If we've not yet configured the device, execute it now.  This can be if we switched drivers.
   if device:get_field("device_configured") ~= true then
-    device.log.debug("Configuration of device pending.")
+    device.log.debug("Configuration of device pending, calling doConfigure")
     call_parent_handler(self.lifecycle_handlers.doConfigure, self, device, "doConfigure")
-    -- device.thread:queue_event(self.lifecycle_dispatcher.dispatch, self.lifecycle_dispatcher, self, device, "doConfigure")
   end
+
+  device.log.trace("wakeup_notification(sleepy-device) - calling default handlers")
+  -- The default handlers take care of the deferred preferences changes on wakeup.
+  call_parent_handler(self.zwave_handlers[cc.WAKE_UP][WakeUp.NOTIFICATION], self, device, cmd)
 end
 
 local sleepy_device = {

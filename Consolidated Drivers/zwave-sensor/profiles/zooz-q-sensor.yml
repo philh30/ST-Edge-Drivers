@@ -129,3 +129,7 @@ preferences:
     definition:
       stringType: text
       default: ""
+  - preferenceId: tempOffset
+    explicit: true
+  - preferenceId: humidityOffset
+    explicit: true      

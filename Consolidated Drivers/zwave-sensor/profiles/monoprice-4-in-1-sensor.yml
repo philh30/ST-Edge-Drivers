@@ -121,3 +121,7 @@ preferences:
         2: "Temp pulse, motion flash"
         3: "Temp flash, motion flash"
       default: 3
+  - preferenceId: tempOffset
+    explicit: true
+  - preferenceId: humidityOffset
+    explicit: true      

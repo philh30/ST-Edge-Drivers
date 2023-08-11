@@ -42,6 +42,7 @@
 local Notification = (require "st.zwave.CommandClass.Notification")({ version = 5})
 local capabilities = require "st.capabilities"
 local cc = require "st.zwave.CommandClass"
+local call_parent_handler = require "call_parent"
 
 local ECOLINK_FLOOD_FINGERPRINTS = {
     { mfr = 0x014A, prod = 0x0005, model = 0x0010 }, -- Ecolink Flood/Freeze Sensor 5 (zwave plus)
@@ -55,15 +56,6 @@ local function can_handle_ecolink_flood(opts, driver, device, ...)
         end
     end
     return false
-end
-
-local function call_parent_handler(handlers, self, device, event, args)
-    if type(handlers) == "function" then
-      handlers = { handlers }  -- wrap as table
-    end
-    for _, func in ipairs( handlers or {} ) do
-        func(self, device, event, args)
-    end
 end
 
 --- @param self st.zwave.Driver

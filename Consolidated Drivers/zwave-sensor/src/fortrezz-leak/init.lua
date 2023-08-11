@@ -17,6 +17,7 @@ local SensorBinary = (require "st.zwave.CommandClass.SensorBinary")({ version = 
 local SensorMultilevel = (require "st.zwave.CommandClass.SensorMultilevel")({ version = 1 })
 local capabilities = require "st.capabilities"
 local cc = require "st.zwave.CommandClass"
+local call_parent_handler = require "call_parent"
 
 local LAST_BATTERY_REPORT_TIME = "lastBatteryReportTime"
 
@@ -31,15 +32,6 @@ local function can_handle_zwave_temp_leak_sensor(opts, driver, device, ...)
     end
   end
   return false
-end
-
-local function call_parent_handler(handlers, self, device, event, args)
-  if type(handlers) == "function" then
-    handlers = { handlers }  -- wrap as table
-  end
-  for _, func in ipairs( handlers or {} ) do
-    func(self, device, event, args)
-  end
 end
 
 -- Request a battery update from the device.

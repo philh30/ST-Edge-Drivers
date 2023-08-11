@@ -1,23 +1,19 @@
-name: fortrezz-leak
+name: linear-motion-wapirz
 components:
 - id: main
   capabilities:
-  - id: waterSensor
+  - id: motionSensor
     version: 1
   - id: temperatureMeasurement
     version: 1
-  - id: battery
-    version: 1
-  - id: temperatureAlarm
+  - id: tamperAlert
     version: 1
   - id: platemusic11009.deviceNetworkId
     version: 1
+  - id: battery
+    version: 1
   categories:
-    - name: LeakSensor
-metadata:
-  deviceType: LeakSensor
-  ocfDeviceType: x.com.st.d.sensor.moisture
-  deviceTypeId: LeakSensor
+  - name: MotionSensor
 preferences:
   - name: "wakeUpInterval"
     title: "Wake Up Interval"
@@ -49,12 +45,14 @@ preferences:
         4:      "Every 4th wakeup"
         101:    "Once per day maximum"
       default: 1
-  - name: "requestTemperature"
-    title: "Request Temperature"
-    description: "Request temperature when device wakes up?"
-    required: true
-    preferenceType: boolean
+  - name: "retriggerWaitTime"
+    title: "Motion Re-Trigger Wait Time"
+    description: "Set trigger interval - the time when motion is reported again after initial trigger (1 - 255 minutes)."
+    required: false
+    preferenceType: integer
     definition:
-      default: true
+      minimum: 1
+      maximum: 255
+      default: 3
   - preferenceId: tempOffset
-    explicit: true   
+    explicit: true

@@ -50,7 +50,7 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
-        0:   "Send supplimental Binary Reports"   # default
+        0:   "Send supplemental Binary Reports"   # default
         255: "Only Notification Reports"
       default: 0
   - name: "basicSetCommand"

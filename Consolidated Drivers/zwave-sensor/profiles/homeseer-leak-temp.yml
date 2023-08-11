@@ -104,3 +104,5 @@ preferences:
     definition:
       stringType: text
       default: ""
+  - preferenceId: tempOffset
+    explicit: true

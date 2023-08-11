@@ -61,6 +61,8 @@ end
 --- @param self st.zwave.Driver
 --- @param device st.zwave.Device
 local function device_init(self, device)
+  -- Set an update preferences function.  The framework will call this
+  -- in the default wakeup handlers if configuration is needed to be delayed set.
   device:set_update_preferences_fn(preferences.update_preferences)
 end
 
@@ -154,12 +156,15 @@ local driver_template = {
   },
   sub_drivers = {
     require("sleepy-device"),  -- General support for any sleepy zwave devices
+    require("battery-device"), -- Support for zwave battery devices
     require("ecolink-sensor"),
     require("fortrezz-leak"),
     require("homeseer-leak"),
     require("ring-contact-2"),
     require("zooz-motion-sensor"),
-    require("zooz-zse41")
+    require("zooz-zse41"),
+    require("linear-motion"),
+    require("vision-contact"),
   },
   lifecycle_handlers = {
     added          = added_handler,

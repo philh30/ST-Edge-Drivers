@@ -54,6 +54,7 @@
 
 local SensorBinary = (require "st.zwave.CommandClass.SensorBinary")({ version = 2})
 local cc = require "st.zwave.CommandClass"
+local call_parent_handler = require "call_parent"
 
 local ECOLINK_TILT_FINGERPRINTS = {
     { mfr = 0x014A, prod = 0x0001, model = 0x0003 }, -- Ecolink Tilt Sensor 2 (zwave)
@@ -68,15 +69,6 @@ local function can_handle_ecolink_tilt(opts, driver, device, ...)
         end
     end
     return false
-end
-
-local function call_parent_handler(handlers, self, device, event, args)
-    if type(handlers) == "function" then
-      handlers = { handlers }  -- wrap as table
-    end
-    for _, func in ipairs( handlers or {} ) do
-        func(self, device, event, args)
-    end
 end
 
 ---  Handler for binary sensor command class reports

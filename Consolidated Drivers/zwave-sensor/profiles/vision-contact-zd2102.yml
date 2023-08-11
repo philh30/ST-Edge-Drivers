@@ -1,4 +1,4 @@
-name: ecolink-contact-2.5
+name: vision-contact-zd2102
 components:
 - id: main
   capabilities:
@@ -43,31 +43,3 @@ preferences:
         4:      "Every 4th wakeup"
         101:    "Once per day maximum"
       default: 1
-  - name: "sensorBinary"
-    title: "Send Sensor Binary Reports"
-    description: "Choose whether Sensor Binary Reports should be sent to the controller in addition to Notification events.<br>Suggestion is to leave this enabled to increase reliability."
-    required: true
-    preferenceType: enumeration
-    definition:
-      options:
-        0:   "Send supplemental Binary Reports"   # default
-        255: "Only Notification Reports"
-      default: 0
-  - name: "basicSetCommand"
-    title: "Basic Set - Close"
-    description: "Choose whether a Basic Set - Off should be sent to Assoc Group 2 when the sensor is closed. Default is disabled."
-    required: true
-    preferenceType: enumeration
-    definition:
-      options:
-        0:   "Do not send Basic Set when closed"   # default 
-        255: "Send Basic Set when closed"
-      default: 0
-  - title: "Association Group 2"
-    name: assocGroup2
-    description: "Enter a comma delimited list of hex IDs. Sends On & Off commands to associated devices. 3 node max."
-    required: true
-    preferenceType: string
-    definition:
-      stringType: text
-      default: ""

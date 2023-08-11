@@ -50,6 +50,13 @@ zwaveManufacturer:
     productType: 0x0201
     productId: 0x000A
     deviceProfileName: homeseer-leak    # by default, no temperature
+# Linear
+  - id: "014F/2002/0203"
+    deviceLabel: Linear Motion Sensor
+    manufacturerId: 0x014F
+    productType: 0x2002
+    productId: 0x0203
+    deviceProfileName: linear-motion-wapirz
 # Monoprice
   - id: "monoprice/4in1"
     deviceLabel: Monoprice 4-in-1 sensor
@@ -64,6 +71,25 @@ zwaveManufacturer:
     productType: 0x0201
     productId: 0x0301
     deviceProfileName: ring-contact-2
+# Vision
+  - id: "0109/2001/0102"
+    deviceLabel: Vision Door/Window Sensor
+    manufacturerId: 0x0109
+    productType: 0x2001
+    productId: 0x0102
+    deviceProfileName: vision-contact-zd2102
+  - id: "0109/2002/0203"
+    deviceLabel: Vision Motion Sensor
+    manufacturerId: 0x0109
+    productType: 0x2002
+    productId: 0x0203
+    deviceProfileName: vision-motion-zp3102
+  - id: "0109/200A/0A02"
+    deviceLabel: Vision Garage Door Detector
+    manufacturerId: 0x0109
+    productType: 0x200A
+    productId: 0x0A02
+    deviceProfileName: vision-contact-zg8101   
 # Zooz
   - id: 027A/7000/E001
     deviceLabel: Zooz ZSE41 XS Contact Sensor
