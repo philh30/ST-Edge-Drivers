@@ -28,8 +28,7 @@ local WakeUp = (require "st.zwave.CommandClass.WakeUp")({ version = 1 })
 --- @type st.utils
 local utils = require "st.utils"
 local call_parent_handler = require "call_parent"
-
-local LAST_BATTERY_REPORT_TIME = "lastBatteryReportTime"
+local battery = require "battery"
 
 local ZOOZ_FINGERPRINTS = {
   { manufacturerId = 0x027A, productType = 0x2021, productId = 0x2101 }, -- Zooz 4-in-1 sensor
@@ -121,46 +120,6 @@ local function sensor_multilevel_report_handler(self, device, cmd)
   end
 end
 
--- Request a battery update from the device.
--- This should only be called when the radio is known to be listening
--- (during initial inclusion/configuration and during Wakeup)
-local function getBatteryUpdate(device, force)
-  device.log.trace("getBatteryUpdate()")
-  if not force then
-      -- Calculate if its time
-      local last = device:get_field(LAST_BATTERY_REPORT_TIME)
-      if last then
-          local now = os.time()
-          local diffsec = os.difftime(now, last)
-          device.log.debug("Last battery update: " .. os.date("%c", last) .. "(" .. diffsec .. " seconds ago)" )
-          local wakeup_offset = 60 * 60 * 24  -- Assume 1 day preference
-
-          if tonumber(device.preferences.batteryInterval) < 100 then
-              -- interval is a multiple of our wakeup time (in seconds)
-              wakeup_offset = tonumber(device.preferences.wakeUpInterval) * tonumber(device.preferences.batteryInterval)
-          end
-
-          if wakeup_offset > 0 then
-              -- Adjust for about 5 minutes to cover waking up "early"
-              wakeup_offset = wakeup_offset - (60 * 5)
-              
-              -- Has it been longer than our interval?
-              force = diffsec >= wakeup_offset
-          end
-      else
-          force = true -- No last battery report, get one now
-      end
-  end
-
-  if not force then device.log.debug("No battery update needed") end
-
-  if force then
-      -- Request a battery update now
-      device:send(Battery:Get({}))
-  end
-
-end
-
 --- @param self st.zwave.Driver
 --- @param device st.zwave.Device
 --- @param cmd st.zwave.CommandClass.WakeUp.Notification
@@ -177,19 +136,10 @@ local function wakeup_notification(self, device, cmd)
   end
 
   -- We may need to request a battery update while we're woken up
-  getBatteryUpdate(device)
-end
-
---- @param self st.zwave.Driver
---- @param device st.zwave.Device
---- @param cmd st.zwave.CommandClass.Battery.Report
-local function battery_report(self, device, cmd)
-  -- Save the timestamp of the last battery report received.
-  device:set_field(LAST_BATTERY_REPORT_TIME, os.time(), { persist = true } )
-  if cmd.args.battery_level == 99 then cmd.args.battery_level = 100 end
-  if cmd.args.battery_level == 0xFF then cmd.args.battery_level = 1 end
-  -- Forward on to the default battery report handlers from the top level
-  call_parent_handler(self.zwave_handlers[cc.BATTERY][Battery.REPORT], self, device, cmd)
+  if battery.getBatteryUpdate(self, device) then
+    -- Request a battery update now
+    device:send(Battery:Get({}))
+  end
 end
 
 --- @param driver st.zwave.Driver
@@ -212,9 +162,6 @@ local zooz_sensor = {
   zwave_handlers = {
     [cc.WAKE_UP] = {
         [WakeUp.NOTIFICATION] = wakeup_notification,
-    },
-    [cc.BATTERY] = {
-        [Battery.REPORT] = battery_report,
     },
     [cc.NOTIFICATION] = {
       [Notification.REPORT] = notification_report_handler
