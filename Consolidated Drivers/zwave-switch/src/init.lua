@@ -103,7 +103,6 @@ local function device_added(driver, device)
   device:refresh()
 end
 
-
 local driver_template = {
   lifecycle_handlers = {
     init           = device_init,
@@ -118,8 +117,6 @@ local driver_template = {
     capabilities.energyMeter,
     capabilities.powerMeter,
     capabilities.motionSensor,
-    capabilities.illuminanceMeasurement,
-    capabilities.temperatureMeasurement,
     capabilities.colorControl,
     capabilities.colorTemperature,
     capabilities.colorMode,
@@ -132,7 +129,6 @@ local driver_template = {
     require("inovelli-nzw97"),
     require("zooz-zen32"),
     require("zooz-zen51"),
-    require("homeseer-motion-fls100"),
   },
   NAME = "zwave-switch",
 }

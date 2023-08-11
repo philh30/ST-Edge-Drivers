@@ -506,19 +506,6 @@ zwaveManufacturer:
     productType: 0x6100
     productId: 0x6100
     deviceProfileName: inovelli-nzw97
-# HomeSeer
-  - id: "000C/0201/000B"
-    deviceLabel: HomeSeer FLS-100 Motion Switch/Sensor
-    manufacturerId: 0x000C
-    productType: 0x0201
-    productId: 0x000B
-    deviceProfileName: homeseer-motion-fls100
-  - id: "000C/0201/000C"
-    deviceLabel: HomeSeer FLS-100G2 Motion Switch/Sensor
-    manufacturerId: 0x000C
-    productType: 0x0201
-    productId: 0x000C
-    deviceProfileName: homeseer-motion-fls100g2
 # Misc Switch
   - id: "0086/0003/0006"
     deviceLabel: Aeotec Heavy Duty Metering Plug
