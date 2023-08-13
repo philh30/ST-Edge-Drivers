@@ -85,10 +85,12 @@ end
 local function wakeup_notification(self, device, cmd)
   device.log.trace("wakeup_notification()")
 
-  -- Get the sensor state on wakeup.   Note that we cannot use SENSOR BINARY GET as 
-  --  the device will return SENSOR BINARY REPORT sometimes different from 
-  -- the current value of the sensor.
-  device:send(Basic:Get({}))
+  -- Note:
+  -- We can NOT querty the state of the sensor during wakeup.   For some reason,
+  -- randomly the device will return SENSOR BINARY REPORT or BASIC REPORT with
+  -- an "open" status even when its closed.   Its not clear when it does this
+  -- or why.   Testing randomly showed it, and production testing with others'
+  -- sensors showed it as well.   So we'll just leave the state alone.
 
   -- When the cover is restored (tamper switch closed), the device wakes up.  Assume tamper is now clear.
   device:emit_event(capabilities.tamperAlert.tamper.clear())
