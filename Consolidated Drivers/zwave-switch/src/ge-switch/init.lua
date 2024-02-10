@@ -34,6 +34,7 @@ local SwitchBinary = (require "st.zwave.CommandClass.SwitchBinary")({version=2,s
 local preferencesMap = require "preferences"
 local update_preferences = require "update_preferences"
 local splitAssocString = require "split_assoc_string"
+local call_parent_handler = require "call_parent"
 
 local GE_SWITCH_FINGERPRINTS = {
   {mfr = 0x0063, prod = 0x4450, model = 0x3030},
@@ -89,7 +90,7 @@ local GE_SWITCH_FINGERPRINTS = {
   {mfr = 0x0063, prod = 0x5052, model = 0x3033},
   {mfr = 0x0063, prod = 0x5052, model = 0x3038},
   {mfr = 0x0063, prod = 0x5052, model = 0x3130},
-  {mfr = 0x0063, prod = 0x5052, model = 0x3132},
+  {mfr = 0x0063, prod = 0x5052, model = 0x3132},  -- 28177 GE Plug In Dual
   {mfr = 0x0063, prod = 0x5252, model = 0x3530},
   {mfr = 0x0063, prod = 0x5257, model = 0x3533},
   {mfr = 0x0039, prod = 0x4944, model = 0x3038},
@@ -135,12 +136,22 @@ end
 local function do_configure(driver, device)
   device:refresh()
   update_preferences(driver, device)
+
+ -- Handle zwave plus lifeline associations
+ if device:is_cc_supported(cc.ZWAVEPLUS_INFO) and device:is_cc_supported(cc.ASSOCIATION)  then
+  device.log.debug("Adding to lifeline")
+  -- Add us to lifeline
+  device:send(Association:Set({grouping_identifier = 1, node_ids ={driver.environment_info.hub_zwave_id}}))
+  device:send(Association:Get({grouping_identifier = 1}))
+end
+
 end
 
 --- @param driver st.zwave.Driver
 --- @param device st.zwave.Device
-local function added(driver, device)
-  device:refresh()
+local function added(driver, device, event, args)
+    -- Call the topmost 'added' lifecycle hander to do any default work
+  call_parent_handler(driver.lifecycle_handlers.added, driver, device, event, args)
   update_preferences(driver, device)
 end
 
@@ -258,6 +269,7 @@ local ge_switch = {
   },
   sub_drivers = {
     require("zwave-fan-3-speed"),
+    require("ge-switch-dual"),
   },
   NAME = "ge zwave",
   can_handle = can_handle_ge_switch,

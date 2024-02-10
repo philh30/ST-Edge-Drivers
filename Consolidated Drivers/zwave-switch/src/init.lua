@@ -67,7 +67,7 @@ end
 --- @param self st.zwave.Driver
 --- @param device st.zwave.Device
 local function updateFirmwareVersion(self, device)
-  -- Set our zwave deviceNetworkID 
+  -- Set our zwave updateFirmwareVersion 
   for _, component in pairs(device.profile.components) do
     if device:supports_capability_by_id(customCap.firmware.name,component.id) then
       local fw_major = (((device.st_store or {}).zwave_version or {}).firmware or {}).major

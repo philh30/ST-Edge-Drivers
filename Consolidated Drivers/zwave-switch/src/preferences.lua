@@ -31,6 +31,18 @@ local GE_BASIC = {
   },
 }
 
+local GE_DUAL = {
+  PARAMETERS = {
+    ledIndicator    = {type = 'config', parameter_number = 3, size = 1},
+    assocGroup2     = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
+    assocGroup3     = {type = 'assoc', group = 3, maxnodes = 5, addhub = false},
+  },
+  BUTTONS = {
+    count = 1,
+    values = {'up_2x','down_2x','pushed_2x'},
+  },
+}
+
 local GE_SCENE = {
   PARAMETERS = {
     powerReset      = {type = 'config', parameter_number = 1, size = 1},
@@ -120,6 +132,15 @@ local devices = {
     },
     PARAMETERS = GE_BASIC.PARAMETERS,
     BUTTONS = GE_BASIC.BUTTONS,
+  },
+  GE_PLUGIN_DUAL = {
+    MATCHING_MATRIX = {
+      mfrs = {0x0039, 0x0063},
+      product_types = {0x5052},
+      product_ids = {0x3132},
+    },
+    PARAMETERS = GE_DUAL.PARAMETERS,
+    BUTTONS = GE_DUAL.BUTTONS,
   },
   GE_PLUGDIM_BASIC = {
     MATCHING_MATRIX = {
