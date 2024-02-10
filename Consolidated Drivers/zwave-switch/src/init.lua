@@ -63,19 +63,25 @@ local function updateNetworkId(self, device, deviceId)
   end
 end
 
----
+--- Update the built in capability firmwareUpdate's currentVersion attribute with the
+--- Zwave version information received during pairing of the device.
 --- @param self st.zwave.Driver
 --- @param device st.zwave.Device
 local function updateFirmwareVersion(self, device)
   -- Set our zwave deviceNetworkID 
   for _, component in pairs(device.profile.components) do
-    if device:supports_capability_by_id(customCap.firmware.name,component.id) then
+    device.log.info("updateFirmwareVersion(): checking component " .. component.id)
+    if device:supports_capability_by_id(capabilities.firmwareUpdate.ID,component.id) then
       local fw_major = (((device.st_store or {}).zwave_version or {}).firmware or {}).major
       local fw_minor = (((device.st_store or {}).zwave_version or {}).firmware or {}).minor
       if fw_major and fw_minor then
         local fmtFirmwareVersion= fw_major .. "." .. string.format('%02d',fw_minor)
-        device:emit_component_event(component,capabilities[customCap.firmware.name].firmwareVersion({value = tonumber(fmtFirmwareVersion) }))
+        device:emit_component_event(component,capabilities.firmwareUpdate.currentVersion({value = fmtFirmwareVersion }))
+      else
+        device.log.warn("Firmware major or minor version not available.")
       end
+    else
+      device.log.warn("Component ".. component.id .. " does not support " .. capabilities.firmwareUpdate.ID)
     end
   end
 end
