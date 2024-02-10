@@ -6,6 +6,10 @@ components:
     version: 1
   - id: button
     version: 1
+  - id: platemusic11009.deviceNetworkId
+    version: 1
+  - id: firmwareUpdate
+    version: 1
   - id: refresh
     version: 1
   categories:
