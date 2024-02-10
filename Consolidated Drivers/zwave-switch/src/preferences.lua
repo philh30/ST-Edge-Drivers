@@ -34,6 +34,18 @@ local GE_BASIC = {
   },
 }
 
+local GE_DUAL = {
+  PARAMETERS = {
+    ledIndicator    = {type = 'config', parameter_number = 3, size = 1},
+    assocGroup2     = {type = 'assoc', group = 2, maxnodes = 5, addhub = false},
+    assocGroup3     = {type = 'assoc', group = 3, maxnodes = 5, addhub = false},
+  },
+  BUTTONS = {
+    count = 1,
+    values = {'up_2x','down_2x','pushed_2x'},
+  },
+}
+
 local GE_SCENE = {
   PARAMETERS = {
     powerReset      = {type = 'config', parameter_number = 1, size = 1},
@@ -127,6 +139,15 @@ local devices = {
     },
     PARAMETERS = GE_BASIC.PARAMETERS,
     BUTTONS = GE_BASIC.BUTTONS,
+  },
+  GE_PLUGIN_DUAL = {
+    MATCHING_MATRIX = {
+      mfrs = {0x0039, 0x0063},
+      product_types = {0x5052},
+      product_ids = {0x3132},
+    },
+    PARAMETERS = GE_DUAL.PARAMETERS,
+    BUTTONS = GE_DUAL.BUTTONS,
   },
   GE_PLUGDIM_BASIC = {
     MATCHING_MATRIX = {
@@ -349,6 +370,37 @@ local devices = {
     PARAMETERS = {
       externalSwitchType      = {type = 'config', parameter_number = 1, size = 1},
       assocGroup1             = {type = 'assoc', group = 1, maxnodes = 5, addhub = false},
+    }
+  },
+  HOMESEER_MOTION_FLS100 = {
+    MATCHING_MATRIX = {
+      mfrs = 0x000C,
+      product_types = 0x0201,
+      product_ids = 0x000B,
+    },
+    PARAMETERS = {
+      onTime                     = {type = 'config', parameter_number = 1, size = 2 },
+      luxSensorThreshold         = {type = 'config', parameter_number = 2, size = 2 },
+      sensorReportInterval       = {type = 'config', parameter_number = 3, size = 2 },
+      -- basicReport                = {type = 'config', parameter_number = 4, size = 1 },  -- P4 is not listed on the alliance reference
+      assocGroup2                = {type = 'assoc', group = 2, maxnodes = 4, addhub = false},
+    }
+  },
+  HOMESEER_MOTION_FLS100G2 = {
+    MATCHING_MATRIX = {
+      mfrs = 0x000C,
+      product_types = 0x0201,
+      product_ids = 0x000C,
+    },
+    PARAMETERS = {
+      onTime                     = {type = 'config', parameter_number = 1, size = 2 },
+      luxSensorThreshold         = {type = 'config', parameter_number = 2, size = 2 },
+      sensorReportInterval       = {type = 'config', parameter_number = 3, size = 2 },
+      motionSensorReports        = {type = 'config', parameter_number = 4, size = 1 },
+      loadControlMode            = {type = 'config', parameter_number = 5, size = 1 },
+      luxSensorControl           = {type = 'config', parameter_number = 6, size = 1 },
+      hsmotionSensitivity        = {type = 'config', parameter_number = 8, size = 1 },
+      assocGroup2                = {type = 'assoc', group = 2, maxnodes = 4, addhub = false},
     }
   },
 }
