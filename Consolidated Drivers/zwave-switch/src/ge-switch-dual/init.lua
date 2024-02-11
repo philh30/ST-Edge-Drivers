@@ -19,7 +19,8 @@ local cc = require "st.zwave.CommandClass"
 local Basic = (require "st.zwave.CommandClass.Basic")({ version = 1 })
 --- @type st.zwave.CommandClass.SwitchBinary
 local SwitchBinary = (require "st.zwave.CommandClass.SwitchBinary")({ version = 2 })
-
+--- @type st.zwave.constants
+local constants = require "st.zwave.constants"
 local log = require "log"
 
 local GE_2_CHANNEL_SMART_PLUG_FINGERPRINTS = {
@@ -68,14 +69,16 @@ local function basic_set_handler(driver, device, cmd)
 end
 
 local function basic_and_switch_binary_report_handler(driver, device, cmd)
-  device.log.trace("basic_and_switch_binary_report_handler: cmd.src_channel" .. cmd.src_channel)
+  device.log.trace("basic_and_switch_binary_report_handler() cmd.src_channel = " .. cmd.src_channel)
   local value = cmd.args.target_value and cmd.args.target_value or cmd.args.value
 
   local event = value == SwitchBinary.value.OFF_DISABLE and capabilities.switch.switch.off() or capabilities.switch.switch.on()
 
   if cmd.src_channel == 0 then
-    -- From the main endpoint (0).   We can update just main.
-    device:emit_event_for_endpoint(cmd.src_channel, event)
+    -- This is main (endpoint 0).  Endpoint 0 returns
+    -- enabled IFF both endpoints are also on.   So we do our logic here
+    -- to make sure its based on the child status, not what the device says
+    handle_main_switch_event(device, value)
   else
     -- For other channels, update that endpoint.
     device:emit_event_for_endpoint(cmd.src_channel, event)
@@ -84,20 +87,29 @@ local function basic_and_switch_binary_report_handler(driver, device, cmd)
   end
 end
 
+-- a SWITCH BINARY GET on endpoint 0 will only return ON if BOTH endpoint 1 and 2
+-- are on.   Our UI needs to reflect that 'main' is on if EITHER 1 or 2 are on.
+-- So we need to make sure we handle that logic here.
 local function set_switch_value(driver, device, value, command)
-  if command.component == "main" then
+  local delay = constants.DEFAULT_GET_STATUS_DELAY
 
+  if command.component == "main" then
     device:send_to_component(SwitchBinary:Set({target_value = value}), command.component)
-    device:send_to_component(SwitchBinary:Get({}), command.component)
-    -- And get the 2 child devices
-    query_switch_status(device)
+
+    local query_device = function()
+      device:send_to_component(SwitchBinary:Get({}), command.component)
+      -- And get the 2 child devices
+      query_switch_status(device)
+    end
+    device.thread:call_with_delay(delay, query_device)
   else
     --Set individual switch value
     device:send_to_component(SwitchBinary:Set({target_value = value, duration = 0}), command.component)
     -- and then get its value. The device won't send it otherwise.
-    device:send_to_component(SwitchBinary:Get({}), command.component)
-    -- And the main
-    device:send_to_component(SwitchBinary:Get({}), "main")
+    local query_device = function()
+      device:send_to_component(SwitchBinary:Get({}), command.component)
+    end
+    device.thread:call_with_delay(delay, query_device)
   end
 end
 
