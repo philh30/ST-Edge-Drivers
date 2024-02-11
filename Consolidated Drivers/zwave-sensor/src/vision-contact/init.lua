@@ -31,7 +31,7 @@ local call_parent_handler = require "call_parent"
 local battery = require "battery"
 
 local VISION_FINGERPRINTS = {
-  { manufacturerId = 0x0109, productType = 0x2001, productId = 0x0102 }, -- Vision ZP2102 motion sensor (also Monoprice #10795 rebrand)
+  { manufacturerId = 0x0109, productType = 0x2001, productId = 0x0102 }, -- Vision ZD2102 contact sensor (also Monoprice #10795 rebrand)
   { manufacturerId = 0x0109, productType = 0x200A, productId = 0x0A02 }, -- Vision ZG8101 garage sensor (also Monoprice #11987 rebrand)
 }
 
@@ -85,8 +85,12 @@ end
 local function wakeup_notification(self, device, cmd)
   device.log.trace("wakeup_notification()")
 
-  -- Get the sensor state on wakeup.  
-  device:send(SensorBinary:Get({}))
+  -- Note:
+  -- We can NOT querty the state of the sensor during wakeup.   For some reason,
+  -- randomly the device will return SENSOR BINARY REPORT or BASIC REPORT with
+  -- an "open" status even when its closed.   Its not clear when it does this
+  -- or why.   Testing randomly showed it, and production testing with others'
+  -- sensors showed it as well.   So we'll just leave the state alone.
 
   -- When the cover is restored (tamper switch closed), the device wakes up.  Assume tamper is now clear.
   device:emit_event(capabilities.tamperAlert.tamper.clear())
@@ -111,24 +115,16 @@ local function basic_set_handler(driver, device, cmd)
   end
 end
 
---- This converts binary sensor reports to correct motion active/inactive events
----
---- For a device that uses v1 of the binary sensor command class, all reports will be considered
---- motion reports.
----
 --- @param self st.zwave.Driver
 --- @param device st.zwave.Device
 --- @param cmd st.zwave.CommandClass.SensorBinary.Report
 local function sensor_binary_report_handler(self, device, cmd)
-  -- sensor_type will be nil if this is a v1 report
-  if ((cmd.args.sensor_type ~= nil and cmd.args.sensor_type == SensorBinary.sensor_type.CONTACT) or
-        cmd.args.sensor_type == nil) then
-    if (cmd.args.sensor_value == SensorBinary.sensor_value.DETECTED_AN_EVENT) then
-      device:emit_event_for_endpoint(cmd.src_channel, capabilities.contactSensor.contact.open())
-    elseif (cmd.args.sensor_value == SensorBinary.sensor_value.IDLE) then
-      device:emit_event_for_endpoint(cmd.src_channel, capabilities.contactSensor.contact.closed())
-    end
-  end
+
+  --- These devices do not always return the correct value for 
+  --- the sensor in a SENSOR BINARY REPORT.
+  ---  So if we get them, just eat it.
+
+  device.log.warn("sensor_binary_report_handler() untrusted, ignoring value")
 end
 
 --- @param self st.zwave.Driver
